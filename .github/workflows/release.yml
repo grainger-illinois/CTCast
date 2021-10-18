@@ -41,8 +41,8 @@ jobs:
       - name: upload
         uses: actions/upload-artifact@v2
         with:
-          name: electron-app-${{ matrix.os }}
-          path: out/electron_app-*-x64/
+          name: ctcast-${{ matrix.os }}
+          path: out/ctcast-*-x64/
   
   publish:
     needs: upload-artifacts
@@ -54,27 +54,27 @@ jobs:
         id: download-windows
         uses: actions/download-artifact@v2
         with:
-          name: electron-app-windows-latest
+          name: ctcast-windows-latest
         
       - name: Download mac
         id: download-mac
         uses: actions/download-artifact@v2
         with:
-          name: electron-app-macos-latest
+          name: ctcast-macos-latest
           
-      - name: Download windows
+      - name: Download linux
         id: download-linux
         uses: actions/download-artifact@v2
         with:
-          name: electron-app-ubuntu-latest
+          name: ctcast-ubuntu-latest
         
       - run: ls
       
       - name: Zip up needed files
         run: |
-          zip -r windows.zip electron_app-win32-x64/
-          zip -r linux.zip electron_app-linux-x64/
-          zip -r mac.zip electron_app-darwin-x64/
+          zip -r windows.zip ctcast-win32-x64/
+          zip -r linux.zip ctcast-linux-x64/
+          zip -r mac.zip ctcast-darwin-x64/
           
       - name: Create release
         uses: softprops/action-gh-release@v1
