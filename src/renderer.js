@@ -26,8 +26,19 @@
  * ```
  */
 
+
 import './index.css';
 
-console.log('👋 This message is being logged by "renderer.js", included via webpack');
-
 import './app.jsx'
+
+const getbutton = document.getElementById('get');
+getbutton.addEventListener('click', async () => {
+    const res = await window.loggerAPI.logMessage('Get button was clicked!');
+    console.log(res);
+})
+
+const postbutton = document.getElementById('post');
+postbutton.addEventListener('click', async () => {
+    const res = await window.loggerAPI.logMessage('Post button was clicked!');
+    console.log(res);
+})
