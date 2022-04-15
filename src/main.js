@@ -5,6 +5,7 @@ const axios = require('axios');
 const { LoggerWriter, ZoomAPI, LinkEncoderAPI } = require('./api');
 
 const logger = new LoggerWriter();
+var linkencoder = new LinkEncoderAPI();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -13,6 +14,11 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 
 async function loggerWriterHandler(logger, message) {
   const res = await logger.sendMessage(message);
+  return res;
+}
+
+async function linkEncoderHandler(linkencoder, caption, port) {
+  const res = await linkencoder.sendMessage(caption, port);
   return res;
 }
 
@@ -42,7 +48,10 @@ app.on('ready', () => {
   ipcMain.handle('log-message', async (event, message) => {
     return await loggerWriterHandler(logger, message);
   });
-
+  
+  ipcMain.handle('linkencoder', async (event, caption, port) => {
+    return await linkEncoderHandler(linkencoder, caption, port);
+  })
   createWindow();
 });
 

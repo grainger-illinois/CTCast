@@ -33,7 +33,7 @@ import './app.jsx'
 
 const getbutton = document.getElementById('get');
 getbutton.addEventListener('click', async () => {
-    const res = await window.loggerAPI.logMessage('Get button was clicked!');
+    const res = await window.linkEncoderAPI.sendToLinkEncoder('Get button was clicked!', 10001);
     console.log(res);
 })
 

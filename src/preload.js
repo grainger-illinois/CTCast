@@ -8,3 +8,7 @@ contextBridge.exposeInMainWorld('backendAPI', {
 contextBridge.exposeInMainWorld('loggerAPI', {
     logMessage: (message) => ipcRenderer.invoke('log-message', message)
 })
+
+contextBridge.exposeInMainWorld('linkEncoderAPI', {
+    sendToLinkEncoder: (caption, port) => ipcRenderer.invoke('linkencoder', caption, port)
+})
