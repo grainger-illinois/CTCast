@@ -90,6 +90,17 @@ export class LinkEncoderAPI {
         return str;
     }
 
+    chunkstring(str, n) {
+        if (str.length <= n)
+            return [str];
+        else {
+            //console.log(str.substr(0, n));
+            //console.log(str.substr(n, str.length - n));
+
+            return [str.substr(0, n)].concat(chunkstring(str.substr(n, str.length - n), str.length - n));
+        }
+    }
+
     async sendMessage(caption, port) {
         if (this.port == 10001) {
             this.fieldinsertmode = Buffer.from("01330D01330D", "hex");
@@ -103,18 +114,18 @@ export class LinkEncoderAPI {
         }
         console.log('Attempting connection');
         await this.connecttoserver(this.port, this.csEncoder);
-        console.log('Connected to ' + host + ':' + port);
+        console.log('Connected to ' + this.csEncoder + ':' + this.port);
 
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {
-            for (const invalid_char of self.character_diff_list) {
+            for (const invalid_char of this.character_diff_list) {
                 caption = this.replaceAllChars(caption, invalid_char, "");
             }
         }
         caption = this.replaceAllChars(caption, '\n', ' ');
         caption = this.replaceAllChars(caption, '\t', ' ');
 
-        list_of_words = caption.split(' ');
+        let list_of_words = caption.split(' ');
         list_of_words = list_of_words.filter((x) => x != '');
 
         if (list_of_words.length == 0) {
@@ -122,26 +133,26 @@ export class LinkEncoderAPI {
             return 200;
         }
 
-        list_of_words_32 = []
+        let list_of_words_32 = []
         for (let i = 0; i < list_of_words.length; i++) {
-            let chunks = chunkstring(list_of_words[i], max_character_number);
+            let chunks = this.chunkstring(list_of_words[i], this.max_character_number);
             for (let j = 0; j < chunks.length; j++) {
                 list_of_words_32.push(chunks[j]);
             }
         }
 
         while (list_of_words_32.length > 0) {
-            word = list_of_words_32.shift(); // current word
+            let word = list_of_words_32.shift(); // current word
 
             while (true) {
                 // if the current and next word combined (including the space between them) is 32 characters or less, combine them together to make a sentence
                 if (list_of_words_32.length > 0 && word.length + 1 + (list_of_words_32[0]).length <= this.max_character_number) {
-                    next_word = list_of_words_32.shift();
+                    let next_word = list_of_words_32.shift();
                     word = word + ' ' + next_word;
                 }
                 else { // send the word(s)
                     //sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
-                    newswire_word = word + "\r";
+                    let newswire_word = word + "\r";
                     this.socket.write(newswire_word, this.encoding);
 
                     break;
