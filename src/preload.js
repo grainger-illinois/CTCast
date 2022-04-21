@@ -12,3 +12,7 @@ contextBridge.exposeInMainWorld('loggerAPI', {
 contextBridge.exposeInMainWorld('linkEncoderAPI', {
     sendToLinkEncoder: (caption, port) => ipcRenderer.invoke('linkencoder', caption, port)
 })
+
+contextBridge.exposeInMainWorld('zoomAPI', {
+    zoomCaption: (caption, meetingLink) => ipcRenderer.invoke('zoom-caption', caption, meetingLink)
+})

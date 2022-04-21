@@ -31,9 +31,11 @@ import './index.css';
 
 import './app.jsx'
 
+const zoomLink = 'https://us02wmcc.zoom.us/closedcaption?id=5710184328&ns=VGFlIEluIEd1J3MgUGVyc29uYWwgTWVldGluZyBS&expire=86400&sparams=id%2Cns%2Cexpire&signature=IUbL1cU78qASvg-BJD2TCvfujKNziJW5z4qbVvyCUbc.AG.QggVe2480KHzUeUozjNjtJknjdmjUW8OtZ6UNgslm7j_JNmgz_jeh6HOqJ5oVkIzRAJyeUFewKUDls3NE_ys8ec-xaZTnFdj0YmrdOh9bEXPAW-73JVeQXVfNGrfZtMaHgrVdxOsCp-zmqG7iWi8zcs6psa8PnU.RVQ9cC2rGxP3okSDSCcXWA.H39xnWHTDAlbyaPq'
+
 const getbutton = document.getElementById('get');
 getbutton.addEventListener('click', async () => {
-    const res = await window.linkEncoderAPI.sendToLinkEncoder('Get button was clicked!', 10001);
+    const res = await window.zoomAPI.zoomCaption('Test Caption baby!', zoomLink);
     console.log(res);
 })
 

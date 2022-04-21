@@ -34,13 +34,31 @@ export class LoggerWriter {
     }
 }
 
+// Some of these hardcoded values should be passed in as args maybe...
 export class ZoomAPI {
     constructor() {
-        console.log("Initialized Zoom API writer.");
+        this.seq = 1;
     }
 
-    sendMessage(message, meetingLink) {
-        
+    getCurSeq(meetingLink) {
+        axios.get(meetingLink + '/seq').then(res => console.log(res)).catch(err => console.log(err));
+    }
+
+    async sendMessage(caption, meetingLink) {
+        if (this.seq == null) {
+            this.getCurSeq(meetingLink);
+        }
+
+        const options = {
+            method: 'post',
+            url:  meetingLink + '&seq=' + this.seq + '&lang=en-US',
+            data: caption,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }
+        await axios(options).then(res => console.log(res)).catch(err => console.log(err));
+        this.seq += 1;
     }
 }
 
