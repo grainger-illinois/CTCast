@@ -1,12 +1,17 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import './App.css';
+import Options from "./components/Options.js"
 
 function render() {
-    ReactDOM.render(<div>
-        <h2>Make an http request</h2>
-        <button id="get">Make get request</button>
-        <br></br>
-        <button id="post">Make post request</button></div>, document.body);
+    ReactDOM.render(
+        <div style={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}>
+            <Options/>
+          </div>, 
+    document.body);
 }
 
 render();
