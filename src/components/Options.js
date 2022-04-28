@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import ZoomPage from './zoom/zoom.js'
 import Home from './home'
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Routes,
     Route,
     Link
@@ -19,6 +19,7 @@ import { Container } from "react-bootstrap";
 
 const Options = (props, window) => {
     return(
+
         <Container>
             <Router>
 
@@ -40,13 +41,14 @@ const Options = (props, window) => {
             
             
             <Routes>
-                <Route exact path='/home' element={< Home />}></Route>
+                <Route exact path='/' ></Route>
                 <Route exact path='/zoom' element={< ZoomPage />}></Route>
                 <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
             </Routes>
 
         </Router>
     </Container>);
+
 }
 
 
