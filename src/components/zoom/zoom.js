@@ -19,9 +19,8 @@ const Form = () => {
         zoomLink: '', message: '', count: 0
     });
 
-
     const classes = useStyles();
-
+    
     const mylog = (result) => {
         var thelog = document.getElementById('thelog');
         thelog.textContent += `${result}\n`;
@@ -42,7 +41,7 @@ const Form = () => {
     const clear = () => {
         setPostData({ zoomlink: '', message: '', count: 0 });
         document.getElementById('thelog').textContent = "";
-      };
+    };
 
   return (
     <div>

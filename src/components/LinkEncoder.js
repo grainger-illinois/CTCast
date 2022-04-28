@@ -30,7 +30,7 @@ const LinkEncoder = (props) => {
             <Form.Group as={Row} className="mb-3">
                 <Col style={{ textAlign: "center" }}>
                     <Button variant="secondary">Back</Button>{' '}
-                    <Button variant="dark" type="submit">Send</Button>
+                    <Button variant="dark" type="submit" >Send</Button>
                 </Col>
             </Form.Group>
         </Form>
