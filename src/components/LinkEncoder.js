@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import React, { useState, useEffect } from 'react'
+import { Form, Row, Col } from 'react-bootstrap'
+//import Button from 'react-bootstrap/Button'
 import Badge from 'react-bootstrap/Badge'
+import { useNavigate } from "react-router-dom";
+import { TextField, Button, Typography, Paper, Grid } from '@material-ui/core';
 
 /**
  * 2022/04/27:
  *   Implemented basic version of sending captions
  *   Need further testing to confirm the message is sent as expected
+ *   Need to change to a better alignment
  */
 
 const LinkEncoder = (props) => {
@@ -27,7 +28,6 @@ const LinkEncoder = (props) => {
         element.click();
     }
 
-
     const writeLog = (result) => {
         var localLog = document.getElementById('locallog');
         localLog.textContent += `${result}\n`;
@@ -43,39 +43,48 @@ const LinkEncoder = (props) => {
         setPostData({ ...postData, caption: '' });
     }
 
+    const clear = () => {
+        setPostData({ ip: '', port: '', caption: '', count: 0 });
+        document.getElementById('locallog').textContent = "";
+    };
+
+    // Unused
+    const switchPage = (url) => {
+        useNavigate(url);
+    };
+
     return <div>
         <h2 style={{ textAlign: "center" }}>Link Encoder</h2>
-        <Form>
-            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                <Col>
-                    <Form.Control type="text" placeholder="IP Address" onChange={e => setPostData({ ...postData, ip: e.target.value })} />
-                </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                <Col>
-                    <Form.Control type="text" placeholder="Port Number" onChange={e => setPostData({ ...postData, port: e.target.value })} />
-                </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                <Col>
-                    <Form.Control type="text" placeholder="Caption" onChange={e => setPostData({ ...postData, caption: e.target.value })}/>
-                </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-                <Col style={{ textAlign: "center" }}>
-                    <Button variant="secondary">Back</Button>{' '}
-                    <Button variant="dark" type="submit" onClick={e => handleSubmit(e)}>Send</Button>
-                </Col>
-            </Form.Group>
-        </Form>
-        <div>
-            <pre id='locallog' ></pre>
-            <Button onClick={downloadTxtFile}> Download</Button>
-        </div>
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+            <TextField name="ip" variant="outlined" size="small" label="IP Address"
+                value={postData.ip} onChange={e => setPostData({ ...postData, ip: e.target.value })}
+            />
+            <TextField name="port" variant="outlined" size="small" label="Port Number"
+                value={postData.port} onChange={e => setPostData({ ...postData, port: e.target.value })}
+            />
+            <TextField name="caption" variant="outlined" size="small" label="Caption"
+                value={postData.caption} onChange={e => setPostData({ ...postData, caption: e.target.value })}
+            />
+            <Grid item>
+                <Button variant="contained" color="primary" type="submit" onClick={e => handleSubmit(e)}>Send</Button>{' '}
+                <Button variant="contained" color="inherit" onClick={clear} >Clear</Button>{' '}
+                {/*<Button variant="contained" color="inherit" onClick={switchPage("../main")} >Back</Button>*/}
+            </Grid>
+            <Grid item container direction="column" alignItems="center">
+                <pre id='locallog' ></pre>
+                <Button onClick={downloadTxtFile}> Download Log</Button>
+            </Grid>
+        </Grid>
     </div>
 }
 
 export default LinkEncoder;
+
+/*
+Old format for reference:
+<Form><Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
+    <Col>
+        <Form.Control type="text" placeholder="IP Address" onChange={e => setPostData({ ...postData, ip: e.target.value })} />
+    </Col>
+</Form.Group></Form>
+*/
