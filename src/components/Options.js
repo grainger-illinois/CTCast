@@ -30,7 +30,7 @@ const Options = (props, window) => {
       </li>
     </ul>
     <Routes>
-    <Route exact path='/' element={< Options />}></Route>
+    <Route exact path='/' ></Route>
     <Route exact path='/zoom' element={< ZoomPage />}></Route>
     <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
     </Routes>
