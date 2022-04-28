@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import ZoomPage from './zoom/zoom.js'
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Routes,
     Route,
     Link
