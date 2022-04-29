@@ -31,14 +31,13 @@ import './index.css';
 import './app.jsx'
 import * as ReactDOM from 'react-dom';
 import React from 'react'
+import Options from './components/Options'
 
 function render() {
     ReactDOM.render(
-        <div style={{
-            position: 'absolute', left: '50%', top: '50%',
-            transform: 'translate(-50%, -50%)'
-          }}>
+        <div>
             <Options window = {window}/>
+            
           </div>, 
     document.body);
 }

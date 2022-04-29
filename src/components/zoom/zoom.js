@@ -20,7 +20,7 @@ const Form = () => {
     });
 
     const classes = useStyles();
-    
+
     const mylog = (result) => {
         var thelog = document.getElementById('thelog');
         thelog.textContent += `${result}\n`;

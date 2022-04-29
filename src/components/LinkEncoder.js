@@ -4,6 +4,7 @@ import { Form, Row, Col } from 'react-bootstrap'
 import Badge from 'react-bootstrap/Badge'
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Paper, Grid } from '@material-ui/core';
+import useStyles from './zoom/styles'
 
 /**
  * 2022/04/27:
@@ -53,31 +54,49 @@ const LinkEncoder = (props) => {
         useNavigate(url);
     };
 
-    return <div>
-        <h2 style={{ textAlign: "center" }}>Link Encoder</h2>
+    const classes = useStyles();
 
-        <Grid container direction="column" justifyContent="center" alignItems="center">
-            <TextField name="ip" variant="outlined" size="small" label="IP Address"
-                value={postData.ip} onChange={e => setPostData({ ...postData, ip: e.target.value })}
-            />
-            <TextField name="port" variant="outlined" size="small" label="Port Number"
-                value={postData.port} onChange={e => setPostData({ ...postData, port: e.target.value })}
-            />
-            <TextField name="caption" variant="outlined" size="small" label="Caption"
-                value={postData.caption} onChange={e => setPostData({ ...postData, caption: e.target.value })}
-            />
-            <Grid item>
-                <Button variant="contained" color="primary" type="submit" onClick={e => handleSubmit(e)}>Send</Button>{' '}
-                <Button variant="contained" color="inherit" onClick={clear} >Clear</Button>{' '}
-                {/*<Button variant="contained" color="inherit" onClick={switchPage("../main")} >Back</Button>*/}
-            </Grid>
-            <Grid item container direction="column" alignItems="center">
+    return (
+        <div>
+            <form autoComplete = "off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
+                <TextField 
+                    name = "ip" 
+                    variant = "outlined" 
+                    label="IP Address" 
+                    fullWidth 
+                    value={postData.ip} 
+                    onChange = {(e) => setPostData({... postData, ip: e.target.value})}
+                    
+                    />
+                <TextField 
+                    name = "port" 
+                    variant = "outlined" 
+                    label="Port" 
+                    fullWidth 
+                    value={postData.port} 
+                    onChange = {(e) => setPostData({... postData, port: e.target.value})}
+                    />
+                <TextField 
+                    name = "caption" 
+                    variant = "outlined" 
+                    label="Message" 
+                    fullWidth 
+                    value={postData.caption} 
+                    onChange = {(e) => setPostData({... postData, caption: e.target.value})}
+                    />
+                <Button id = "zoompost" className = {classes.buttonSubmit} variant = "contained" color="primary" size="large" type = "submit" fullWidth>Submit</Button>
+                <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
+            
+                
+            </form>
+            <div>
                 <pre id='locallog' ></pre>
-                <Button onClick={downloadTxtFile}> Download Log</Button>
-            </Grid>
-        </Grid>
+                    <Button onClick = {downloadTxtFile}> Download Log</Button>
+            </div>
+    
+        </div>
 
-    </div>
+    );
 }
 
 export default LinkEncoder;
