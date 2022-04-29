@@ -1,53 +1,82 @@
-import React, { useState, useEffect } from "react";
-import Button from 'react-bootstrap/Button';
-import LinkEncoder from "./LinkEncoder";
-import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
 import ZoomPage from './zoom/zoom.js'
+import LinkEncoder from './LinkEncoder.js';
+
 import Home from './home'
+import './Options.css'
 import {
     HashRouter as Router,
     Routes,
     Route,
     Link
 } from 'react-router-dom';
-import { colors } from "@material-ui/core";
-import { Container } from "react-bootstrap";
 
 
 
 const Options = (props, window) => {
-    return(
 
-        <Container>
-            <Router>
+  return (
+    <Router>
+    <Box sx={{ flexGrow: 1 }} width = "100%" className='center-align'>
+      <AppBar position="static" className='center-align'>
+        <Toolbar>
+            <Link to = "/home" style={{ color: '#FFF', textDecoration: 'none' }}>
+          <Button color="inherit">Home</Button>
+          </Link>
+          <Link to ="/zoom" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Button color="inherit">Zoom</Button>
+          </Link>
+          <Link to = "/linkencoder" style={{ color: '#FFF', textDecoration: 'none' }}>
+          <Button color="inherit">Link Encoder</Button>
+          </Link>
+          <Button color="inherit">Upload Files</Button>
+        </Toolbar>
+      </AppBar>
 
-                <div>
-                    <Link to="/home">
-                        <Button>HOME</Button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/zoom">
-                        <Button>Zoom</Button>
-                    </Link>
-                </div>
-                <div>
-                    <Link to="/linkencoder">
-                        <Button>Link Encoder</Button>
-                    </Link>
-                </div>
-            
-            
-            <Routes>
-                <Route exact path='/' ></Route>
-                <Route exact path='/zoom' element={< ZoomPage />}></Route>
+        <Routes>
+                 <Route exact path='/home' element={< Home />}></Route>
+                 <Route exact path='/zoom' element={< ZoomPage />}></Route>
                 <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
-            </Routes>
+        </Routes>
+        
+    </Box>
+    </Router>
+  );
+    //     <Container>
+    //         <Router>
+    //             <nav>
+    //                 <ul>
+    //                     <li>
+    //                         <Link to="/home">
+    //                             <Button>HOME</Button>
+    //                         </Link>
+    //                     </li>
+    //                     <li>
+    //                         <Link to="/zoom">
+    //                             <Button>Zoom</Button>
+    //                         </Link>
+    //                     </li>
+    //                     <li>
+    //                         <Link to="/linkencoder">
+    //                             <Button>Link Encoder</Button>
+    //                         </Link>
+    //                     </li>
+    //                 </ul>
+    //             </nav>
+            
+    //         <Routes>
+    //             <Route exact path='/' ></Route>
+    //             <Route exact path='/zoom' element={< ZoomPage />}></Route>
+    //             <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
+    //         </Routes>
 
-        </Router>
-    </Container>);
+    //     </Router>
+    // </Container>);
 
 }
 
