@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('loggerAPI', {
 })
 
 contextBridge.exposeInMainWorld('linkEncoderAPI', {
-    sendToLinkEncoder: (caption, port) => ipcRenderer.invoke('linkencoder', caption, port)
+    sendToLinkEncoder: (caption, host, port) => ipcRenderer.invoke('linkencoder', caption, host, port)
 })
 
 contextBridge.exposeInMainWorld('zoomAPI', {

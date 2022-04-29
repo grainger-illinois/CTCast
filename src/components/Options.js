@@ -20,6 +20,7 @@ import {
 
 const Options = (props, window) => {
 
+
   return (
     <Router>
     <Box sx={{ flexGrow: 1 }} width = "100%" className='center-align'>
@@ -41,6 +42,7 @@ const Options = (props, window) => {
         <Routes>
                  <Route exact path='/home' element={< Home />}></Route>
                  <Route exact path='/zoom' element={< ZoomPage />}></Route>
+
                 <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
         </Routes>
         

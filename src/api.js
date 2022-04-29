@@ -67,7 +67,7 @@ export class LinkEncoderAPI {
     constructor() {
         this.csEncoder = 'sce492.cs.illinois.edu';
         this.encoding = 'latin1';
-        this.port = 10002;
+        this.defaultPort = 10002;
         this.max_character_number = 32;
 
         this.newswire = null;
@@ -119,20 +119,31 @@ export class LinkEncoderAPI {
         }
     }
 
-    async sendMessage(caption, port) {
-        if (this.port == 10001) {
+    async sendMessage(caption, host, port) {
+        if (host == "") {
+            host = this.csEncoder;
+        }
+        if (port == "") {
+            port = this.defaultPort;
+        }
+
+        if (port == 10001) {
             this.fieldinsertmode = Buffer.from("01330D01330D", "hex");
             this.newswire = Buffer.from("014E36014E36", "hex");
-        } else if (this.port == 10002) {
+        } else if (port == 10002) {
             this.fieldinsertmode = Buffer.from("01340D01340D", "hex");
             this.newswire = Buffer.from("015046015046", "hex");
         } else {
             console.error("Invalid port given, Should only be 10001 or 10002");
             return 400;
         }
-        console.log('Attempting connection');
-        await this.connecttoserver(this.port, this.csEncoder);
-        console.log('Connected to ' + this.csEncoder + ':' + this.port);
+        
+        // reconnecting trigger. Not sure if this works as expected when disconnected
+        if (this.socket == null || this.socket.readyState == 'closed') {
+            console.log('Attempting connection');
+            await this.connecttoserver(port, host);
+            console.log('Connected to ' + host + ':' + port);
+        }
 
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {

@@ -37,7 +37,7 @@ const LinkEncoder = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.port);
+        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${postData.caption}`);
         postData.count += 1;
@@ -90,6 +90,7 @@ const LinkEncoder = (props) => {
                 
             </form>
             <div>
+
                 <pre id='locallog' ></pre>
                     <Button onClick = {downloadTxtFile}> Download Log</Button>
             </div>
