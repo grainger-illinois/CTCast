@@ -24,7 +24,7 @@ const Options = (props, window) => {
             <Router>
 
                 <div>
-                    <Link to="/home">
+                    <Link to="/">
                         <Button>HOME</Button>
                     </Link>
                 </div>
@@ -41,7 +41,7 @@ const Options = (props, window) => {
             
             
             <Routes>
-                <Route exact path='/' ></Route>
+                <Route exact path='/' element={< Home />}></Route>
                 <Route exact path='/zoom' element={< ZoomPage />}></Route>
                 <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
             </Routes>
