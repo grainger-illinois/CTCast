@@ -36,7 +36,7 @@ const LinkEncoder = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.port);
+        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${postData.caption}`);
         postData.count += 1;
@@ -57,10 +57,10 @@ const LinkEncoder = (props) => {
         <h2 style={{ textAlign: "center" }}>Link Encoder</h2>
 
         <Grid container direction="column" justifyContent="center" alignItems="center">
-            <TextField name="ip" variant="outlined" size="small" label="IP Address"
+            <TextField name="ip" variant="outlined" size="small" label="IP (empty for default)"
                 value={postData.ip} onChange={e => setPostData({ ...postData, ip: e.target.value })}
             />
-            <TextField name="port" variant="outlined" size="small" label="Port Number"
+            <TextField name="port" variant="outlined" size="small" label="Port (empty for default)"
                 value={postData.port} onChange={e => setPostData({ ...postData, port: e.target.value })}
             />
             <TextField name="caption" variant="outlined" size="small" label="Caption"

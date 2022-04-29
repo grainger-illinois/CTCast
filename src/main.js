@@ -17,8 +17,8 @@ async function loggerWriterHandler(logger, message) {
   return res;
 }
 
-async function linkEncoderHandler(linkencoder, caption, port) {
-  const res = await linkencoder.sendMessage(caption, port);
+async function linkEncoderHandler(linkencoder, caption, host, port) {
+  const res = await linkencoder.sendMessage(caption, host, port);
   return res;
 }
 
@@ -54,8 +54,8 @@ app.on('ready', () => {
     return await loggerWriterHandler(logger, message);
   });
   
-  ipcMain.handle('linkencoder', async (event, caption, port) => {
-    return await linkEncoderHandler(linkencoder, caption, port);
+  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
+    return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
   ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
