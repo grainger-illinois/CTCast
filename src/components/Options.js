@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -6,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import ZoomPage from './zoom/zoom.js'
 import LinkEncoder from './LinkEncoder.js';
+import UploadFiles from './UploadFiles.js';
 
 import Home from './home'
 import './Options.css'
@@ -26,7 +26,7 @@ const Options = (props, window) => {
     <Box sx={{ flexGrow: 1 }} width = "100%" className='center-align'>
       <AppBar position="static" className='center-align'>
         <Toolbar>
-            <Link to = "/" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Link to = "/home" style={{ color: '#FFF', textDecoration: 'none' }}>
           <Button color="inherit">Home</Button>
           </Link>
           <Link to ="/zoom" style={{ color: '#FFF', textDecoration: 'none' }}>
@@ -35,15 +35,18 @@ const Options = (props, window) => {
           <Link to = "/linkencoder" style={{ color: '#FFF', textDecoration: 'none' }}>
           <Button color="inherit">Link Encoder</Button>
           </Link>
+	  <Link to ="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none' }}>
           <Button color="inherit">Upload Files</Button>
+	  </Link>
         </Toolbar>
       </AppBar>
 
         <Routes>
-                 <Route exact path='/' element={< Home />}></Route>
+                 <Route exact path='/home' element={< Home />}></Route>
                  <Route exact path='/zoom' element={< ZoomPage />}></Route>
 
-                <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
+          <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
+	  <Route exact path='/uploadfiles' element={< UploadFiles />}></Route>
         </Routes>
         
     </Box>
