@@ -45,7 +45,7 @@ function render() {
         <div>
             <Options window = {window}/>
             
-          </div>, 
+        </div>, 
     document.body);
 }
 

@@ -26,7 +26,7 @@ const Options = (props, window) => {
     <Box sx={{ flexGrow: 1 }} width = "100%" className='center-align'>
       <AppBar position="static" className='center-align'>
         <Toolbar>
-            <Link to = "/home" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Link to = "/" style={{ color: '#FFF', textDecoration: 'none' }}>
           <Button color="inherit">Home</Button>
           </Link>
           <Link to ="/zoom" style={{ color: '#FFF', textDecoration: 'none' }}>
@@ -42,7 +42,7 @@ const Options = (props, window) => {
       </AppBar>
 
         <Routes>
-                 <Route exact path='/home' element={< Home />}></Route>
+                 <Route exact path='/' element={< Home />}></Route>
                  <Route exact path='/zoom' element={< ZoomPage />}></Route>
 
           <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
