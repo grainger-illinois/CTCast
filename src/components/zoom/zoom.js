@@ -54,9 +54,10 @@ const Form = () => {
         window.zoomAPI.zoomCaption(postData.message, postData.zoomlink);
 
         mylog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${postData.message}`);
-        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, postData.message), ...arr]);
         postData.count += 1;
+
         setPostData({ ...postData, message: '' });
+        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, postData.message), ...arr]);
     }
 
     const clear = () => {
@@ -105,10 +106,12 @@ const Form = () => {
 
                 </Stack>
             </form>
+
             <div>
                 {/* Remove 'hidden' to show text log */}
                 <pre id='thelog' hidden></pre>
             </div>
+
             <br></br>
 
 
@@ -122,9 +125,9 @@ const Form = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {postDataArr.map((row) => (
+                        {postDataArr.map((row, index) => (
                             <TableRow
-                                key={row.name}
+                                key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
                             >
                                 <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count + 1}</TableCell>
@@ -135,7 +138,6 @@ const Form = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
         </div>
     )
 }
