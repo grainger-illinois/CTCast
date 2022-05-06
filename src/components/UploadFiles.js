@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import Button from 'react-bootstrap/Button';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import { Co2Sharp } from "@mui/icons-material";
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Fab from '@mui/material/Fab';
+
+
+
 
 function UploadFiles() {
-
-
 	function removeEmpty(word) {
 		return word != '';
 	}
@@ -24,7 +36,7 @@ function UploadFiles() {
 	const [map, setMap] = useState(new Map());
 
 	window.shortcutMap.getShortcutMap().then((result) => {
-		setMap(result);	
+		setMap(result);
 	});
 
 	const [currLongText, setCurrLongText] = useState("");
@@ -56,7 +68,7 @@ function UploadFiles() {
 	}
 
 	const handleSubmission = () => {
-	//console.log(map);
+		//console.log(map);
 		if (isFilePicked) {
 			//console.log(map);
 			let reader = new FileReader();
@@ -77,9 +89,9 @@ function UploadFiles() {
 						malformedArgs = true;
 						continue;
 					}
-					let words = trimmedLine.split(":");      
-					for(let i = 0; i < words.length; i++)
-						words[i] = words[i].trim();      
+					let words = trimmedLine.split(":");
+					for (let i = 0; i < words.length; i++)
+						words[i] = words[i].trim();
 					words = words.filter(removeEmpty);
 
 					if (words.length == 1) {
@@ -139,7 +151,7 @@ function UploadFiles() {
 						}
 					}
 				}
-				
+
 				window.shortcutMap.sendShortcut(map);
 				//console.log(map);
 			});
@@ -150,20 +162,61 @@ function UploadFiles() {
 
 	return <div style={{ margin: "20px", marginTop: "30px" }}>
 		<h1 style={{ textAlign: "left" }}>File Upload</h1>
-		<h2 style={{ textAlign: "center" }}>Upload Shortcuts file</h2>
-		<br />
-		<input type="file" name="file" onChange={fileChangeHandler} />
-		<button onClick={handleSubmission}>Submit</button>
-		<br />
-		<br />
-		<h2 style={{ textAlign: "center" }}>Add individual shortcuts:</h2>
-		<input type="text" placeholder="Long text" name="String" onChange={longTextHandler} />
-		<br />
-		<input type="text" placeholder="Shortcut" name="Shortcut" onChange={shortcutHandler} />
-		<button onClick={addPairToMap}>Click</button>
-		<br />
-		<h2 style={{ textAlign: "center" }}>Click this button to clear the short cuts:</h2>
-		<button onClick={clearMap}>Click</button>
+		<h2>Upload shortcuts file</h2>
+		<Stack
+			component="form"
+			sx={{
+				width: '100%',
+			}}
+			spacing={2}
+			noValidate
+			autoComplete="off"
+		>
+			<Button variant="outlined" color="primary" endIcon={<InsertDriveFileIcon />}>
+				Choose file
+				<input type="file" name="file" onChange={fileChangeHandler} style={{ opacity: "0", top: "0", left: "0", width: "100%", height: "100%", position: "absolute" }} />
+			</Button>
+			{isFilePicked ?
+				<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission}>Upload</Button> :
+				<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission} disabled>Upload</Button>
+			}
+			<span style={{ textAlign: "center" }}>{isFilePicked ?
+				<span>{selectedFile.name}</span> :
+				<span></span>
+			}</span>
+		</Stack>
+
+		<h2>Add individual shortcuts</h2>
+		<Stack
+			component="form"
+			sx={{
+				width: '100%',
+			}}
+			spacing={2}
+			noValidate
+			autoComplete="off"
+		>
+			<TextField
+				name="Long text"
+				variant="outlined"
+				label="Long text"
+				fullWidth
+				onChange={longTextHandler}
+			/>
+			<TextField
+				name="Shortcut"
+				variant="outlined"
+				label="Shortcut"
+				fullWidth
+				onChange={shortcutHandler}
+			/>
+
+			<Button variant="outlined" color="primary" onClick={addPairToMap}>Click</Button>
+			<hr />
+
+			<Button variant="outlined" color="warning" onClick={clearMap} endIcon={<ClearAllIcon />}>Clear short cuts</Button>
+
+		</Stack>
 	</div>
 
 }
