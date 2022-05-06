@@ -25,21 +25,22 @@ const Options = (props, window) => {
     <Router>
       <Box sx={{ flexGrow: 1 }} width="100%" className='center-align'>
         <AppBar position="static" className='center-align'>
-          <Toolbar>
-            <Link to="/" style={{ color: '#FFF', textDecoration: 'none' }}>
+          <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+            <Link to="/" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Home</Button>
             </Link>
-            <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Zoom</Button>
             </Link>
-            <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Link Encoder</Button>
             </Link>
-            <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none' }}>
+            <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">File Upload</Button>
             </Link>
           </Toolbar>
         </AppBar>
+
 
         <Routes>
           <Route exact path='/' element={< Home />}></Route>
