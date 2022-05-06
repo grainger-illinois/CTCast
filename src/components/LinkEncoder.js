@@ -54,11 +54,16 @@ const LinkEncoder = (props) => {
     }
 
     const handleSubmit = (e) => {
+	const commandReplacer = require('./commandReplacer.js');
         e.preventDefault();
 
-        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
+	let map = new Map();
 
-        writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${postData.caption}`);
+	let newText = commandReplacer(postData.caption, map, "@");
+
+        window.linkEncoderAPI.sendToLinkEncoder(newText, postData.ip, postData.port);
+
+        writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${newText}`);
         postData.count += 1;
         setPostData({ ...postData, caption: '' });
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, postData.caption), ...arr]);
