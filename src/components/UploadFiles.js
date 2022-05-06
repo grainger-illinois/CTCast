@@ -92,7 +92,10 @@ function UploadFiles() {
 						malformedArgs = true;
 						continue;
 					}
-					let words = trimmedLine.split(":").filter(removeEmpty);
+					let words = trimmedLine.split(":");      
+					for(let i = 0; i < words.length; i++)
+						words[i] = words[i].trim();      
+					words = words.filter(removeEmpty);
 
 					if (words.length == 1) {
 						unmatched.push(words[0]);
