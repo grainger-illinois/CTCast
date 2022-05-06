@@ -46,13 +46,13 @@ const Form = () => {
         thelog.textContent += `${result}\n`;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
         //dispatch(createPost(postData));
         //dispatch(sendZoom(postData));
 
-        window.zoomAPI.zoomCaption(postData.message, postData.zoomlink);
+        await window.zoomAPI.zoomCaption(postData.message, postData.zoomlink);
 
         var message = await window.zoomAPI.getLastMessage();
 

@@ -53,10 +53,10 @@ const LinkEncoder = (props) => {
         localLog.textContent += `${result}\n`;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
+        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
         var message = await window.linkEncoderAPI.getLastMessage();
 
