@@ -67,7 +67,8 @@ function UploadFiles() {
 		if (currLongText !== "" && currShortcut !== "") {
 			map.set(currShortcut, currLongText);
 		}
-		console.log(map);
+		//console.log(map);
+		window.uploadMap.sendShortcut(map);
 	}
 
 	const handleSubmission = () => {
@@ -150,7 +151,9 @@ function UploadFiles() {
 						}
 					}
 				}
-				console.log(map);
+				
+				window.uploadMap.sendShortcut(map);
+				//console.log(map);
 			});
 
 			reader.readAsText(selectedFile);

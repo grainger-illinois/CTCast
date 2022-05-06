@@ -1,11 +1,14 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const commandReplacer = require('./components/commandReplacer');
 
-const { LoggerWriter, ZoomAPI, LinkEncoderAPI } = require('./api');
+const { LoggerWriter, ZoomAPI, LinkEncoderAPI, ShortcutMap } = require('./api');
 
 var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
 var zoom = new ZoomAPI();
+var shortcutMap = new ShortcutMap();
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -18,14 +21,27 @@ async function loggerWriterHandler(logger, message) {
 }
 
 async function linkEncoderHandler(linkencoder, caption, host, port) {
-  const res = await linkencoder.sendMessage(caption, host, port);
+  message = commandReplacer(caption, shortcutMap.getShortcutMap(), '@')
+  const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
 
 async function zoomAPIHandler(zoom, caption, meetingLink) {
-  const res = await zoom.sendMessage(caption, meetingLink);
+  
+  console.log(shortcutMap.getShortcutMap());
+  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  console.log(message);
+
+  const res = await zoom.sendMessage(message, meetingLink);
   return res;
 }
+
+async function shortcutHandler(shortcut) {
+  const res = await shortcutMap.updateShortcutMap(shortcut);
+  return res;
+}
+
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -61,6 +77,10 @@ app.on('ready', () => {
   ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
+
+  ipcMain.handle('upload-map', async(event, shortcut) => {
+    return await shortcutHandler(shortcut);
+  })
 
   createWindow();
 });

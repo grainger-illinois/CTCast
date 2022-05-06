@@ -1,3 +1,5 @@
+import { LocalConvenienceStoreOutlined } from '@mui/icons-material';
+
 let axios = require('axios');
 let fs = require('fs');
 let net = require('net');
@@ -31,6 +33,26 @@ export class LoggerWriter {
             }
         });
         return 200;
+    }
+}
+
+export class ShortcutMap {
+    constructor() {
+        this.shortcuts = new Map();
+    }
+
+    async updateShortcutMap(shortcut) {
+        
+        this.shortcuts = new Map([...this.shortcuts, ...shortcut]);
+        console.log("update:");
+        console.log(this.shortcuts);
+        return this.shortcuts;
+    }
+
+    async getShortcutMap(){
+        console.log("get:");
+        console.log(this.shortcuts);
+        return this.shortcuts;
     }
 }
 
