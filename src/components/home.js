@@ -12,7 +12,20 @@ const zoom_card = (
       </Typography>
 
       <Typography variant="body2">
-        Instructions
+        Instructions:
+        <div>
+          <ul>
+                <li>To connect to Zoom meeting, enter valid Zoom API key from Zoom meeting</li>
+                <li>To send captions, add desired captions to the captions textbox and press send button or press enter key</li>
+                <li>To connect to new meeting, press clear button</li>
+                <li>
+                  To download the caption log, press download button
+                </li>
+                <li>
+                  Caution!: if you clear out during zoom call, you need to start the Zoom meeting again in order for captioning to work properly
+                </li>
+          </ul>
+        </div>
 
       </Typography>
     </CardContent>
