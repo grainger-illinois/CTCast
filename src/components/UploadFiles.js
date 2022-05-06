@@ -3,26 +3,6 @@ import Button from 'react-bootstrap/Button';
 
 function UploadFiles() {
 
-	function replaceCommands(text, map, marker) {
-		let keys = [];
-
-		for (const k of map.keys()) {
-			keys.push(k);
-		}
-		keys.sort((a, b) => b.length - a.length);
-		console.log(keys);
-		for (let i = 0; i < map.size; i++) {
-			if (text.indexOf(marker + keys[i]) > -1) {
-				let newText = "";
-				while (text !== newText) {
-					newText = text;
-					text = text.replace(marker + keys[i], map.get(keys[i]));
-				}
-			}
-		}
-		return text;
-	}
-
 
 	function removeEmpty(word) {
 		return word != '';
@@ -42,6 +22,10 @@ function UploadFiles() {
 	const [isFilePicked, setIsFilePicked] = useState(false);
 	const [marker, setMarker] = useState('@');
 	const [map, setMap] = useState(new Map());
+
+	window.shortcutMap.getShortcutMap().then((result) => {
+		setMap(result);	
+	});
 
 	const [currLongText, setCurrLongText] = useState("");
 	const [currShortcut, setCurrShortcut] = useState("");
@@ -72,6 +56,7 @@ function UploadFiles() {
 	}
 
 	const handleSubmission = () => {
+	//console.log(map);
 		if (isFilePicked) {
 			//console.log(map);
 			let reader = new FileReader();
