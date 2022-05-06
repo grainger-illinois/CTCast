@@ -55,7 +55,7 @@ function UploadFiles() {
 	};
 
 	const clearMap = (event) => {
-		map.clear();
+		window.shortcutMap.clearMap();
 	};
 
 	const fileChangeHandler = (event) => {
@@ -68,7 +68,7 @@ function UploadFiles() {
 			map.set(currShortcut, currLongText);
 		}
 		//console.log(map);
-		window.uploadMap.sendShortcut(map);
+		window.shortcutMap.sendShortcut(map);
 	}
 
 	const handleSubmission = () => {
@@ -155,7 +155,7 @@ function UploadFiles() {
 					}
 				}
 				
-				window.uploadMap.sendShortcut(map);
+				window.shortcutMap.sendShortcut(map);
 				//console.log(map);
 			});
 

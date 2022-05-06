@@ -10,9 +10,12 @@ contextBridge.exposeInMainWorld('linkEncoderAPI', {
 })
 
 contextBridge.exposeInMainWorld('zoomAPI', {
-    zoomCaption: (caption, meetingLink) => ipcRenderer.invoke('zoom-caption', caption, meetingLink)
+    zoomCaption: (caption, meetingLink) => ipcRenderer.invoke('zoom-caption', caption, meetingLink),
+    clearZoom: () => ipcRenderer.send('clear-zoom')
 })
 
-contextBridge.exposeInMainWorld('uploadMap', {
-    sendShortcut: (shortcut) => ipcRenderer.invoke('upload-map', shortcut)
+contextBridge.exposeInMainWorld('shortcutMap', {
+    sendShortcut: (shortcut) => ipcRenderer.invoke('upload-map', shortcut),
+    getShortcutMap: () => ipcRenderer.invoke('get-shortcut-map'),
+    clearShortcuts: () => ipcRenderer.send('clear-shortcuts')
 })

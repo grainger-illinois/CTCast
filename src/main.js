@@ -78,9 +78,21 @@ app.on('ready', () => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
 
-  ipcMain.handle('upload-map', async(event, shortcut) => {
-    return await shortcutHandler(shortcut);
+  ipcMain.handle('clear-zoom', async () => {
+    zoom = new ZoomAPI();
   })
+
+  ipcMain.handle('upload-map', async (event, shortcut) => {
+    return await shortcutHandler(shortcut);
+  });
+
+  ipcMain.handle('get-shortcut-map', async (event) => {
+    return shortcutMap.shortcuts;
+  });
+
+  ipcMain.handle('clear-shortcuts', async (event) => {
+    shortcutMap.shortcuts = new Map();
+  });
 
   createWindow();
 });

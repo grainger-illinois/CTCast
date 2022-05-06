@@ -70,6 +70,7 @@ const Form = () => {
         setPostData({ zoomlink: '', message: '', count: 0 });
         setPostDataArr([]);
         document.getElementById('thelog').textContent = "";
+        window.zoomAPI.clearZoom();
     };
 
 
