@@ -47,23 +47,20 @@ const Form = () => {
     }
 
     const handleSubmit = (e) => {
-	const commandReplacer = require('./../commandReplacer.js');
 
         e.preventDefault();
         //dispatch(createPost(postData));
         //dispatch(sendZoom(postData));
 
-	let map = new Map();
+        window.zoomAPI.zoomCaption(postData.message, postData.zoomlink);
 
-	let newText = commandReplacer(postData.message, map, "@");
+        var message = await window.zoomAPI.getLastMessage();
 
-        window.zoomAPI.zoomCaption(newText, postData.zoomlink);
-
-        mylog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${newText}`);
+        mylog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
 
         setPostData({ ...postData, message: '' });
-        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, newText), ...arr]);
+        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
     }
 
     const clear = () => {
