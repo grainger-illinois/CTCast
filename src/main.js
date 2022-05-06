@@ -21,7 +21,7 @@ async function loggerWriterHandler(logger, message) {
 }
 
 async function linkEncoderHandler(linkencoder, caption, host, port) {
-  message = commandReplacer(caption, shortcutMap.getShortcutMap(), '@')
+  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
