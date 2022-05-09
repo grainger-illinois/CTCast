@@ -1,6 +1,5 @@
 function replaceCommands(text, map, marker) {
 	let keys = [];
-	console.log(map);
 	for(const k of map.keys()) {
 	    keys.push(k);
 	}

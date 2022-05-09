@@ -65,6 +65,9 @@ function UploadFiles() {
 		}
 		//console.log(map);
 		window.shortcutMap.sendShortcut(map);
+
+		setCurrLongText('');
+		setCurrShortcut('');
 	}
 
 	const handleSubmission = () => {
@@ -201,6 +204,7 @@ function UploadFiles() {
 				variant="outlined"
 				label="Long text"
 				fullWidth
+				value={currLongText}
 				onChange={longTextHandler}
 			/>
 			<TextField
@@ -208,10 +212,11 @@ function UploadFiles() {
 				variant="outlined"
 				label="Shortcut"
 				fullWidth
+				value={currShortcut}
 				onChange={shortcutHandler}
 			/>
 
-			<Button variant="outlined" color="primary" onClick={addPairToMap}>Click</Button>
+			<Button variant="outlined" color="primary" onClick={addPairToMap}>Submit Pair</Button>
 			<hr />
 
 			<Button variant="outlined" color="warning" onClick={clearMap} endIcon={<ClearAllIcon />}>Clear short cuts</Button>

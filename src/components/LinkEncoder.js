@@ -53,20 +53,17 @@ const LinkEncoder = (props) => {
         localLog.textContent += `${result}\n`;
     }
 
-    const handleSubmit = (e) => {
-	const commandReplacer = require('./commandReplacer.js');
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-	let map = new Map();
+        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
-	let newText = commandReplacer(postData.caption, map, "@");
+        var message = await window.linkEncoderAPI.getLastMessage();
 
-        window.linkEncoderAPI.sendToLinkEncoder(newText, postData.ip, postData.port);
-
-        writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${newText}`);
+        writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
         setPostData({ ...postData, caption: '' });
-        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, postData.caption), ...arr]);
+        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
 
     }
 
@@ -74,6 +71,7 @@ const LinkEncoder = (props) => {
         setPostData({ ip: '', port: '', caption: '', count: 0 });
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
+        window.linkEncoderAPI.clearLinkEncoder();
     };
 
     // Unused

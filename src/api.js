@@ -44,14 +44,10 @@ export class ShortcutMap {
     async updateShortcutMap(shortcut) {
         
         this.shortcuts = new Map([...this.shortcuts, ...shortcut]);
-        console.log("update:");
-        console.log(this.shortcuts);
         return this.shortcuts;
     }
 
     async getShortcutMap(){
-        console.log("get:");
-        console.log(this.shortcuts);
         return this.shortcuts;
     }
 }
@@ -60,6 +56,7 @@ export class ShortcutMap {
 export class ZoomAPI {
     constructor() {
         this.seq = 1;
+        this.last_message = null;
     }
 
     getCurSeq(meetingLink) {
@@ -81,6 +78,10 @@ export class ZoomAPI {
         }
         await axios(options).then(res => console.log(res)).catch(err => console.log(err));
         this.seq += 1;
+
+        this.last_message = caption;
+
+        return 200;
     }
 }
 
@@ -110,6 +111,8 @@ export class LinkEncoderAPI {
         this.character_diff_list = ['*', "\\", '\'', '_', '`', '{', '}', '|', '~'];
 
         this.socket = null;
+
+        this.last_message = null;
     }
 
     async connecttoserver(port, host) {
@@ -211,6 +214,8 @@ export class LinkEncoderAPI {
             }
 
         }
+
+        this.last_message = caption;
         return 200;
     }
 };

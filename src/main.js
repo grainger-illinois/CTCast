@@ -27,10 +27,7 @@ async function linkEncoderHandler(linkencoder, caption, host, port) {
 }
 
 async function zoomAPIHandler(zoom, caption, meetingLink) {
-  
-  console.log(shortcutMap.getShortcutMap());
   message = commandReplacer(caption, shortcutMap.shortcuts, '@')
-  console.log(message);
 
   const res = await zoom.sendMessage(message, meetingLink);
   return res;
@@ -74,13 +71,25 @@ app.on('ready', () => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
+  ipcMain.handle('clear-le', async (event) => {
+    linkencoder = new LinkEncoderAPI();
+  })
+
+  ipcMain.handle('le-last-message', async (event) => {
+    return linkencoder.last_message;
+  });
+
   ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
 
-  ipcMain.handle('clear-zoom', async () => {
+  ipcMain.handle('clear-zoom', async (event) => {
     zoom = new ZoomAPI();
-  })
+  });
+
+  ipcMain.handle('zoom-last-message', async (event) => {
+    return zoom.last_message;
+  });
 
   ipcMain.handle('upload-map', async (event, shortcut) => {
     return await shortcutHandler(shortcut);
