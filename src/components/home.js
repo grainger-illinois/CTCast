@@ -17,7 +17,7 @@ const zoom_card = (
           <ul>
                 <li>To connect to Zoom meeting, enter valid Zoom API key from Zoom meeting</li>
                 <li>To send captions, add desired captions to the captions textbox and press send button or press enter key</li>
-                <li>To connect to new meeting, press clear button</li>
+                <li>To connect to new meeting or to disconnect, press clear button</li>
                 <li>
                   To download the caption log, press download button
                 </li>
@@ -40,7 +40,17 @@ const linkencoder_card = (
       </Typography>
 
       <Typography variant="body2">
-        Instructions
+        Instructions:
+        <div>
+          <ul>
+                <li>To connect to link encoder, enter valid IP address, port number</li>
+                <li>To send captions, add desired captions to the captions textbox and press send button or press enter key</li>
+                <li>To connect to new link encoder or to disconnect, press clear button</li>
+                <li>
+                  To download the caption log, press download button
+                </li>
+          </ul>
+        </div>
 
       </Typography>
     </CardContent>
@@ -56,6 +66,19 @@ const upload_card = (
 
       <Typography variant="body2">
         Instructions
+        <div>
+          <ul>
+                <li>To upload shortcuts, either upload a text file or add them manually</li>
+                <li>When using file upload, have the text first then shortcut (e.g. ClassTranscribe:CT)</li>
+                <li>When using manual shortcut input, add full text and shortcut to designated textboxes</li>
+                <li>
+                  You can manually input shortcuts after file has been uploaded
+                </li>
+                <li>
+                  You can reset the shortcuts by pressing clear button.
+                </li>
+          </ul>
+        </div>
 
       </Typography>
     </CardContent>

@@ -39,6 +39,18 @@ const LinkEncoder = (props) => {
 
     const [postDataArr, setPostDataArr] = useState([]);
 
+    useEffect(() => {
+        const data = window.localStorage.getItem('linken_captioning');
+        const data_log = window.localStorage.getItem('logging_data');
+        setPostData(JSON.parse(data));
+        setPostDataArr(JSON.parse(data_log));
+    }, [])
+
+    useEffect(() => {
+        window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
+        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
+    }, [postData, postDataArr])
+
     const downloadTxtFile = () => {
         const element = document.createElement("a");
         const file = new Blob([document.getElementById('locallog').outerHTML], { type: 'text/plain' });

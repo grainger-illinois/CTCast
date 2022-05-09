@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import useStyles from './styles'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ const Form = () => {
         return { time, count, message };
     }
 
-
+    //Function to download log file
     const downloadTxtFile = () => {
         const element = document.createElement("a");
         const file = new Blob([document.getElementById('thelog').outerHTML], { type: 'text/plain' });
@@ -33,24 +33,43 @@ const Form = () => {
         element.click();
     }
 
+    //Post object for ZoomAPI key, message, and seq number
     const [postData, setPostData] = useState({
         zoomLink: '', message: '', count: 0
     });
 
+    //Log object
     const [postDataArr, setPostDataArr] = useState([]);
 
-    const classes = useStyles();
+    //Updates the objects from locally saved objects
+    useEffect(() => {
+        const data = window.localStorage.getItem('Zoom_captioning');
+        const data_log = window.localStorage.getItem('logging_data');
+        setPostData(JSON.parse(data));
+        setPostDataArr(JSON.parse(data_log));
+    }, [])
 
+    //locally saves objects upon changes to postData and postDataArr
+    useEffect(() => {
+        window.localStorage.setItem('Zoom_captioning', JSON.stringify(postData))
+        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
+    }, [postData, postDataArr])
+
+    //Log updating function
     const mylog = (result) => {
         var thelog = document.getElementById('thelog');
         thelog.textContent += `${result}\n`;
     }
 
+    const classes = useStyles();
+
+    //hanles submit by calling zoomAPI and sending neccesary data to its function
+    //sends logging information to mylog function
+    //updates count
+    //resets message
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-        //dispatch(createPost(postData));
-        //dispatch(sendZoom(postData));
 
         await window.zoomAPI.zoomCaption(postData.message, postData.zoomlink);
 
@@ -63,6 +82,7 @@ const Form = () => {
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
     }
 
+    //resets postData and postDataArr objects
     const clear = () => {
         setPostData({ zoomlink: '', message: '', count: 0 });
         setPostDataArr([]);

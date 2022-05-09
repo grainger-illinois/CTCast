@@ -55,7 +55,7 @@ export class ShortcutMap {
 // Some of these hardcoded values should be passed in as args maybe...
 export class ZoomAPI {
     constructor() {
-        this.seq = 1;
+        this.seq = 0;
         this.last_message = null;
     }
 
