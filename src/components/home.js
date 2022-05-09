@@ -38,7 +38,7 @@ const linkencoder_card = (
       <Typography variant="h5" component="div">
         Link Encoder
       </Typography>
-
+      <hr />
 
       <Typography variant="body2">
 
@@ -65,7 +65,7 @@ const upload_card = (
       <Typography variant="h5" component="div">
         File Upload
       </Typography>
-
+      <hr />
 
       <Typography variant="body2">
         <div>
