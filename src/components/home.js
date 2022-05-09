@@ -41,7 +41,7 @@ const linkencoder_card = (
 
 
       <Typography variant="body2">
-        Instructions:
+
         <div>
           <ul>
                 <li>To connect to link encoder, enter valid IP address, port number</li>
@@ -68,7 +68,6 @@ const upload_card = (
 
 
       <Typography variant="body2">
-        Instructions
         <div>
           <ul>
                 <li>To upload shortcuts, either upload a text file or add them manually</li>
