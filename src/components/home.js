@@ -10,11 +10,11 @@ const zoom_card = (
       <Typography variant="h5" component="div">
         Zoom
       </Typography>
-
-      <Typography variant="body2">
-        Instructions:
+      <hr />
+      <Typography variant="body1">
         <div>
           <ul>
+
                 <li>To connect to Zoom meeting, enter valid Zoom API key from Zoom meeting</li>
                 <li>To send captions, add desired captions to the captions textbox and press send button or press enter key</li>
                 <li>To connect to new meeting or to disconnect, press clear button</li>
@@ -24,9 +24,9 @@ const zoom_card = (
                 <li>
                   Caution!: if you clear out during zoom call, you need to start the Zoom meeting again in order for captioning to work properly
                 </li>
+
           </ul>
         </div>
-
       </Typography>
     </CardContent>
   </React.Fragment>
@@ -38,6 +38,7 @@ const linkencoder_card = (
       <Typography variant="h5" component="div">
         Link Encoder
       </Typography>
+
 
       <Typography variant="body2">
         Instructions:
@@ -53,6 +54,7 @@ const linkencoder_card = (
         </div>
 
       </Typography>
+
     </CardContent>
   </React.Fragment>
 );
@@ -63,6 +65,7 @@ const upload_card = (
       <Typography variant="h5" component="div">
         File Upload
       </Typography>
+
 
       <Typography variant="body2">
         Instructions
@@ -81,6 +84,7 @@ const upload_card = (
         </div>
 
       </Typography>
+
     </CardContent>
   </React.Fragment>
 );
