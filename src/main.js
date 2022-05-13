@@ -1,16 +1,55 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const commandReplacer = require('./components/commandReplacer');
+
+const { LoggerWriter, ZoomAPI, LinkEncoderAPI, ShortcutMap } = require('./api');
+
+var logger = new LoggerWriter();
+var linkencoder = new LinkEncoderAPI();
+var zoom = new ZoomAPI();
+var shortcutMap = new ShortcutMap();
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
+async function loggerWriterHandler(logger, message) {
+  const res = await logger.sendMessage(message);
+  return res;
+}
+
+async function linkEncoderHandler(linkencoder, caption, host, port) {
+  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  const res = await linkencoder.sendMessage(message, host, port);
+  return res;
+}
+
+async function zoomAPIHandler(zoom, caption, meetingLink) {
+  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+
+  const res = await zoom.sendMessage(message, meetingLink);
+  return res;
+}
+
+async function shortcutHandler(shortcut) {
+  const res = await shortcutMap.updateShortcutMap(shortcut);
+  return res;
+}
+
+
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      enableRemoteModule: true
+    },
   });
 
   // and load the index.html of the app.
@@ -23,7 +62,49 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  ipcMain.handle('log-message', async (event, message) => {
+    return await loggerWriterHandler(logger, message);
+  });
+  
+  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
+    return await linkEncoderHandler(linkencoder, caption, host, port);
+  });
+
+  ipcMain.handle('clear-le', async (event) => {
+    linkencoder = new LinkEncoderAPI();
+  })
+
+  ipcMain.handle('le-last-message', async (event) => {
+    return linkencoder.last_message;
+  });
+
+  ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
+    return await zoomAPIHandler(zoom, caption, meetingLink);
+  });
+
+  ipcMain.handle('clear-zoom', async (event) => {
+    zoom = new ZoomAPI();
+  });
+
+  ipcMain.handle('zoom-last-message', async (event) => {
+    return zoom.last_message;
+  });
+
+  ipcMain.handle('upload-map', async (event, shortcut) => {
+    return await shortcutHandler(shortcut);
+  });
+
+  ipcMain.handle('get-shortcut-map', async (event) => {
+    return shortcutMap.shortcuts;
+  });
+
+  ipcMain.handle('clear-shortcuts', async (event) => {
+    shortcutMap.shortcuts = new Map();
+  });
+
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
