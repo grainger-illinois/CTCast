@@ -3,18 +3,23 @@ import { LocalConvenienceStoreOutlined } from '@mui/icons-material';
 let axios = require('axios');
 let fs = require('fs');
 let net = require('net');
+let os = require('os');
+let path = require('path');
 
 /* This is where we should put the classes that will handle the functionality for communication with zoom and link encoder */
-const log_prefix = './logs/log-' // Will eventually be configurable location
+const log_dir = path.join(os.homedir(), 'CTCast', 'logs') // Will eventually be configurable location
 
 /* The basic structure of one of these classes */
 export class LoggerWriter {
     constructor() {
         let date = new Date();
-        const filename = log_prefix + String(Date.now()) + '.txt';
+        fs.mkdirSync(log_dir,
+            {recursive: true}
+        )
+        const filename =  path.join(log_dir, String(Date.now()) + '.txt');
         this.filename = filename;
-        const initial_message = 'Log created at ' + date.getFullYear + '-' + date.getMonth() + '-' + date.getDate() + '\n';
-        console.log(process.cwd());
+        const initial_message = 'Log created at ' + date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + '\n';
+        console.log(filename);
         fs.writeFile(filename, initial_message, err => {
             if (err) {
                 console.error('ERROR: Could not initialize file!');
@@ -25,7 +30,7 @@ export class LoggerWriter {
 
     async sendMessage(message) {
         let date = new Date();
-        const modified_message = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ':\t' + message + '\n';
+        const modified_message = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + ':\t' + message + '\n';
         fs.appendFile(this.filename, modified_message, err => {
             if (err) {
                 console.error('ERROR: Could not log message!');
