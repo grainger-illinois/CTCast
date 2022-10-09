@@ -142,10 +142,7 @@ export class LinkEncoderAPI {
         if (str.length <= n)
             return [str];
         else {
-            //console.log(str.substr(0, n));
-            //console.log(str.substr(n, str.length - n));
-
-            return [str.substr(0, n)].concat(chunkstring(str.substr(n, str.length - n), str.length - n));
+            return str.match(new RegExp('.{1,' + n + '}', 'g')); //split the strings chunks of strings of length 32
         }
     }
 
@@ -174,19 +171,20 @@ export class LinkEncoderAPI {
             await this.connecttoserver(port, host);
             console.log('Connected to ' + host + ':' + port);
         }
-
+        
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {
             for (const invalid_char of this.character_diff_list) {
                 caption = this.replaceAllChars(caption, invalid_char, "");
             }
         }
+        
         caption = this.replaceAllChars(caption, '\n', ' ');
         caption = this.replaceAllChars(caption, '\t', ' ');
-
-        let list_of_words = caption.split(' ');
-        list_of_words = list_of_words.filter((x) => x != '');
-
+        
+        let list_of_words = caption.split(' '); //split the user submitted input on whitespace
+        list_of_words = list_of_words.filter((x) => x != ''); //remove empty string elements
+        
         if (list_of_words.length == 0) {
             console.log('Caption was empty!');
             return 200;
@@ -202,10 +200,9 @@ export class LinkEncoderAPI {
 
         while (list_of_words_32.length > 0) {
             let word = list_of_words_32.shift(); // current word
-
             while (true) {
                 // if the current and next word combined (including the space between them) is 32 characters or less, combine them together to make a sentence
-                if (list_of_words_32.length > 0 && word.length + 1 + (list_of_words_32[0]).length <= this.max_character_number) {
+                if (list_of_words_32.length > 0 && (word.length + 1 + (list_of_words_32[0]).length <= this.max_character_number)) {
                     let next_word = list_of_words_32.shift();
                     word = word + ' ' + next_word;
                 }
