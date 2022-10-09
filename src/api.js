@@ -220,4 +220,4 @@ export class LinkEncoderAPI {
         this.last_message = caption;
         return 200;
     }
-};
+}
