@@ -4,6 +4,7 @@ const path = require("path");
 
 let app;
 
+// make sure that the electron app can start
 beforeAll(() => {
   app = new Application({
     path: electronPath,
@@ -20,7 +21,7 @@ afterAll(function () {
   }
 });
 
-
+// test to see if the app opens a new window
 test("Displays App window", async function () {
     let windowCount = await app.client.getWindowCount();
   
