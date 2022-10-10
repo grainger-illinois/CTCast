@@ -13,7 +13,7 @@ beforeAll(() => {
   });
 
   return app.start();
-}, 15000);
+}, 30000);
 
 afterAll(function () {
   if (app && app.isRunning()) {
