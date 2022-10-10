@@ -15,7 +15,7 @@ beforeAll(() => {
   });
 
   return app.start();
-}, 60000);
+}, 600000);
 
 afterAll(function () {
   if (app && app.isRunning()) {
