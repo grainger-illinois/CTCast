@@ -2,6 +2,8 @@ const Application = require("spectron").Application;
 const electronPath = require("electron");
 const path = require("path");
 
+jest.useRealTimers();
+
 let app;
 
 // make sure that the electron app can start
@@ -13,7 +15,7 @@ beforeAll(() => {
   });
 
   return app.start();
-}, 30000);
+}, 60000);
 
 afterAll(function () {
   if (app && app.isRunning()) {
@@ -23,6 +25,7 @@ afterAll(function () {
 
 // test to see if the app opens a new window
 test("Displays App window", async function () {
+    jest.setTimeout(30000);
     let windowCount = await app.client.getWindowCount();
   
     expect(windowCount).toBe(1);
