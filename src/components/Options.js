@@ -3,9 +3,12 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
+import { Help } from '@mui/icons-material'
+
 import ZoomPage from './zoom/zoom.js'
 import LinkEncoder from './LinkEncoder.js';
 import UploadFiles from './UploadFiles.js';
+import Support from "./Help.js";
 
 import Home from './home'
 import './Options.css'
@@ -15,7 +18,6 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-
 
 
 const Options = (props, window) => {
@@ -38,6 +40,9 @@ const Options = (props, window) => {
             <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">File Upload</Button>
             </Link>
+            <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center", flexGrow: "1" }}>
+              <Button color="inherit"><Help/></Button>
+            </Link>
           </Toolbar>
         </AppBar>
 
@@ -48,6 +53,8 @@ const Options = (props, window) => {
 
           <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
           <Route exact path='/uploadfiles' element={< UploadFiles />}></Route>
+          <Route exact path='/help' element={< Support />}></Route>
+
         </Routes>
 
       </Box>
