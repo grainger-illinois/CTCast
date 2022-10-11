@@ -2,7 +2,7 @@ import { _electron as electron } from "playwright";
 import { test, expect } from "@playwright/test";
 
 test("Launch electron app", async () => {
-  test.setTimeout(0);
+  test.setTimeout(300000);
   const electronApp = await electron.launch({ args: ["."] });
 
   const windowState: {
