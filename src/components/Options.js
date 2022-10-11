@@ -27,7 +27,7 @@ const Options = (props, window) => {
     <Router>
       <Box sx={{ flexGrow: 1 }} width="100%" className='center-align'>
         <AppBar position="static" className='center-align'>
-          <Toolbar style={{ display: "flex", justifyContent: "space-between" }}>
+          <Toolbar style={{ display: "flex", justifyContent: "start" }}>
             <Link to="/" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Home</Button>
             </Link>
@@ -37,13 +37,16 @@ const Options = (props, window) => {
             <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Link Encoder</Button>
             </Link>
-            <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
+            <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit">File Upload</Button>
             </Link>
-            <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center", flexGrow: "1" }}>
+            <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "1"}}>
+            </Box>
+            <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit"><Help/></Button>
             </Link>
           </Toolbar>
+
         </AppBar>
 
 
