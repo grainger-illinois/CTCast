@@ -40,8 +40,5 @@ jobs:
       - name: Build
         run: npm install make
         
-      - name: Run ESLint
-        run: npm run lint
-
       - name: Run tests
         run: npm run test
