@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { Co2Sharp } from "@mui/icons-material";
+// import Box from '@mui/material/Box';
+// import Card from '@mui/material/Card';
+// import CardContent from '@mui/material/CardContent';
+// import Typography from '@mui/material/Typography';
+// import { Co2Sharp } from "@mui/icons-material";
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Fab from '@mui/material/Fab';
+// import Fab from '@mui/material/Fab';
 
 
 
@@ -32,7 +32,7 @@ function UploadFiles() {
 
 	const [selectedFile, setSelectedFile] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
-	const [marker, setMarker] = useState('@');
+	//const [marker, setMarker] = useState('@');
 	const [map, setMap] = useState(new Map());
 
 	window.shortcutMap.getShortcutMap().then((result) => {
@@ -50,7 +50,7 @@ function UploadFiles() {
 		setCurrShortcut(event.target.value);
 	};
 
-	const clearMap = (event) => {
+	const clearMap = () => {
 		window.shortcutMap.clearMap();
 	};
 
@@ -76,7 +76,7 @@ function UploadFiles() {
 			//console.log(map);
 			let reader = new FileReader();
 
-			reader.addEventListener('load', (e) => {
+			reader.addEventListener('load', () => {
 				let content = reader.result;
 
 				let lines = content.split("\n");
@@ -119,7 +119,7 @@ function UploadFiles() {
 
 				for (let word of unmatched) {
 					let wordContained = false;
-					map.forEach(function (value, key) { if (value === word) wordContained = true; });
+					map.forEach(function (value) { if (value === word) wordContained = true; });
 
 					if (wordContained)
 						continue;

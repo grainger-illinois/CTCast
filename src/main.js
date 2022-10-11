@@ -1,3 +1,5 @@
+//import message from './Message';
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
@@ -8,6 +10,9 @@ var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
 var zoom = new ZoomAPI();
 var shortcutMap = new ShortcutMap();
+var message = new message();
+var MAIN_WINDOW_WEBPACK_ENTRY = new MAIN_WINDOW_WEBPACK_ENTRY;
+
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -67,39 +72,39 @@ app.on('ready', () => {
     return await loggerWriterHandler(logger, message);
   });
   
-  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
+  ipcMain.handle('linkencoder', async (caption, host, port) => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
-  ipcMain.handle('clear-le', async (event) => {
+  ipcMain.handle('clear-le', async () => {
     linkencoder = new LinkEncoderAPI();
   })
 
-  ipcMain.handle('le-last-message', async (event) => {
+  ipcMain.handle('le-last-message', async () => {
     return linkencoder.last_message;
   });
 
-  ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
+  ipcMain.handle('zoom-caption', async (caption, meetingLink) => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
 
-  ipcMain.handle('clear-zoom', async (event) => {
+  ipcMain.handle('clear-zoom', async () => {
     zoom = new ZoomAPI();
   });
 
-  ipcMain.handle('zoom-last-message', async (event) => {
+  ipcMain.handle('zoom-last-message', async () => {
     return zoom.last_message;
   });
 
-  ipcMain.handle('upload-map', async (event, shortcut) => {
+  ipcMain.handle('upload-map', async (shortcut) => {
     return await shortcutHandler(shortcut);
   });
 
-  ipcMain.handle('get-shortcut-map', async (event) => {
+  ipcMain.handle('get-shortcut-map', async () => {
     return shortcutMap.shortcuts;
   });
 
-  ipcMain.handle('clear-shortcuts', async (event) => {
+  ipcMain.handle('clear-shortcuts', async () => {
     shortcutMap.shortcuts = new Map();
   });
 

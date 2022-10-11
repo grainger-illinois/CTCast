@@ -1,5 +1,3 @@
-import { LocalConvenienceStoreOutlined } from '@mui/icons-material';
-
 let axios = require('axios');
 let fs = require('fs');
 let net = require('net');
@@ -200,21 +198,18 @@ export class LinkEncoderAPI {
 
         while (list_of_words_32.length > 0) {
             let word = list_of_words_32.shift(); // current word
-            while (true) {
-                // if the current and next word combined (including the space between them) is 32 characters or less, combine them together to make a sentence
-                if (list_of_words_32.length > 0 && (word.length + 1 + (list_of_words_32[0]).length <= this.max_character_number)) {
-                    let next_word = list_of_words_32.shift();
-                    word = word + ' ' + next_word;
-                }
-                else { // send the word(s)
-                    //sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
-                    let newswire_word = word + "\r";
-                    this.socket.write(newswire_word, this.encoding);
-
-                    break;
-                }
+            // if the current and next word combined (including the space between them) is 32 characters or less, combine them together to make a sentence
+            if (list_of_words_32.length > 0 && (word.length + 1 + (list_of_words_32[0]).length <= this.max_character_number)) {
+                let next_word = list_of_words_32.shift();
+                word = word + ' ' + next_word;
             }
+            else { // send the word(s)
+                //sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
+                let newswire_word = word + "\r";
+                this.socket.write(newswire_word, this.encoding);
 
+                break;
+            }
         }
 
         this.last_message = caption;
