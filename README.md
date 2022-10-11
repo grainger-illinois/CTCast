@@ -4,9 +4,10 @@ A tool to broadcast captions and text descriptions.
 
 # License
 
-Source code and is available under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt), copyright (C) Board of Trustees, University of Illinois 2021.
+Source code and is available under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt), copyright (C) Board of Trustees, University of Illinois 2021-2022.
 
 # Installation
+We currently target Node 16 (check the latest build actions). Node Verson Manager (nvm) is useful to select a particular version of Node.
 Development of this requires node/npm to work. Install node, and then clone this repo to get started. cd into the directory and run `npm install` to install node dependencies, and run `npm start` to start the application.
 
 # Structure
