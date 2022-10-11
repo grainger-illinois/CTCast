@@ -1,5 +1,3 @@
-//import message from './Message';
-
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
@@ -10,9 +8,6 @@ var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
 var zoom = new ZoomAPI();
 var shortcutMap = new ShortcutMap();
-var message = new message();
-var MAIN_WINDOW_WEBPACK_ENTRY = new MAIN_WINDOW_WEBPACK_ENTRY;
-
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -26,13 +21,13 @@ async function loggerWriterHandler(logger, message) {
 }
 
 async function linkEncoderHandler(linkencoder, caption, host, port) {
-  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
 
 async function zoomAPIHandler(zoom, caption, meetingLink) {
-  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
 
   const res = await zoom.sendMessage(message, meetingLink);
   return res;
@@ -56,7 +51,6 @@ const createWindow = () => {
       enableRemoteModule: true
     },
   });
-
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 

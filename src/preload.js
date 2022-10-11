@@ -23,3 +23,4 @@ contextBridge.exposeInMainWorld('shortcutMap', {
     clearShortcuts: () => ipcRenderer.send('clear-shortcuts')
 })
 
+
