@@ -18,7 +18,7 @@ import {
 
 
 
-const Options = () => {
+const Options = (props, window) => {
 
 
   return (
