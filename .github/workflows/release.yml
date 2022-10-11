@@ -72,15 +72,15 @@ jobs:
       
       - name: Zip up needed files
         run: |
-          zip -r windows.zip ctcast-win32-x64/
-          zip -r linux.zip ctcast-linux-x64/
-          zip -r mac.zip ctcast-darwin-x64/
+          zip -r ctcast-${{ github.event.inputs.release_tag }}-windows.zip ctcast-win32-x64/
+          zip -r ctcast-${{ github.event.inputs.release_tag }}-linux.zip ctcast-linux-x64/
+          zip -r ctcast-${{ github.event.inputs.release_tag }}-mac.zip ctcast-darwin-x64/
           
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            windows.zip
-            linux.zip
-            mac.zip
+            ctcast-${{ github.event.inputs.release_tag }}-windows.zip
+            ctcast-${{ github.event.inputs.release_tag }}-linux.zip
+            ctcast-${{ github.event.inputs.release_tag }}-mac.zip
           tag_name: ${{ github.event.inputs.release_tag }}
