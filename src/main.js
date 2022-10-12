@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: 0 */
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
@@ -66,39 +67,39 @@ app.on('ready', () => {
     return await loggerWriterHandler(logger, message);
   });
   
-  ipcMain.handle('linkencoder', async (caption, host, port) => {
+  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
-  ipcMain.handle('clear-le', async () => {
+  ipcMain.handle('clear-le', async (event) => {
     linkencoder = new LinkEncoderAPI();
   })
 
-  ipcMain.handle('le-last-message', async () => {
+  ipcMain.handle('le-last-message', async (event) => {
     return linkencoder.last_message;
   });
 
-  ipcMain.handle('zoom-caption', async (caption, meetingLink) => {
+  ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
 
-  ipcMain.handle('clear-zoom', async () => {
+  ipcMain.handle('clear-zoom', async (event) => {
     zoom = new ZoomAPI();
   });
 
-  ipcMain.handle('zoom-last-message', async () => {
+  ipcMain.handle('zoom-last-message', async (event) => {
     return zoom.last_message;
   });
 
-  ipcMain.handle('upload-map', async (shortcut) => {
+  ipcMain.handle('upload-map', async (event, shortcut) => {
     return await shortcutHandler(shortcut);
   });
 
-  ipcMain.handle('get-shortcut-map', async () => {
+  ipcMain.handle('get-shortcut-map', async (event) => {
     return shortcutMap.shortcuts;
   });
 
-  ipcMain.handle('clear-shortcuts', async () => {
+  ipcMain.handle('clear-shortcuts', async (event) => {
     shortcutMap.shortcuts = new Map();
   });
 
