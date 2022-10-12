@@ -21,13 +21,13 @@ async function loggerWriterHandler(logger, message) {
 }
 
 async function linkEncoderHandler(linkencoder, caption, host, port) {
-  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
 
 async function zoomAPIHandler(zoom, caption, meetingLink) {
-  message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
 
   const res = await zoom.sendMessage(message, meetingLink);
   return res;
@@ -51,7 +51,6 @@ const createWindow = () => {
       enableRemoteModule: true
     },
   });
-
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
@@ -67,39 +66,39 @@ app.on('ready', () => {
     return await loggerWriterHandler(logger, message);
   });
   
-  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
+  ipcMain.handle('linkencoder', async (caption, host, port) => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
-  ipcMain.handle('clear-le', async (event) => {
+  ipcMain.handle('clear-le', async () => {
     linkencoder = new LinkEncoderAPI();
   })
 
-  ipcMain.handle('le-last-message', async (event) => {
+  ipcMain.handle('le-last-message', async () => {
     return linkencoder.last_message;
   });
 
-  ipcMain.handle('zoom-caption', async (event, caption, meetingLink) => {
+  ipcMain.handle('zoom-caption', async (caption, meetingLink) => {
     return await zoomAPIHandler(zoom, caption, meetingLink);
   });
 
-  ipcMain.handle('clear-zoom', async (event) => {
+  ipcMain.handle('clear-zoom', async () => {
     zoom = new ZoomAPI();
   });
 
-  ipcMain.handle('zoom-last-message', async (event) => {
+  ipcMain.handle('zoom-last-message', async () => {
     return zoom.last_message;
   });
 
-  ipcMain.handle('upload-map', async (event, shortcut) => {
+  ipcMain.handle('upload-map', async (shortcut) => {
     return await shortcutHandler(shortcut);
   });
 
-  ipcMain.handle('get-shortcut-map', async (event) => {
+  ipcMain.handle('get-shortcut-map', async () => {
     return shortcutMap.shortcuts;
   });
 
-  ipcMain.handle('clear-shortcuts', async (event) => {
+  ipcMain.handle('clear-shortcuts', async () => {
     shortcutMap.shortcuts = new Map();
   });
 

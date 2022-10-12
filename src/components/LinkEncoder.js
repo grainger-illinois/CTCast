@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+//import { Form, Row, Col } from 'react-bootstrap'
 //import Button from 'react-bootstrap/Button'
-import Badge from 'react-bootstrap/Badge'
-import { useNavigate } from "react-router-dom";
+//import Badge from 'react-bootstrap/Badge'
+// import { useNavigate } from "react-router-dom";
 import useStyles from './zoom/styles'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -22,7 +22,7 @@ import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
  *   Need to change to a better alignment
  */
 
-const LinkEncoder = (props) => {
+const LinkEncoder = () => {
     //const [captionList, setCaptionList] = useState([]);
     //const [localLog, setLocalLog] = useState("");
     const [postData, setPostData] = useState({
@@ -84,11 +84,6 @@ const LinkEncoder = (props) => {
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
         window.linkEncoderAPI.clearLinkEncoder();
-    };
-
-    // Unused
-    const switchPage = (url) => {
-        useNavigate(url);
     };
 
     const classes = useStyles();

@@ -22,3 +22,5 @@ contextBridge.exposeInMainWorld('shortcutMap', {
     getShortcutMap: () => ipcRenderer.invoke('get-shortcut-map'),
     clearShortcuts: () => ipcRenderer.send('clear-shortcuts')
 })
+
+

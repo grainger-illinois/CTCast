@@ -9,7 +9,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "eslint .  --ext .js",
+    "lint-fix": "eslint --fix .  --ext .js",
+    "test": "playwright test"
   },
   "keywords": [],
   "author": {
@@ -71,11 +73,19 @@
     "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
     "@electron-forge/maker-zip": "^6.0.0-beta.61",
     "@electron-forge/plugin-webpack": "^6.0.0-beta.61",
+    "@playwright/test": "^1.27.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.4.0",
     "electron": "^15.5.4",
+    "electron-playwright-helpers": "^1.2.0",
+    "eslint": "^8.25.0",
+    "eslint-plugin-jest": "^27.1.1",
+    "eslint-plugin-react": "^7.31.8",
+    "jest": "^27.2.5",
     "node-loader": "^2.0.0",
+    "playwright": "^1.27.0",
+    "spectron": "^17.0.0",
     "style-loader": "^3.3.0"
   },
   "dependencies": {
