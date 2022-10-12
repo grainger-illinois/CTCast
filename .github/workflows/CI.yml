@@ -39,9 +39,15 @@ jobs:
         
       - name: Build
         run: npm install make
+      
+      - name: Make
+        run: npm run make
 
       - name: Install Playwright
         run: npx playwright install --with-deps
+
+      - name: Install Electron Playwright helpers
+        run: npm i -D electron-playwright-helpers
 
       - name: Run MacOS and Windows tests
         run: npx playwright test
