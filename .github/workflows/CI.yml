@@ -19,11 +19,7 @@ jobs:
   # This workflow contains a single job called "build"
     build:
       # The type of runner that the job will run on
-      runs-on: ${{ matrix.os }}
-      
-      strategy:
-        matrix:
-          os: [ubuntu-latest]
+      runs-on: ubuntu-latest
 
       # Steps represent a sequence of tasks that will be executed as part of the job
       steps:
@@ -49,7 +45,7 @@ jobs:
 
         - name: Run Playwright tests
           run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- npx playwright test
-          
+
   job2:
     build:
       # The type of runner that the job will run on
