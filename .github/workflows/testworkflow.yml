@@ -32,14 +32,15 @@ jobs:
       - name: install dependencies
         run: npm install
         
-      - name: install electron-installer-windows
-        run: npm install --no-save electron-installer-windows
         
       - name: Build
         run: npm run make 
       
       - name: ls contents
         run: ls out/
+        
+      - name: install electron-installer-windows as a command
+        run: npm install -g electron-installer-windows
 
       - name: Create Windows Installer
         run: electron-installer-windows --src out/ctcast-win32-x64/ --dest out/installers/  
