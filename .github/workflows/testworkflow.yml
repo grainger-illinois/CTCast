@@ -38,13 +38,16 @@ jobs:
       - name: Build
         run: npm run make 
       
-      - name: ls
-      - run: ls
+      - name: ls contents
+        run: ls out/
 
       - name: Create Windows Installer
         run: electron-installer-windows --src out/ctcast-win32-x64/ --dest out/installers/  
         
-      - name: Create release
+      - name: ls exe
+        run: ls out/installers/ 
+
+      - name: Publish release
         uses: softprops/action-gh-release@v1
         with:
           files: |
