@@ -49,8 +49,11 @@ jobs:
       - name: Install Electron Playwright helpers
         run: npm i -D electron-playwright-helpers
 
-      - name: Run MacOS and Windows tests
+      - if: matrix.os != 'ubuntu-latest'
         run: npx playwright test
+
+      - if: matrix.os == 'ubuntu-latest'
+        run: "xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm run test"
 
 
               
