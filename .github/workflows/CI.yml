@@ -42,9 +42,6 @@ jobs:
 
       - name: Install Playwright
         run: npx playwright install --with-deps
-        
-      - name: Install xvfb
-        run: npm install xvfb
 
       - name: Run MacOS and Windows tests
         run: npx playwright test
