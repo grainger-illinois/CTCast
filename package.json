@@ -1,6 +1,6 @@
 {
-  "name": "CTCast",
-  "productName": "CT-Cast",
+  "name": "ctcast",
+  "productName": "ctcast",
   "version": "0.1.2-pre",
   "description": "Live Image Description Broadcasting",
   "main": ".webpack/main",
