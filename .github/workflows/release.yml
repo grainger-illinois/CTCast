@@ -37,12 +37,29 @@ jobs:
         
       - name: Build
         run: npm run make
+
+      - name: install electron-installer-windows as a command
+        if: runner.os == 'Windows'
+        run: npm install -g electron-installer-windows
+
+      - name: Create Windows Installers
+        if: runner.os == 'Windows'
+        run: electron-installer-windows \
+          --src out/ctcast-win32-x64/ 
+          --dest out/installers/  \
+          --tags utility
         
+      - name: Installers created
+        if: runner.os == 'Windows'
+        run: ls out/installers/ 
+
       - name: upload
         uses: actions/upload-artifact@v2
         with:
           name: ctcast-${{ matrix.os }}
-          path: out/ctcast-*-x64/
+          path: |
+            out/ctcast-*-x64/
+            out/installers/*
   
   publish:
     needs: upload-artifacts
@@ -53,34 +70,19 @@ jobs:
       contents: write
       
     steps:
-      - name: Download windows
-        id: download-windows
+      - name: Download all artefacts
         uses: actions/download-artifact@v2
-        with:
-          name: ctcast-windows-latest
-        
-      - name: Download mac
-        id: download-mac
-        uses: actions/download-artifact@v2
-        with:
-          name: ctcast-macos-latest
-          
-      - name: Download linux
-        id: download-linux
-        uses: actions/download-artifact@v2
-        with:
-          name: ctcast-ubuntu-latest
-        
-      - run: ls
+ 
+      - name: List artefacts
+        run: ls -R
       
-      - name: Zip up needed files
+      - name: Create zip releases
         run: |
           zip -r ctcast-${{ github.event.inputs.release_tag }}-windows.zip ctcast-win32-x64/
           zip -r ctcast-${{ github.event.inputs.release_tag }}-linux.zip ctcast-linux-x64/
           zip -r ctcast-${{ github.event.inputs.release_tag }}-mac.zip ctcast-darwin-x64/
         
-      # ctcast-${{ github.event.inputs.release_tag }}-mac.zip ; more work to do 
-      # to support Mac
+      # We're not publishing Mac version
       
       - name: Create release
         uses: softprops/action-gh-release@v1
@@ -88,4 +90,7 @@ jobs:
           files: |
             ctcast-${{ github.event.inputs.release_tag }}-windows.zip
             ctcast-${{ github.event.inputs.release_tag }}-linux.zip
+            ctcast-*-full.nupkg
+            ctcast-*-setup.exe
+            ctcast-*-setup.msi
           tag_name: ${{ github.event.inputs.release_tag }}
