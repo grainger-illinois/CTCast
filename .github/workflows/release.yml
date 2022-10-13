@@ -1,8 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Release
 
-# Controls when the workflow will run
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -11,55 +8,49 @@ on:
         description: 'The tag to associate to this release'
         required: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-    
-  upload-artifacts:
+
+  build-application:
     # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
     
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+        os: [ubuntu-latest, windows-latest, darwin-latest]
+        
+    steps: 
+      - name: Checkout ctcast
+        uses: actions/checkout@v2
 
       - name: Setup Node
         uses: actions/setup-node@v2.4.1
         with:
           node-version: 16
           
-      - name: install dependencies
+      - name: Install dependencies
         run: npm install
         
       - name: Build
         run: npm run make
 
-      - name: install electron-installer-windows as a command
-        if: runner.os == 'Windows'
-        run: npm install -g electron-installer-windows
+      - name: Create tgz archive      
+        run: tar cvzf ctcast-{{runner.os}}.tgz out/ctcast-*/
 
-      - name: Create Windows Installers
+      - name: Create Windows Installer
         if: runner.os == 'Windows'
-        run: electron-installer-windows --src out/ctcast-win32-x64/ --dest out/installers/ 
-        
-      - name: Installers created
-        if: runner.os == 'Windows'
-        run: ls out/installers/ 
+        run:  |
+          npm install -g electron-installer-windows
+          electron-installer-windows --src out/ctcast-*/ --dest out/installers/
+          ls out/installers/
 
-      - name: upload
+      - name: Create artifact of archive and installers
         uses: actions/upload-artifact@v2
         with:
-          name: ctcast-${{ matrix.os }}
-          path: |
-            out/ctcast-*-x64/
-            out/installers/*
-  
+          name: release-{{runner.os}}
+          path: out/*.tgz installers/*
+          
   publish:
-    needs: upload-artifacts
+    needs: build-application
     
     runs-on: ubuntu-latest
 
@@ -67,27 +58,17 @@ jobs:
       contents: write
       
     steps:
-      - name: Download all artefacts
+      - name: Download all artifacts
         uses: actions/download-artifact@v2
  
-      - name: List artefacts
+      - name: List artifacts
         run: ls -R
-      
-      - name: Create zip releases
-        run: |
-          zip -r ctcast-${{ github.event.inputs.release_tag }}-windows.zip ctcast-win32-x64/
-          zip -r ctcast-${{ github.event.inputs.release_tag }}-linux.zip ctcast-linux-x64/
-          zip -r ctcast-${{ github.event.inputs.release_tag }}-mac.zip ctcast-darwin-x64/
-        
-      # We're not publishing Mac version
       
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ctcast-${{ github.event.inputs.release_tag }}-windows.zip
-            ctcast-${{ github.event.inputs.release_tag }}-linux.zip
-            ctcast-*-full.nupkg
-            ctcast-*-setup.exe
-            ctcast-*-setup.msi
+            release-Linux/ctcast-*
+            release-Windows/ctcast-*
+            
           tag_name: ${{ github.event.inputs.release_tag }}
