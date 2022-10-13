@@ -51,7 +51,6 @@ jobs:
       - name: Upload Windows installers
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v2
-        working-directory: 
         with:
           name: release-${{runner.os}}
           path: ./out/make/squirrel.windows/x64/
