@@ -11,7 +11,6 @@ on:
 jobs:
 
   build-application:
-    # The type of runner that the job will run on
     runs-on: ${{ matrix.os }}
     
     strategy:
@@ -33,8 +32,11 @@ jobs:
       - name: Build
         run: npm run make
 
+      - name: List output
+        run: ls -R
+        
       - name: Create tgz archive      
-        run: tar cvzf ctcast-{{runner.os}}.tgz out/ctcast-*/
+        run: tar -cvzf ctcast-{{runner.os}}.tgz out/ctcast-*
 
       - name: Create Windows Installer
         if: runner.os == 'Windows'
@@ -47,7 +49,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: release-{{runner.os}}
-          path: out/*.tgz installers/*
+          path: |
+            cast*.tgz
+            out/installers/*
           
   publish:
     needs: build-application
@@ -72,3 +76,7 @@ jobs:
             release-Windows/ctcast-*
             
           tag_name: ${{ github.event.inputs.release_tag }}
+          
+# Todo code sign
+# https://www.electronforge.io/guides/code-signing/code-signing-macos
+# https://www.electronforge.io/guides/code-signing/code-signing-windows
