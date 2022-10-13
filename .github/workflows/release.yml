@@ -39,16 +39,22 @@ jobs:
 # out\make\squirrel.windows\x64\{ctcast-0.1.2-pre Setup.exe,ctcast-0.1.2-pre-full.nupkg,RELEASES}
 
       - name: Create tgz archive      
-        run: tar -cvzf ../ctcast-{{runner.os}}.tgz ctcast-*
+        run: tar -cvzf ../ctcast-${{runner.os}}.tgz ctcast-*
         working-directory: out
 
-      - name: Create artifact of archive and installers
+      - name: Upload archive
         uses: actions/upload-artifact@v2
         with:
-          name: release-{{runner.os}}
-          path: |
-            ctcast*.tgz
-            ./out/make/squirrel.windows/x64/*
+          name: release-${{runner.os}}
+          path: ctcast*.tgz
+          
+      - name: Upload Windows installers
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v2
+        working-directory: 
+        with:
+          name: release-${{runner.os}}
+          path: ./out/make/squirrel.windows/x64/
           
   publish:
     needs: build-application
