@@ -15,7 +15,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, darwin-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
         
     steps: 
       - name: Checkout ctcast
@@ -33,25 +33,22 @@ jobs:
         run: npm run make
 
       - name: List output
-        run: ls -R
-        
-      - name: Create tgz archive      
-        run: tar -cvzf ctcast-{{runner.os}}.tgz out/ctcast-*
+        run: ls -R out
 
-      - name: Create Windows Installer
-        if: runner.os == 'Windows'
-        run:  |
-          npm install -g electron-installer-windows
-          electron-installer-windows --src out/ctcast-*/ --dest out/installers/
-          ls out/installers/
+# out\ctcast-win32-x64        
+# out\make\squirrel.windows\x64\{ctcast-0.1.2-pre Setup.exe,ctcast-0.1.2-pre-full.nupkg,RELEASES}
+
+      - name: Create tgz archive      
+        run: tar -cvzf ../ctcast-{{runner.os}}.tgz ctcast-*
+        working-directory: out
 
       - name: Create artifact of archive and installers
         uses: actions/upload-artifact@v2
         with:
           name: release-{{runner.os}}
           path: |
-            cast*.tgz
-            out/installers/*
+            ctcast*.tgz
+            ./out/make/squirrel.windows/x64/*
           
   publish:
     needs: build-application
