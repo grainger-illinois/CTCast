@@ -55,7 +55,7 @@ const createWindow = () => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -90,7 +90,7 @@ app.on('ready', () => {
     return zoom.last_message;
   });
 
-  ipcMain.handle('upload-map', async (shortcut) => {
+  ipcMain.handle('upload-map', async (event, shortcut) => {
     return await shortcutHandler(shortcut);
   });
 

@@ -63,7 +63,7 @@ function UploadFiles() {
 		if (currLongText !== "" && currShortcut !== "") {
 			map.set(currShortcut, currLongText);
 		}
-		//console.log(map);
+		// console.log(map);
 		window.shortcutMap.sendShortcut(map);
 
 		setCurrLongText('');
@@ -73,7 +73,6 @@ function UploadFiles() {
 	const handleSubmission = () => {
 		//console.log(map);
 		if (isFilePicked) {
-			//console.log(map);
 			let reader = new FileReader();
 
 			reader.addEventListener('load', () => {
