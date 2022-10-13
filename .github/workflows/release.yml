@@ -44,10 +44,7 @@ jobs:
 
       - name: Create Windows Installers
         if: runner.os == 'Windows'
-        run: electron-installer-windows \
-          --src out/ctcast-win32-x64/ 
-          --dest out/installers/  \
-          --tags utility
+        run: electron-installer-windows --src out/ctcast-win32-x64/ --dest out/installers/ 
         
       - name: Installers created
         if: runner.os == 'Windows'
