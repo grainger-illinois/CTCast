@@ -15,7 +15,35 @@ on:
       - main
 
 jobs:
+  extract-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ctcast
+        uses: actions/checkout@v2
+
+      - name: Get release info
+        id: release_info
+        shell: bash
+        run: |
+          version="$(cat package.json | jq -r .version)"
+          echo "VERSION=${version}" > version.txt
+          echo "${VERSION}"
+          changelog="$(sed -e "1,/^## ${version}/d" -e "/^## /,\$d" -e '/^$/d' CHANGELOG.md)"
+          changelog="${changelog//'%'/'%25'}"
+          echo -e "${changelog}" >> release.body.txt
+          echo -e "${changelog}" 
+          
+      - name: Create Version artifact    
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-version
+          path: |
+            release.body.txt
+            version.txt
+    
   build-application:
+    needs: extract-version
+    
     runs-on: ${{ matrix.os }}
     
     strategy:
@@ -25,20 +53,6 @@ jobs:
     steps: 
       - name: Checkout ctcast
         uses: actions/checkout@v2
-
-      - name: Get release info
-        id: release_info
-        shell: bash
-        run: |
-          version="$(cat package.json | jq -r .version)"
-          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            changelog="$(sed -e "1,/^## ${version}/d" -e "/^## /,\$d" -e '/^$/d' CHANGELOG.md)"
-            changelog="${changelog//'%'/'%25'}"
-            echo -e "${changelog}" >> release.body.txt
-          else
-            echo -en "" >> release.body.txt
-          fi
-          echo "VERSION=${version}" >> $GITHUB_ENV
 
       - name: Setup Node
         uses: actions/setup-node@v2.4.1
@@ -89,6 +103,12 @@ jobs:
       - name: List artifacts
         run: ls -R
       
+      - name: Set version
+        run: cat release-version/version.txt >> $GITHUB_ENV
+         
+      - name: Print version
+        run: echo ${{ env.VERSION }}
+        
       # create the release, if anything fails later, you will need to delete the 
       # release as well as the tags.
       - name: Create release
@@ -96,11 +116,12 @@ jobs:
         with:
           tag_name: ${{ env.VERSION }}
           name: ${{ env.VERSION }}
-          body_path: release.body.txt
+          body_path: release-version/release.body.txt
           files: |
             release-Windows/ctcast-*
             release-Linux/ctcast-*
             release-macOS/ctcast-*
+            release-version/*
           
 # Todo code sign
 # https://www.electronforge.io/guides/code-signing/code-signing-macos
