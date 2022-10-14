@@ -27,10 +27,11 @@ jobs:
         run: |
           version="$(cat package.json | jq -r .version)"
           echo "VERSION=${version}" > version.txt
-
+          echo "${VERSION}"
           changelog="$(sed -e "1,/^## ${version}/d" -e "/^## /,\$d" -e '/^$/d' CHANGELOG.md)"
           changelog="${changelog//'%'/'%25'}"
-          echo -e "${changelog}" >> release.body.txt      
+          echo -e "${changelog}" >> release.body.txt
+          echo -e "${changelog}" 
           
       - name: Create Version artifact    
         uses: actions/upload-artifact@v2
