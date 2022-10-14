@@ -1,8 +1,8 @@
 {
   "name": "ctcast",
   "productName": "ctcast",
-  "version": "0.1.2-pre",
-  "description": "Live Image Description Broadcasting",
+  "version": "0.1.2",
+  "description": "Caption and Image Description Broadcasting",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",

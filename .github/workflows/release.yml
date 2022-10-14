@@ -1,15 +1,20 @@
+# When creating a release make sure to:
+# 1. Update CHANGELOG.md
+# 2. Update version in package.json
+# 3. Merge into main branch
+#
+# If you need to re-release (broken build), first remove the release
+# as well as the tag. Once that is done you can push a fix, or just
+# re-run the release action.
+
 name: Release
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-    inputs:
-      release_tag:
-        description: 'The tag to associate to this release'
-        required: true
+  push:
+    branches:
+      - main
 
 jobs:
-
   build-application:
     runs-on: ${{ matrix.os }}
     
@@ -20,6 +25,20 @@ jobs:
     steps: 
       - name: Checkout ctcast
         uses: actions/checkout@v2
+
+      - name: Get release info
+        id: release_info
+        shell: bash
+        run: |
+          version="$(cat package.json | jq -r .version)"
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            changelog="$(sed -e "1,/^## ${version}/d" -e "/^## /,\$d" -e '/^$/d' CHANGELOG.md)"
+            changelog="${changelog//'%'/'%25'}"
+            echo -e "${changelog}" >> release.body.txt
+          else
+            echo -en "" >> release.body.txt
+          fi
+          echo "VERSION=${version}" >> $GITHUB_ENV
 
       - name: Setup Node
         uses: actions/setup-node@v2.4.1
@@ -70,15 +89,20 @@ jobs:
       - name: List artifacts
         run: ls -R
       
+      # create the release, if anything fails later, you will need to delete the 
+      # release as well as the tags.
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
+          body_path: release.body.txt
           files: |
             release-Linux/ctcast-*
-            release-Windows/ctcast-*
-            
+            release-Windows/ctcast-*        
           tag_name: ${{ github.event.inputs.release_tag }}
           
 # Todo code sign
 # https://www.electronforge.io/guides/code-signing/code-signing-macos
 # https://www.electronforge.io/guides/code-signing/code-signing-windows
+
