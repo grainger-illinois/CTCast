@@ -9,26 +9,22 @@
 
 name: Release
 
-# Controls when the workflow will run
 on:
   push:
     branches:
       - main
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  release:
-    # The type of runner that the job will run on
+  build-application:
     runs-on: ${{ matrix.os }}
     
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        
+    steps: 
+      - name: Checkout ctcast
+        uses: actions/checkout@v2
 
       - name: Get release info
         id: release_info
@@ -55,6 +51,44 @@ jobs:
       - name: Build
         run: npm run make
 
+      - name: List output
+        run: ls -R out
+
+# out\ctcast-win32-x64        
+# out\make\squirrel.windows\x64\{ctcast-0.1.2-pre Setup.exe,ctcast-0.1.2-pre-full.nupkg,RELEASES}
+
+      - name: Create tgz archive      
+        run: tar -cvzf ../ctcast-${{runner.os}}.tgz ctcast-*
+        working-directory: out
+
+      - name: Upload archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-${{runner.os}}
+          path: ctcast*.tgz
+          
+      - name: Upload Windows installers
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-${{runner.os}}
+          path: ./out/make/squirrel.windows/x64/
+          
+  publish:
+    needs: build-application
+    
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v2
+ 
+      - name: List artifacts
+        run: ls -R
+      
       # create the release, if anything fails later, you will need to delete the 
       # release as well as the tags.
       - name: Create release
@@ -64,4 +98,11 @@ jobs:
           name: ${{ env.VERSION }}
           body_path: release.body.txt
           files: |
-            out/make/**/*.*
+            release-Windows/ctcast-*
+            release-Linux/ctcast-*
+            release-macOS/ctcast-*
+          
+# Todo code sign
+# https://www.electronforge.io/guides/code-signing/code-signing-macos
+# https://www.electronforge.io/guides/code-signing/code-signing-windows
+
