@@ -98,9 +98,9 @@ jobs:
           name: ${{ env.VERSION }}
           body_path: release.body.txt
           files: |
+            release-Windows/ctcast-*
             release-Linux/ctcast-*
-            release-Windows/ctcast-*        
-          tag_name: ${{ github.event.inputs.release_tag }}
+            release-macOS/ctcast-*
           
 # Todo code sign
 # https://www.electronforge.io/guides/code-signing/code-signing-macos
