@@ -5,9 +5,6 @@ var servers = [];
 var ports = [10001,10002];
 
 // connect to both ports for testing.
-var barrier = new Map();
-barrier.set(10001, false);
-barrier.set(10002, false);
 
 var linesFromBothConnection = new Map();
 linesFromBothConnection.set(10001, []);
@@ -65,9 +62,6 @@ ports.forEach(function (port) {
 
             console.log("Exact input:");
             console.log(linesFromBothConnection);
-
-            barrier.forEach((value, key) => barrier.set(key, false));
-
 
 
         });
