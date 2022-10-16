@@ -10,7 +10,13 @@ var linesFromBothConnection = new Map();
 linesFromBothConnection.set(10001, []);
 linesFromBothConnection.set(10002, []);
 
-const footer = Buffer.from("01300d01300d", 'hex');
+this.rollupcode0 = Buffer.from("1427142D1470", "hex");
+this.rollupcode1 = Buffer.from("1427142D1350", "hex");
+this.rollupcode2 = Buffer.from("142D1370", "hex");
+this.rollupcode3 = Buffer.from("142D1450", "hex");
+this.rollupcode4 = Buffer.from("142D1470", "hex");
+this.bypass = Buffer.from("01300D01300D", "hex");
+this.resetcode = Buffer.from("0F0F", "hex");
 
 
 const compare = () => {
