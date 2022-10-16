@@ -20,7 +20,7 @@ import {
 } from 'react-router-dom';
 
 
-const Options = (props, window) => {
+const Options = () => {
 
 
   return (
