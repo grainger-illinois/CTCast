@@ -31,7 +31,7 @@ def sendNewsWire(s, newswire):
     #print("    Configuring for newswire mode")
     s.sendall(newswire)
 
-def sendControlCodes(s, rollupcode, fieldinsertmode):  
+def sendControlCodes(s, rollupcode, fieldinsertmode):
     s.sendall(fieldinsertmode + rollupcode) # sends the control codes to configure how the text is displayed
 
 def clearScreen(s, bypass):
@@ -62,9 +62,11 @@ def main():
         host = csEncoder
     elif host == 'bot':
         host = botEncoder
+    else:
+        host = 'localhost'
     if not port:
         port = defaultPort
-        
+
     channel = None # determines which fieldinsertmode to use
 
     if (int(port) == 10001): # port 10001 is the first channel according to the manual
@@ -73,12 +75,12 @@ def main():
         channel = "Channel 2"
     else:
         # for use with other link encoders where the channels are mapped to different ports
-        channel = input("Type 'Channel 1' or 'Channel 2' to specify which channel to send captions to.\n") 
+        channel = input("Type 'Channel 1' or 'Channel 2' to specify which channel to send captions to.\n")
 
     # allows the user to determine how unsupported characters should be handled by the system
     #print("NOTICE: Some characters are not supported by the CEA-608-E character encoding. These characters may be omitted or displayed as a different character.")
     # sets this flag to the user's submitted input
-    
+
     #do_something = input("Type 'Omit' to delete all unsupported characters. Type anything else to allow unsupported characters to be converted to a supported CEA-608-E character. ")
     do_something="Omit"
 
@@ -106,7 +108,7 @@ def main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # create socket
     s.connect((host, int(port))) # connect to link encoder using the specified credentials
     print("Connected\n")
-    
+
     print("Start typing in captions. Press enter to send.")
     print("Press CTRL D if there are no more captions to send.")
 
@@ -122,9 +124,9 @@ def main():
     character_diff_list.append('|')
     character_diff_list.append('}')
     character_diff_list.append('~')
-    
+
     print("Note the following characters will be discarded " + ' '.join(character_diff_list))
-    
+
     row_number_dict = {} # create dictionary of rollupcodes such that we can iterate through them
     row_number_dict[0] = rollupcode1 # top caption line
     row_number_dict[1] = rollupcode2 # second caption line
@@ -137,7 +139,7 @@ def main():
     the captions aren't long enough to reach the 4th row again then the bypass command isn't sent. Need to fix this.
     '''
 
-    
+
 
     for line in input_stream: # reading from stdin
         sendNewsWire(s, newswire)
@@ -146,7 +148,7 @@ def main():
                 line = line.replace(char_to_delete, "") # replace all unsupported characters with the empty string
 
         list_of_words = line.split() # split the user submitted input on any kind of whitespace
-        
+
         if (not list_of_words): # just in case there are no words to process for some reason (this shouldn't ever run)
             continue
 
@@ -155,7 +157,7 @@ def main():
         # for every word, split the word into pieces if the word itself exceeds 32 characters, and add the words to the list
         for word in list_of_words:
             for word_32 in chunkstring(word, max_character_number):
-                list_of_words_32.append(word_32) 
+                list_of_words_32.append(word_32)
 
         # keep sending words until all user input has been sent
         while (list_of_words_32):
@@ -168,7 +170,7 @@ def main():
                     word = word + ' ' + next_word
                 else: # send the word(s)
                     #sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
-                    newswire_word = bytes(word, "iso-8859-1") + b"\r" 
+                    newswire_word = bytes(word, "iso-8859-1") + b"\r"
                     sleep(0.1)
                     sendData(s, newswire_word)
 
@@ -177,7 +179,7 @@ def main():
         # Sending the bypass ensures the link encoder has an end time for the caption and does not hang onto the last line
         print("----")
         s.sendall(bypass)
-        
+
     s.close()
     print("Closing program.")
 
