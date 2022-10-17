@@ -34,7 +34,7 @@ const LinkEncoder = () => {
         count,
         caption
     ) {
-        return { time, count, caption };
+        return { time, count, caption};
     }
 
     const [postDataArr, setPostDataArr] = useState([]);
@@ -75,6 +75,9 @@ const LinkEncoder = () => {
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
         setPostData({ ...postData, caption: '' });
+        if (!postDataArr) {
+            setPostDataArr([]);
+        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
 
     }
@@ -88,6 +91,7 @@ const LinkEncoder = () => {
 
     const classes = useStyles();
 
+
     return (
         <div style={{ margin: "20px", marginTop: "30px" }}>
             <h1 style={{ textAlign: "left" }}>Link Encoder</h1>
@@ -97,7 +101,7 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="IP Address"
                     fullWidth
-                    value={postData.ip}
+                    value={postData ? postData.ip : ''}
                     onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
                 />
@@ -106,7 +110,7 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="Port"
                     fullWidth
-                    value={postData.port}
+                    value={postData ? postData.port : ''}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
                 <TextField
@@ -114,7 +118,7 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="Message"
                     fullWidth
-                    value={postData.caption}
+                    value={postData ? postData.caption : ''}
                     onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
                 />
 
@@ -152,7 +156,7 @@ const LinkEncoder = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {postDataArr.map((row, index) => (
+                        {postDataArr ? postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -161,7 +165,7 @@ const LinkEncoder = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
                             </TableRow>
-                        ))}
+                        )): <TableRow></TableRow>}
                     </TableBody>
                 </Table>
             </TableContainer>
