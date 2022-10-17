@@ -10,12 +10,13 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import { Box } from "@mui/system";
 // import Fab from '@mui/material/Fab';
 
 
 
 
-function UploadFiles() {
+function Shortcuts() {
 	function removeEmpty(word) {
 		return word != '';
 	}
@@ -155,7 +156,7 @@ function UploadFiles() {
 				}
 
 				window.shortcutMap.sendShortcut(map);
-				//console.log(map);
+				console.log(map);
 			});
 
 			reader.readAsText(selectedFile);
@@ -163,8 +164,7 @@ function UploadFiles() {
 	};
 
 	return <div style={{ margin: "20px", marginTop: "30px" }}>
-		<h1 style={{ textAlign: "left" }}>File Upload</h1>
-		<h2>Upload shortcuts file</h2>
+		<h1 style={{ textAlign: "left" }}>Shortcuts</h1>
 		<Stack
 			component="form"
 			sx={{
@@ -174,14 +174,18 @@ function UploadFiles() {
 			noValidate
 			autoComplete="off"
 		>
-			<Button variant="outlined" color="primary" endIcon={<InsertDriveFileIcon />}>
-				Choose file
-				<input type="file" name="file" onChange={fileChangeHandler} style={{ opacity: "0", top: "0", left: "0", width: "100%", height: "100%", position: "absolute" }} />
-			</Button>
-			{isFilePicked ?
-				<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission}>Upload</Button> :
-				<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission} disabled>Upload</Button>
-			}
+			<div style={{display: "flex"}}>
+
+				<Button variant="outlined" sx={{flexGrow: 1, p:1, m:1}} color="primary" endIcon={<InsertDriveFileIcon />} spacing={2}>
+					Choose file
+					<input type="file" name="file" onChange={fileChangeHandler} style={{ opacity: "0", top: "0", left: "0", width: "100%", height: "100%", position: "absolute" }} />
+				</Button>
+				{isFilePicked ?
+					<Button sx={{p:1, m:1}} variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission}>Upload</Button> :
+					<Button sx={{p:1, m:1}} variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission} disabled>Upload</Button>
+				}
+			</div>
+
 			<span style={{ textAlign: "center" }}>{isFilePicked ?
 				<span>{selectedFile.name}</span> :
 				<span></span>
@@ -225,4 +229,4 @@ function UploadFiles() {
 
 }
 
-export default UploadFiles;
+export default Shortcuts;
