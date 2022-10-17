@@ -1,5 +1,4 @@
 var net = require('net');
-const {map} = require("react-bootstrap/ElementChildren");
 var host = '127.0.0.1';
 var servers = [];
 var ports = [10001,10002];
@@ -10,13 +9,13 @@ var linesFromBothConnection = new Map();
 linesFromBothConnection.set(10001, []);
 linesFromBothConnection.set(10002, []);
 
-this.rollupcode0 = Buffer.from("1427142D1470", "hex");
-this.rollupcode1 = Buffer.from("1427142D1350", "hex");
-this.rollupcode2 = Buffer.from("142D1370", "hex");
-this.rollupcode3 = Buffer.from("142D1450", "hex");
-this.rollupcode4 = Buffer.from("142D1470", "hex");
-this.bypass = Buffer.from("01300D01300D", "hex");
-this.resetcode = Buffer.from("0F0F", "hex");
+// this.rollupcode0 = Buffer.from("1427142D1470", "hex");
+// this.rollupcode1 = Buffer.from("1427142D1350", "hex");
+// this.rollupcode2 = Buffer.from("142D1370", "hex");
+// this.rollupcode3 = Buffer.from("142D1450", "hex");
+// this.rollupcode4 = Buffer.from("142D1470", "hex");
+// this.bypass = Buffer.from("01300D01300D", "hex");
+// this.resetcode = Buffer.from("0F0F", "hex");
 
 
 const compare = () => {
@@ -39,7 +38,6 @@ const compare = () => {
     }
 }
 
-var times = 0
 // Create servers
 ports.forEach(function (port) {
 
