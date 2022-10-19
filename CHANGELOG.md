@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## 0.1.3-pre2 - 2022-10-13
+
+### Added
+- LinkEncoder output should now be equivalent to the original python code
+
+### Fixed
+- Fixed UI bugs (including initial blank screen for Zoom and LinkEncoder pages)
+
 ## 0.1.2 - 2022-10-13
 ### Added
 - Improved documentation, including Best Practices tips

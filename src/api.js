@@ -220,7 +220,10 @@ export class LinkEncoderAPI {
                     break;
                 }
             }
+
         }
+        await this.sleep(10);
+        this.socket.write(this.bypass, this.encoding)
 
         this.last_message = caption;
         return 200;

@@ -20,7 +20,7 @@ const Form = () => {
         count,
         message
     ) {
-        return { time, count, message };
+        return { time, count, message};
     }
 
     //Function to download log file
@@ -79,6 +79,9 @@ const Form = () => {
         postData.count += 1;
 
         setPostData({ ...postData, message: '' });
+        if (!postDataArr) {
+            setPostDataArr([]);
+        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
     }
 
@@ -101,7 +104,7 @@ const Form = () => {
                     label="Zoom API Token"
 
                     fullWidth
-                    value={postData.zoomlink}
+                    value={postData ? postData.zoomlink : ''}
                     onChange={(e) => setPostData({ ...postData, zoomlink: e.target.value })}
 
                 />
@@ -111,7 +114,7 @@ const Form = () => {
                     label="Message"
 
                     fullWidth
-                    value={postData.message}
+                    value={postData ? postData.message : ''}
                     onChange={(e) => setPostData({ ...postData, message: e.target.value })}
                 />
 
@@ -138,7 +141,6 @@ const Form = () => {
 
             <br></br>
 
-
             <TableContainer sx={{ maxHeight: 200 }}>
                 <Table stickyHeader size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
                     <TableHead>
@@ -148,8 +150,9 @@ const Form = () => {
                             <TableCell align="justify" sx={{ width: "70%" }}><Message fontSize="small"></Message></TableCell>
                         </TableRow>
                     </TableHead>
+
                     <TableBody>
-                        {postDataArr.map((row, index) => (
+                        {postDataArr ? postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -158,7 +161,7 @@ const Form = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.message}</TableCell>
                             </TableRow>
-                        ))}
+                        )): <TableRow></TableRow>}
                     </TableBody>
                 </Table>
             </TableContainer>
