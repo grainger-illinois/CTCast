@@ -41,9 +41,13 @@ function Shortcuts() {
 	//const [marker, setMarker] = useState('@');
 	const [map, setMap] = useState(new Map());
 
-	window.shortcutMap.getShortcutMap().then((result) => {
-		setMap(result);
-	});
+	const refreshMap = () => {
+		window.shortcutMap.getShortcutMap().then((result) => {
+			setMap(result);
+		});
+	}
+
+	refreshMap();
 
 	const [currLongText, setCurrLongText] = useState("");
 	const [currShortcut, setCurrShortcut] = useState("");
@@ -57,10 +61,9 @@ function Shortcuts() {
 	};
 
 	const clearMap = () => {
-		setMap(new Map());
-		map.clear();
+		window.shortcutMap.clearShortcuts();
+		refreshMap();
 		console.log(map);
-		window.shortcutMap.clearMap();
 	};
 
 	const fileChangeHandler = (event) => {
