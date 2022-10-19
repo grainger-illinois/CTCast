@@ -37,7 +37,7 @@ const Options = () => {
               <Button color="inherit">Link Encoder</Button>
             </Link>
             <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
-              <Button color="inherit">File Upload</Button>
+              <Button color="inherit">Shortcuts</Button>
             </Link>
             <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "1"}}>
             </Box>
