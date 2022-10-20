@@ -68,7 +68,7 @@ const LinkEncoder = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
+        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption);
 
         var message = await window.linkEncoderAPI.getLastMessage();
 
@@ -87,6 +87,26 @@ const LinkEncoder = () => {
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
         window.linkEncoderAPI.clearLinkEncoder();
+    };
+
+    const [buttonText, setButtonText] = useState('Connect');
+    const [selected, setSelected] = useState("success");
+
+    const connectAndDisconnect = async (e) => {
+        e.preventDefault();
+
+        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
+    };
+
+    const handleClick = () => {
+        if (buttonText == 'Connect'){
+            setButtonText('Disconnect');
+            setSelected("error");
+        }
+        else {
+            setButtonText('Connect');
+            setSelected("success");
+        }   
     };
 
     const classes = useStyles();
@@ -135,8 +155,15 @@ const LinkEncoder = () => {
                         Download
                     </Button>
 
+                    
+
                 </Stack>
 
+            </form>
+            <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={connectAndDisconnect}>
+                <Button color={selected} variant="contained" onClick={handleClick} type="submit">
+                    {buttonText}
+                </Button>
             </form>
 
             <div>

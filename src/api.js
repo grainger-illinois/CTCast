@@ -150,7 +150,7 @@ export class LinkEncoderAPI {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async sendMessage(caption, host, port) {
+    async connectAndDisconnect(host, port) {
         if (host == "") {
             host = this.csEncoder;
         }
@@ -174,6 +174,19 @@ export class LinkEncoderAPI {
             console.log('Attempting connection');
             await this.connecttoserver(port, host);
             console.log('Connected to ' + host + ':' + port);
+        }
+        else {
+            this.socket.destroy();
+            console.log('Disconnected from ' + host + ':' + port);
+        }
+
+        return 200;
+    }
+
+    async sendMessage(caption) {
+        if (this.socket == null || this.socket.readyState == 'closed') {
+            console.log('Connect to an IP address first');
+            return 400;
         }
         
         this.socket.write(this.newswire, this.encoding);

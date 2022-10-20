@@ -6,7 +6,8 @@ contextBridge.exposeInMainWorld('loggerAPI', {
 })
 
 contextBridge.exposeInMainWorld('linkEncoderAPI', {
-    sendToLinkEncoder: (caption, host, port) => ipcRenderer.invoke('linkencoder', caption, host, port),
+    connectionLinkEncoder: (host, port) => ipcRenderer.invoke('connection-le', host, port),
+    sendToLinkEncoder: (caption) => ipcRenderer.invoke('linkencoder', caption),
     clearLinkEncoder: () => ipcRenderer.send('clear-le'),
     getLastMessage: () => ipcRenderer.invoke('le-last-message')
 })
