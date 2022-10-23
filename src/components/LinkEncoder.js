@@ -15,7 +15,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from '@mui/material/Checkbox';
 import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
-import { resolvePath } from 'react-router-dom';
 import FormGroup from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -101,9 +100,7 @@ const LinkEncoder = () => {
     const [selected, setSelected] = useState("success");
     const [checked, setIsChecked] = useState(false);
 
-    const connectAndDisconnect = async (e) => {
-        
-
+    const connectAndDisconnect = async () => {
         await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port)
         .then(() => {
             if (buttonText == 'Connect'){
