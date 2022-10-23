@@ -13,7 +13,13 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Checkbox from '@mui/material/Checkbox';
 import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
+import { resolvePath } from 'react-router-dom';
+import FormGroup from '@mui/material/FormLabel';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
+
 
 /**
  * 2022/04/27:
@@ -21,6 +27,8 @@ import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
  *   Need further testing to confirm the message is sent as expected
  *   Need to change to a better alignment
  */
+
+let interval;
 
 const LinkEncoder = () => {
     //const [captionList, setCaptionList] = useState([]);
@@ -91,29 +99,50 @@ const LinkEncoder = () => {
 
     const [buttonText, setButtonText] = useState('Connect');
     const [selected, setSelected] = useState("success");
+    const [checked, setIsChecked] = useState(false);
 
     const connectAndDisconnect = async (e) => {
-        e.preventDefault();
+        
 
-        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
+        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port)
+        .then(() => {
+            if (buttonText == 'Connect'){
+                setButtonText('Disconnect');
+                setSelected("error");
+            }
+            else {
+                setButtonText('Connect');
+                setSelected("success");
+            }  
+        });
     };
 
-    const handleClick = () => {
-        if (buttonText == 'Connect'){
-            setButtonText('Disconnect');
-            setSelected("error");
-        }
-        else {
-            setButtonText('Connect');
-            setSelected("success");
-        }   
+    const pinging = async () => {
+        return new Promise(resolve => {
+            if (checked == false) {
+                interval = setInterval(async () => {
+                    
+                    var today = new Date();
+                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    await window.linkEncoderAPI.sendToLinkEncoder(time);    
+                }, 5000);
+                
+            }
+            resolve();
+        })
     };
+
+    const stopPinging = async () => {
+        setIsChecked(!checked);
+        clearInterval(interval);
+        await pinging();
+    }   
 
     const classes = useStyles();
 
 
     return (
-        <div style={{ margin: "20px", marginTop: "30px" }}>
+        <div style={{ margin: "20px", marginTop: "30px" }} className="position-sticky">
             <h1 style={{ textAlign: "left" }}>Link Encoder</h1>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <TextField
@@ -130,9 +159,19 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="Port"
                     fullWidth
+                    align="left"
                     value={postData ? postData.port : ''}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
+                <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
+                    <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
+                        {buttonText}
+                    </Button>
+
+                    <FormGroup>
+                        <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
+                    </FormGroup>
+                </Stack>
                 <TextField
                     name="caption"
                     variant="outlined"
@@ -161,10 +200,10 @@ const LinkEncoder = () => {
 
             </form>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={connectAndDisconnect}>
-                <Button color={selected} variant="contained" onClick={handleClick} type="submit">
-                    {buttonText}
-                </Button>
+                
             </form>
+
+
 
             <div>
                 {/* Remove 'hidden' to show text log */}
