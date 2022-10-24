@@ -3,12 +3,12 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import { Help } from '@mui/icons-material'
+import { Help as HelpIcon } from '@mui/icons-material'
 
 import ZoomPage from './zoom/zoom.js'
 import LinkEncoder from './LinkEncoder.js';
-import UploadFiles from './UploadFiles.js';
-import Support from "./Help.js";
+import Shortcuts from './Shortcuts';
+import Help from "./Help.js";
 
 import Home from './home'
 import './Options.css'
@@ -38,12 +38,12 @@ const Options = () => {
               <Button color="inherit">Link Encoder</Button>
             </Link>
             <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
-              <Button color="inherit">File Upload</Button>
+              <Button color="inherit">Shortcuts</Button>
             </Link>
             <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "1"}}>
             </Box>
             <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
-              <Button color="inherit"><Help/></Button>
+              <Button color="inherit"><HelpIcon/></Button>
             </Link>
           </Toolbar>
 
@@ -53,46 +53,14 @@ const Options = () => {
         <Routes>
           <Route exact path='/' element={< Home />}></Route>
           <Route exact path='/zoom' element={< ZoomPage />}></Route>
-
           <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
-          <Route exact path='/uploadfiles' element={< UploadFiles />}></Route>
-          <Route exact path='/help' element={< Support />}></Route>
-
+          <Route exact path='/uploadfiles' element={< Shortcuts />}></Route>
+          <Route exact path='/help' element={< Help />}></Route>
         </Routes>
 
       </Box>
     </Router>
   );
-  //     <Container>
-  //         <Router>
-  //             <nav>
-  //                 <ul>
-  //                     <li>
-  //                         <Link to="/home">
-  //                             <Button>HOME</Button>
-  //                         </Link>
-  //                     </li>
-  //                     <li>
-  //                         <Link to="/zoom">
-  //                             <Button>Zoom</Button>
-  //                         </Link>
-  //                     </li>
-  //                     <li>
-  //                         <Link to="/linkencoder">
-  //                             <Button>Link Encoder</Button>
-  //                         </Link>
-  //                     </li>
-  //                 </ul>
-  //             </nav>
-
-  //         <Routes>
-  //             <Route exact path='/' ></Route>
-  //             <Route exact path='/zoom' element={< ZoomPage />}></Route>
-  //             <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
-  //         </Routes>
-
-  //     </Router>
-  // </Container>);
 
 }
 
