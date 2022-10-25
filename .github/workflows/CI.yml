@@ -49,6 +49,9 @@ jobs:
       - name: Install Electron Playwright helpers
         run: npm i -D electron-playwright-helpers
 
+      - name: Run lint
+        run: npm run lint
+
       - if: matrix.os != 'ubuntu-latest'
         run: npx playwright test
 

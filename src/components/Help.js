@@ -7,7 +7,7 @@ const Help = () => {
 
       <h1>Captioned Enhanced Audio Descriptions Best Practices</h1>
 
-      <h2>Speaker's Names</h2>
+      <h2>Speaker&apos;s Names</h2>
       <p>Speakers should be identified by typing their name to help label speaker the first time they speak. Help to include at least first time they are spoken, if two speakers have very similar voices. In normal dialog labeling every speaker change would be excessive. If the speakers are known in advance it can be helpful to pre-create shortcuts for their names, e.g.,a shortcut <tt>ChRoJo</tt> for <tt>Chancellor Robert Jones</tt>.</p>
 
       <h2>Numbers</h2>
@@ -19,7 +19,7 @@ const Help = () => {
 
       <h2>Split tables into multiple descriptions (overview, then cross-sections).</h2>
       <p>Multi row and column data can be described at different times.</p>
-      <p>Start with an overview - the scope or intent of the data e.g., <tt>Increasing student enrollment at each campus over the last decade</tt> then describe a portion of the data horizontally or vertically depending on the discussion. For example, the discussion may focus on enrollment between campus's or focus on enrollment over time for a specific campus. In the former, briefly describe enrollment changes for each year for one specific campus.</p>
+      <p>Start with an overview - the scope or intent of the data e.g., <tt>Increasing student enrollment at each campus over the last decade</tt> then describe a portion of the data horizontally or vertically depending on the discussion. For example, the discussion may focus on enrollment between campus&apos;s or focus on enrollment over time for a specific campus. In the former, briefly describe enrollment changes for each year for one specific campus.</p>
 
       <h2>Accurate pronunciation</h2>
       <p>Some words (e.g., Grainger) are mispronounced by automated Speech To Text conversions. Alternative incorrect spellings to improve the pronunciation can be included inside square brackets. For example, <tt>Grainger[Grain-jer] College of Engineering.</tt> The original, correct spelling should still be included for display and Braille rendering output</p>
