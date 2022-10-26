@@ -39,6 +39,10 @@ async function shortcutHandler(shortcut) {
   return res;
 }
 
+async function fileProcessHandler(ext, arrayBuffer) {
+
+}
+
 
 
 const createWindow = () => {
@@ -48,7 +52,6 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
       enableRemoteModule: true
     },
   });
@@ -102,6 +105,10 @@ app.on('ready', () => {
   ipcMain.handle('clear-shortcuts', async (event) => {
     shortcutMap.shortcuts = new Map();
   });
+
+  ipcMain.handle('process-file', async (event, ext, buffer) => {
+    return await fileProcessHandler(ext, buffer);
+  })
 
   createWindow();
 });

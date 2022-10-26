@@ -82,14 +82,17 @@ function Shortcuts() {
 		setCurrShortcut('');
 	}
 
-	const handleSubmission = () => {
+	const handleUpload = () => {
 		//console.log(map);
 		if (isFilePicked) {
 			let reader = new FileReader();
+			
 
 			reader.addEventListener('load', () => {
-				let content = reader.result;
-
+				console.log(typeof(reader.result));
+				window.fileExtractionAPI.processFile('', reader.result)
+				
+				/*
 				let lines = content.split("\n");
 
 				lines = lines.filter(removeEmpty);
@@ -164,13 +167,13 @@ function Shortcuts() {
 							continue;
 						}
 					}
-				}
+				} */
 
 				window.shortcutMap.sendShortcut(map);
 				console.log(map);
 			});
 
-			reader.readAsText(selectedFile);
+			reader.readAsArrayBuffer(selectedFile);
 		} else alert("Please choose a file!");
 	};
 
@@ -224,8 +227,8 @@ function Shortcuts() {
 					<input type="file" name="file" onChange={fileChangeHandler} style={{ opacity: "0", top: "0", left: "0", width: "100%", height: "100%", position: "absolute" }} />
 				</Button>
 				{isFilePicked ?
-					<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission}>Upload</Button> :
-					<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleSubmission} disabled>Upload</Button>
+					<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleUpload}>Upload</Button> :
+					<Button variant="outlined" color="success" endIcon={<FileUploadIcon />} onClick={handleUpload} disabled>Upload</Button>
 				}
 
 			<span style={{ textAlign: "center" }}>{isFilePicked ?

@@ -10,4 +10,15 @@ module.exports = {
   module: {
     rules,
   },
+  resolve:{
+    
+    fallback: {
+      "fs": false,
+      "path": require.resolve("path-browserify"), 
+      "stream": require.resolve("stream-browserify"), 
+      "util": require.resolve("util/"),
+      "events": require.resolve("events/") 
+
+    }
+  },
 };
