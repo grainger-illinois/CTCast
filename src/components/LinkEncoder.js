@@ -27,7 +27,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
  *   Need to change to a better alignment
  */
 
-let interval;
+let interval; //for 5s ping
 
 const LinkEncoder = () => {
     //const [captionList, setCaptionList] = useState([]);
@@ -75,7 +75,7 @@ const LinkEncoder = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption);
+        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
         var message = await window.linkEncoderAPI.getLastMessage();
 
@@ -118,9 +118,11 @@ const LinkEncoder = () => {
         return new Promise(resolve => {
             if (checked == false) {
                 interval = setInterval(async () => {
-                    
                     var today = new Date();
-                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    var hours = today.getHours();
+                    var ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    var time = hours + ":" + today.getMinutes() + ":" + today.getSeconds() + ' ' + ampm;
                     await window.linkEncoderAPI.sendToLinkEncoder(time);    
                 }, 5000);
                 

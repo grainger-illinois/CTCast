@@ -26,9 +26,9 @@ async function linkEncoderConnectionHandler(linkencoder, host, port) {
   return res;
 }
 
-async function linkEncoderHandler(linkencoder, caption) {
+async function linkEncoderHandler(linkencoder, caption, host, port) {
   var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
-  const res = await linkencoder.sendMessage(message);
+  const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
 
@@ -76,8 +76,8 @@ app.on('ready', () => {
     return await linkEncoderConnectionHandler(linkencoder, host, port);
   });
   
-  ipcMain.handle('linkencoder', async (event, caption) => {
-    return await linkEncoderHandler(linkencoder, caption);
+  ipcMain.handle('linkencoder', async (event, caption, host, port) => {
+    return await linkEncoderHandler(linkencoder, caption, host, port);
   });
 
   ipcMain.handle('clear-le', async (event) => {
