@@ -27,6 +27,11 @@ async function linkEncoderHandler(linkencoder, caption, host, port) {
   return res;
 }
 
+async function shortcutHandler(shortcut) {
+  const res = await shortcutMap.updateShortcutMap(shortcut);
+  return res;
+}
+
 async function zoomAPIHandler(zoom, caption, meetingLink) {
   var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
 
@@ -34,16 +39,24 @@ async function zoomAPIHandler(zoom, caption, meetingLink) {
   return res;
 }
 
-async function shortcutHandler(shortcut) {
-  const res = await shortcutMap.updateShortcutMap(shortcut);
-  return res;
-}
-
 async function fileProcessHandler(ext, arrayBuffer) {
+  switch(ext) {
+  case 'docx':
+      console.log(arrayBuffer);
+      const mammoth = require('mammoth');
 
+      /* clear image data, keep alt text only */
+      var options = {
+          convertImage: mammoth.images.imgElement(function(image) {})
+      };
+      /* there is an option of arrayBuffer but don't use it*/
+      mammoth.convertToHtml({buffer: arrayBuffer}, options).then((result) => {
+          console.log(result)
+      })
+      break;
+  
+  }
 }
-
-
 
 const createWindow = () => {
   // Create the browser window.

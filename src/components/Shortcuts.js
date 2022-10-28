@@ -43,17 +43,22 @@ function Shortcuts() {
 	const [map, setMap] = useState(new Map());
 
 	useEffect(() => {
-		window.localStorage.setItem("map", JSON.stringify(Map));
-	}, [map])
+		console.log(map);
+		const mapJSON = JSON.stringify(Object.fromEntries(map))
+		console.log("use[map]", mapJSON);
+		if (map.size > 0) {
+			window.localStorage.setItem("map", mapJSON);
+		}
+	}, [map]);
 
 	useEffect(() => {
 		const mapJSON = window.localStorage.getItem("map")
 		
 		console.log(mapJSON)
-		if (mapJSON === undefined) {
-			setMap(JSON.parse(mapJSON))
+		if (mapJSON !== 'undefined') {
+			setMap(new Map(Object.entries(JSON.parse(mapJSON))));
 		}
-	}, [])
+	}, []);
 
 	const refreshMap = () => {
 		window.shortcutMap.getShortcutMap().then((result) => {
@@ -88,8 +93,8 @@ function Shortcuts() {
 		if (currLongText !== "" && currShortcut !== "") {
 			map.set(currShortcut, currLongText);
 		}
-		// console.log(map);
 		window.shortcutMap.sendShortcut(map);
+		refreshMap();
 
 		setCurrLongText('');
 		setCurrShortcut('');

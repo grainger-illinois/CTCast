@@ -24,21 +24,7 @@ contextBridge.exposeInMainWorld('shortcutMap', {
 })
 
 contextBridge.exposeInMainWorld('fileExtractionAPI', {
-    processFile: (ext, arrayBuffer) => {
-        if (ext == 'docx') {
-            console.log(arrayBuffer);
-            const mammoth = require('mammoth');
-
-            /* empty 
-            var options = {
-                convertImage: mammoth.images.imgElement(function(image) {})
-            };
-            /* there is an option of arrayBuffer but don't use it*/
-            mammoth.convertToHtml({buffer: arrayBuffer}, options).then((result) => {
-                console.log(result)
-            })
-        }
-    }
+    processFile: (ext, arrayBuffer) => ipcRenderer.invoke('process-file', ext, arrayBuffer)
 })
 
 
