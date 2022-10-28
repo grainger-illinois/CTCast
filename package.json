@@ -1,7 +1,7 @@
 {
   "name": "ctcast",
   "productName": "ctcast",
-  "version": "0.1.3-pre2",
+  "version": "0.1.3-pre3",
   "description": "Caption and Image Description Broadcasting",
   "main": ".webpack/main",
   "scripts": {
