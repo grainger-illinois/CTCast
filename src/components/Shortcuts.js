@@ -47,7 +47,6 @@ function Shortcuts() {
 		});
 	}
 
-	refreshMap();
 
 	const [currLongText, setCurrLongText] = useState("");
 	const [currShortcut, setCurrShortcut] = useState("");
@@ -89,8 +88,9 @@ function Shortcuts() {
 			
 
 			reader.addEventListener('load', () => {
-				console.log(typeof(reader.result));
-				window.fileExtractionAPI.processFile('', reader.result)
+				window.fileExtractionAPI.processFile(
+					selectedFile.name.split('.').slice(-1)[0], 
+					reader.result);
 				
 				/*
 				let lines = content.split("\n");
