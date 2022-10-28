@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { useEffect } from "react";
 // import Fab from '@mui/material/Fab';
 
 
@@ -40,6 +41,19 @@ function Shortcuts() {
 	const [isFilePicked, setIsFilePicked] = useState(false);
 	//const [marker, setMarker] = useState('@');
 	const [map, setMap] = useState(new Map());
+
+	useEffect(() => {
+		window.localStorage.setItem("map", JSON.stringify(Map));
+	}, [map])
+
+	useEffect(() => {
+		const mapJSON = window.localStorage.getItem("map")
+		
+		console.log(mapJSON)
+		if (mapJSON === undefined) {
+			setMap(JSON.parse(mapJSON))
+		}
+	}, [])
 
 	const refreshMap = () => {
 		window.shortcutMap.getShortcutMap().then((result) => {
@@ -177,9 +191,8 @@ function Shortcuts() {
 		} else alert("Please choose a file!");
 	};
 
-	return <div style={{ margin: "20px", marginTop: "30px", display:"flex" }} >
-			<Box sx={{flexGrow: '1', marginRight:'20px', height:'auto'}}>
-				<Button onClick={() => console.log(map)}>map</Button>
+	const ListMap = () => 
+		<Box sx={{flexGrow: '1', marginRight:'20px', height:'auto'}}>
 				<h2>Shortcuts</h2>
 				<List>
 					{Array.from(map, (entry) =>
@@ -190,7 +203,11 @@ function Shortcuts() {
 					</ListItem>)}
 				</List>
 			</Box>
+	
 
+	return <div style={{ margin: "20px", marginTop: "30px", display:"flex" }} >
+			
+			<ListMap/>
 
 			<Stack
 				sx={{flexGrow: '1'}}
