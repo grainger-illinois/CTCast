@@ -1,7 +1,7 @@
 import { PlaywrightTestConfig } from '@playwright/test'
 
 const config: PlaywrightTestConfig = {
-  testDir: './tests',
+  testDir: './testing',
   maxFailures: 2,
 }
 
