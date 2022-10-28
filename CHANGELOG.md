@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - LinkEncoder output should now be equivalent to the original python code
+- Experimental support for 5second ping test and automatic reconnect
 
 ### Fixed
 - Fixed UI bugs (including initial blank screen for Zoom and LinkEncoder pages)
