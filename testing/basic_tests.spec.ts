@@ -199,8 +199,8 @@ test('renders the help page', async () => {
   page = await electronApp.firstWindow()
   const [window] = await Promise.all([
     page.waitForEvent('framenavigated'),
-    //page.locator('a:has-text("help")').click()
-    page.locator('id=help').click()
+    page.locator('a[href="#/help"]').click()
+    //page.locator('id=help').click()
   ]);
   await window.waitForSelector('h1')
   const text = await page.$eval('h1', (el) => el.textContent)
