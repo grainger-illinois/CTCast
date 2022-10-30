@@ -116,12 +116,15 @@ function Shortcuts() {
 		<Box sx={{flexGrow: '1', marginRight:'20px', height:'auto'}}>
 				<h2>Shortcuts</h2>
 				<List>
-					{Array.from(map, (entry) =>
-					<ListItem disablePadding key={entry[0]}>
-						<ListItemButton onClick={() => {alert(entry[1])}}>
-							<ListItemText>{entry[0]}</ListItemText>
-						</ListItemButton>
-					</ListItem>)}
+					{Array.from(map, (entry) => {
+						if (entry[0] != 'docx' && entry[0] != 'pptx' && entry[0] != 'pdf') {
+							return <ListItem disablePadding key={entry[0]}>
+										<ListItemButton onClick={() => {alert(entry[1])}}>
+											<ListItemText>{entry[0]}</ListItemText>
+										</ListItemButton>
+									</ListItem>
+						}
+					})}
 				</List>
 			</Box>
 	
