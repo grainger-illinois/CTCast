@@ -85,6 +85,8 @@ function Shortcuts() {
 			map.set(currShortcut, currLongText);
 		}
 
+		window.shortcutMap.sendShortcut(map).then(refreshRemoteMap());
+
 		setCurrLongText('');
 		setCurrShortcut('');
 	}

@@ -87,14 +87,12 @@
     "eslint-plugin-react": "^7.31.8",
     "jest": "^27.2.5",
     "jszip": "^3.10.1",
-    "libreoffice-convert": "^1.4.1",
-    "mammoth": "^1.5.1",
     "node-loader": "^2.0.0",
     "path-browserify": "^1.0.1",
     "playwright": "^1.27.0",
     "spectron": "^17.0.0",
     "style-loader": "^3.3.0",
-    "xml2js": "^0.4.23",
+    "xml2js": "^0.4.23"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
