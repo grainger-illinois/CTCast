@@ -49,7 +49,9 @@ async function fileProcessHandler(ext, arrayBuffer) {
     altTextResult = await extractDocxImageAltText(arrayBuffer);
     for (const [i, slide] of altTextResult.entries()) {
       for (const [j, picture] of slide.entries()) {
-        mapForThisFile.set(filename + 'p' + j, picture);
+        mapForThisFile.set('docx' + shortcutMap.get('docx') + 'p' + j, picture);
+        mapForThisFile.set('docx', shortcutMap.get('docx') + 1);
+
       }
     }
     break;
@@ -57,7 +59,8 @@ async function fileProcessHandler(ext, arrayBuffer) {
     altTextResult = await extractPptxImageAltText(arrayBuffer);
     for (const [i, slide] of altTextResult.entries()) {
       for (const [j, picture] of slide.entries()) {
-        mapForThisFile.set(filename + 's' + i + 'p' + j, picture);
+        mapForThisFile.set('pptx' + shortcutMap.get('pptx')  + 's' + i + 'p' + j, picture);
+        mapForThisFile.set('pptx', shortcutMap.get('pptx') + 1);
       }
     }
     break;
@@ -127,7 +130,7 @@ app.on('ready', () => {
   });
 
   ipcMain.handle('clear-shortcuts', async (event) => {
-    shortcutMap.shortcuts = new Map();
+    shortcutMap = new ShortcutMap();
   });
 
   ipcMain.handle('process-file', async (event, ext, buffer) => {

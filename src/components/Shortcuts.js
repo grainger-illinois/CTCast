@@ -99,8 +99,6 @@ function Shortcuts() {
 			reader.addEventListener('load', async () => {
 				const ext = selectedFile.name.split('.').slice(-1)[0];
 				// Might have weird filenames that include '.'
-				const filename = selectedFile.name.split('.')[0];
-				console.log(filename);
 				await window.fileExtractionAPI.processFile(
 					ext,
 					reader.result

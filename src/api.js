@@ -44,6 +44,13 @@ export class LoggerWriter {
 export class ShortcutMap {
     constructor() {
         this.shortcuts = new Map();
+        this.shortcuts.set('pptx', 1);
+        this.shortcuts.set('docx', 1);
+        this.shortcuts.set('pdf', 1);
+    }
+    
+    get(key) {
+        return this.shortcuts.get(key);
     }
 
     async appendToExistingShortcutMap(shortcut) {
@@ -51,7 +58,7 @@ export class ShortcutMap {
         return this.shortcuts;
     }
 
-    async getShortcutMap(){
+    getShortcutMap(){
         return this.shortcuts;
     }
 }
