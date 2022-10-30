@@ -45,7 +45,6 @@
         }
       ],
       "plugins": [
-        [
           "@electron-forge/plugin-webpack",
           {
             "mainConfig": "./webpack.main.config.js",
