@@ -4,6 +4,7 @@ const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
 
 const { LoggerWriter, ZoomAPI, LinkEncoderAPI, ShortcutMap } = require('./api');
+const { extractDocxImageAltText, extractPptxImageAltText } = require('./util/extractAltTextHelpers');
 
 var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
@@ -28,7 +29,7 @@ async function linkEncoderHandler(linkencoder, caption, host, port) {
 }
 
 async function shortcutHandler(shortcut) {
-  const res = await shortcutMap.updateShortcutMap(shortcut);
+  const res = await shortcutMap.appendToExistingShortcutMap(shortcut);
   return res;
 }
 
@@ -40,23 +41,33 @@ async function zoomAPIHandler(zoom, caption, meetingLink) {
 }
 
 async function fileProcessHandler(ext, arrayBuffer) {
+  debugger;
+  var altTextResult;
+  var mapForThisFile = new Map();
   switch(ext) {
   case 'docx':
-      console.log(arrayBuffer);
-      const mammoth = require('mammoth');
-
-      /* clear image data, keep alt text only */
-      var options = {
-          convertImage: mammoth.images.imgElement(function(image) {})
-      };
-      /* there is an option of arrayBuffer but don't use it*/
-      mammoth.convertToHtml({buffer: arrayBuffer}, options).then((result) => {
-          console.log(result)
-      })
-      break;
-  
+    altTextResult = await extractDocxImageAltText(arrayBuffer);
+    for (const [i, slide] of altTextResult.entries()) {
+      for (const [j, picture] of slide.entries()) {
+        mapForThisFile.set(filename + 'p' + j, picture);
+      }
+    }
+    break;
+  case 'pptx':
+    altTextResult = await extractPptxImageAltText(arrayBuffer);
+    for (const [i, slide] of altTextResult.entries()) {
+      for (const [j, picture] of slide.entries()) {
+        mapForThisFile.set(filename + 's' + i + 'p' + j, picture);
+      }
+    }
+    break;
   }
+  
+  shortcutMap.appendToExistingShortcutMap(mapForThisFile);
+  
 }
+
+
 
 const createWindow = () => {
   // Create the browser window.

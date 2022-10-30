@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from '@mui/material/Button';
 // import Box from '@mui/material/Box';
 // import Card from '@mui/material/Card';
@@ -16,51 +16,43 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { useEffect } from "react";
 // import Fab from '@mui/material/Fab';
 
 
 
 
 function Shortcuts() {
-	function removeEmpty(word) {
-		return word != '';
-	}
 
-	function findSuffix(word, map, len) {
-		let suffLength = len - word.length;
-		for (let i = 1; i < Math.pow(10, suffLength); i++) {
-			if (map.get(word + i) == undefined) {
-				return word + i;
-			}
-		}
-		return null;
-	}
 
 	const [selectedFile, setSelectedFile] = useState();
 	const [isFilePicked, setIsFilePicked] = useState(false);
 	//const [marker, setMarker] = useState('@');
 	const [map, setMap] = useState(new Map());
+	
+	const didMountRef = useRef(false);
+
 
 	useEffect(() => {
-		console.log(map);
-		const mapJSON = JSON.stringify(Object.fromEntries(map))
-		console.log("use[map]", mapJSON);
-		if (map.size > 0) {
+		const mapJSON = JSON.stringify(Object.fromEntries(map));
+		if (didMountRef.current) {
 			window.localStorage.setItem("map", mapJSON);
+		} else {
+			didMountRef.current = true;
 		}
 	}, [map]);
 
 	useEffect(() => {
-		const mapJSON = window.localStorage.getItem("map")
-		
-		console.log(mapJSON)
+		const mapJSON = window.localStorage.getItem("map");
+		console.log(mapJSON);
 		if (mapJSON !== 'undefined') {
-			setMap(new Map(Object.entries(JSON.parse(mapJSON))));
+			const localStorageMap = new Map(Object.entries(JSON.parse(mapJSON)));
+			setMap(localStorageMap);
+			// console.log(map);
+			window.shortcutMap.sendShortcut(localStorageMap).then(refreshRemoteMap());
 		}
 	}, []);
 
-	const refreshMap = () => {
+	const refreshRemoteMap = () => {
 		window.shortcutMap.getShortcutMap().then((result) => {
 			setMap(result);
 		});
@@ -80,8 +72,7 @@ function Shortcuts() {
 
 	const clearMap = () => {
 		window.shortcutMap.clearShortcuts();
-		refreshMap();
-		console.log(map);
+		refreshRemoteMap();
 	};
 
 	const fileChangeHandler = (event) => {
@@ -93,103 +84,28 @@ function Shortcuts() {
 		if (currLongText !== "" && currShortcut !== "") {
 			map.set(currShortcut, currLongText);
 		}
-		window.shortcutMap.sendShortcut(map);
-		refreshMap();
 
 		setCurrLongText('');
 		setCurrShortcut('');
 	}
 
 	const handleUpload = () => {
-		//console.log(map);
 		if (isFilePicked) {
 			let reader = new FileReader();
-			
 
-			reader.addEventListener('load', () => {
-				window.fileExtractionAPI.processFile(
-					selectedFile.name.split('.').slice(-1)[0], 
-					reader.result);
-				
-				/*
-				let lines = content.split("\n");
 
-				lines = lines.filter(removeEmpty);
+			reader.addEventListener('load', async () => {
+				const ext = selectedFile.name.split('.').slice(-1)[0];
+				// Might have weird filenames that include '.'
+				const filename = selectedFile.name.split('.')[0];
+				console.log(filename);
+				await window.fileExtractionAPI.processFile(
+					ext,
+					reader.result
+					);
 
-				let unmatched = [];
-				let malformedArgs = false;
+				refreshRemoteMap();
 
-				for (let line of lines) {
-					let trimmedLine = line.trim();
-					if (trimmedLine.indexOf(":") === 0) {
-						malformedArgs = true;
-						continue;
-					}
-					let words = trimmedLine.split(":");
-					for (let i = 0; i < words.length; i++)
-						words[i] = words[i].trim();
-					words = words.filter(removeEmpty);
-
-					if (words.length == 1) {
-						unmatched.push(words[0]);
-					}
-					else if (words.length == 2) {
-						if (map.get(words[1]) != undefined) {
-							malformedArgs = true;
-							continue;
-						}
-						else {
-							map.set(words[1], words[0]);
-						}
-					}
-					else {
-						malformedArgs = true;
-					}
-				}
-				if (malformedArgs) {
-					//alert("There were malformed or repeated arguments that have not been applied. Please review the short cuts list and make sure the short cuts you are expecting are there.");
-				}
-
-				for (let word of unmatched) {
-					let wordContained = false;
-					map.forEach(function (value) { if (value === word) wordContained = true; });
-
-					if (wordContained)
-						continue;
-
-					let w = word.toLowerCase();
-					if (map.get(w.charAt(0)) == undefined) {
-						map.set(w.charAt(0), word)
-						continue;
-					}
-
-					if (w.length > 1) {
-						if (map.get(w.charAt(0) + w.charAt(1)) == undefined) {
-							map.set(w.charAt(0) + w.charAt(1), word);
-							continue;
-						}
-						let mapping = findSuffix((w.charAt(0) + w.charAt(1)), map, 4);
-						if (mapping == null)
-							continue;
-						else {
-							map.set(mapping, word);
-							continue;
-						}
-					}
-
-					else {
-						let mapping = findSuffix((w.charAt(0)), map, 4);
-						if (mapping == null)
-							continue;
-						else {
-							map.set(mapping, word);
-							continue;
-						}
-					}
-				} */
-
-				window.shortcutMap.sendShortcut(map);
-				console.log(map);
 			});
 
 			reader.readAsArrayBuffer(selectedFile);

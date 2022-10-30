@@ -46,8 +46,7 @@ export class ShortcutMap {
         this.shortcuts = new Map();
     }
 
-    async updateShortcutMap(shortcut) {
-        
+    async appendToExistingShortcutMap(shortcut) {
         this.shortcuts = new Map([...this.shortcuts, ...shortcut]);
         return this.shortcuts;
     }
