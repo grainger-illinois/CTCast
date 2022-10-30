@@ -22,6 +22,11 @@ async function loggerWriterHandler(logger, message) {
   return res;
 }
 
+async function linkEncoderConnectionHandler(linkencoder, host, port) {
+  const res = await linkencoder.connectAndDisconnect(host, port);
+  return res;
+}
+
 async function linkEncoderHandler(linkencoder, caption, host, port) {
   var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
@@ -95,6 +100,10 @@ app.on('ready', () => {
   ipcMain.handle('log-message', async (event, message) => {
     return await loggerWriterHandler(logger, message);
   });
+
+  ipcMain.handle('connection-le', async (event, host, port) => {
+    return await linkEncoderConnectionHandler(linkencoder, host, port);
+  });
   
   ipcMain.handle('linkencoder', async (event, caption, host, port) => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
@@ -102,7 +111,7 @@ app.on('ready', () => {
 
   ipcMain.handle('clear-le', async (event) => {
     linkencoder = new LinkEncoderAPI();
-  })
+  });
 
   ipcMain.handle('le-last-message', async (event) => {
     return linkencoder.last_message;
