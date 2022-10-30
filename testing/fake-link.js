@@ -1,5 +1,4 @@
 var net = require('net');
-const {map} = require("react-bootstrap/ElementChildren");
 var host = '127.0.0.1';
 var servers = [];
 var ports = [10001,10002];

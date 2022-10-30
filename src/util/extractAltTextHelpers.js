@@ -24,7 +24,7 @@ export async function extractDocxImageAltText(myArrayBuffer) {
                 if (typeof(v) === 'object') {
                     findImages(v);
                 }
-            };
+            }
         }
         
         findImages(xmlContent);
@@ -61,7 +61,7 @@ export async function extractPptxImageAltText(myArrayBuffer) {
                 if (typeof(v) === 'object') {
                     findImages(v);
                 }
-            };
+            }
         }
         findImages(xmlContent);
         return(images);

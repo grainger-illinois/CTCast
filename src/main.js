@@ -41,7 +41,6 @@ async function zoomAPIHandler(zoom, caption, meetingLink) {
 }
 
 async function fileProcessHandler(ext, arrayBuffer) {
-  debugger;
   var altTextResult;
   var mapForThisFile = new Map();
   switch(ext) {
