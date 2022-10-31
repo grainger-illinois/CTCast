@@ -76,20 +76,33 @@ const LinkEncoder = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
-
-        var message = await window.linkEncoderAPI.getLastMessage();
-
-        writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
-        setPostData({ ...postData, caption: '' });
-        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
+        if(postData.ip == "") {
+            writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}: Error: No IP set. Not sent to LinkEncoder.`);
+            setPostData({ ...postData, caption: '' });
+            setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, "Error: No IP set. Not sent to LinkEncoder."), ...arr]);
+        } else if (postData.port != 10001 && postData.port != 10002){
+            writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}: Invalid port given, Should only be 10001 or 10002.`);
+            setPostData({ ...postData, caption: '' });
+            setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, "Invalid port given, Should only be 10001 or 10002."), ...arr]);
+        }else if(postData.caption == "") {
+            writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}: Error: No content in caption. Not sent to LinkEncoder.`);
+            setPostData({ ...postData, caption: '' });
+            setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, "Error: No content in caption. Not sent to LinkEncoder."), ...arr]);
+        } else {
 
+            await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
+            //Could be useful to display errors about conntion failures from this
+            var message = await window.linkEncoderAPI.getLastMessage();
+
+            writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
+            setPostData({ ...postData, caption: '' });
+            setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
+        }
     }
 
     const clear = () => {
-        setPostData({ ip: '', port: '', caption: '', count: 0 });
+        setPostData({ ip: '', port: '', caption: '', count: -1 });
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
         window.linkEncoderAPI.clearLinkEncoder();
