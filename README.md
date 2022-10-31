@@ -28,3 +28,8 @@ Overall, the frontend takes a caption, and sends it to the backend, which sends 
 
 # Usage
 To use the app, first decide if you want to send captions to Zoom or Link Encoder. To send captions to Zoom, you need the Zoom API key for the meeting and input it into the UI. Afterwards, typing in captions and hitting send will automatically send them to Zoom to be displayed in the meeting. For Link Encoer the process is simple. Enter the address that the Link Encoder is hosted on, and a port number (either 10001 or 10002), and any captions will be formatted and sent to the Link Encoder to be outputted by it.
+
+In order to pack the app and create an executable, it is necessary to run the comand `npm run make` from the CMD. Then a new folder called out will appear, click it, then click the ctcastwin-... folder and you will find there the executable, called "ctcast.exe".
+
+# Testing
+Tests are run through terminal by typing "npx playwright test". The tests as of now are very basic, they just check if a user can move around the app easily and send text through the link encoder.

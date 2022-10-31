@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## 0.1.3-pre2 - 2022-10-13
+## 0.1.3-pre3 - 2022-10-28
 
 ### Added
 - LinkEncoder output should now be equivalent to the original python code
+- Experimental support for 5second ping test and automatic reconnect
 
 ### Fixed
 - Fixed UI bugs (including initial blank screen for Zoom and LinkEncoder pages)
+- Better support for CC1 and CC3 channels (different LinkEncoder control codes)
 
 ## 0.1.2 - 2022-10-13
 ### Added
