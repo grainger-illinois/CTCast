@@ -49,8 +49,10 @@ const LinkEncoder = () => {
     useEffect(() => {
         const data = window.localStorage.getItem('linken_captioning');
         const data_log = window.localStorage.getItem('logging_data');
-        setPostData(JSON.parse(data));
-        setPostDataArr(JSON.parse(data_log));
+        const data_prased= JSON.parse(data);
+        const data_log_parsed = JSON.parse(data_log);
+        setPostData(data_prased || "");
+        setPostDataArr(data_log_parsed || "");
     }, [])
 
     useEffect(() => {
@@ -82,9 +84,6 @@ const LinkEncoder = () => {
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
         setPostData({ ...postData, caption: '' });
-        if (!postDataArr) {
-            setPostDataArr([]);
-        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
 
     }
@@ -149,7 +148,7 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="IP Address"
                     fullWidth
-                    value={postData ? postData.ip : ''}
+                    value={postData.ip}
                     onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
                 />
@@ -159,7 +158,7 @@ const LinkEncoder = () => {
                     label="Port"
                     fullWidth
                     align="left"
-                    value={postData ? postData.port : ''}
+                    value={postData.port}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
                 <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
@@ -221,7 +220,7 @@ const LinkEncoder = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
+                        {postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -230,7 +229,7 @@ const LinkEncoder = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
                             </TableRow>
-                        )): <TableRow></TableRow>}
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -45,8 +45,10 @@ const Form = () => {
     useEffect(() => {
         const data = window.localStorage.getItem('Zoom_captioning');
         const data_log = window.localStorage.getItem('logging_data');
-        setPostData(JSON.parse(data));
-        setPostDataArr(JSON.parse(data_log));
+        const data_prased = JSON.parse(data)
+        const data_log_parsed = JSON.parse(data_log);
+        setPostData(data_prased || "");
+        setPostDataArr(data_log_parsed || "");
     }, [])
 
     //locally saves objects upon changes to postData and postDataArr
@@ -79,9 +81,6 @@ const Form = () => {
         postData.count += 1;
 
         setPostData({ ...postData, message: '' });
-        if (!postDataArr) {
-            setPostDataArr([]);
-        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
     }
 
@@ -104,7 +103,7 @@ const Form = () => {
                     label="Zoom API Token"
 
                     fullWidth
-                    value={postData ? postData.zoomlink : ''}
+                    value={postData.zoomlink}
                     onChange={(e) => setPostData({ ...postData, zoomlink: e.target.value })}
 
                 />
@@ -114,7 +113,7 @@ const Form = () => {
                     label="Message"
 
                     fullWidth
-                    value={postData ? postData.message : ''}
+                    value={postData.message}
                     onChange={(e) => setPostData({ ...postData, message: e.target.value })}
                 />
 
@@ -152,7 +151,7 @@ const Form = () => {
                     </TableHead>
 
                     <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
+                        {postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -161,7 +160,7 @@ const Form = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.message}</TableCell>
                             </TableRow>
-                        )): <TableRow></TableRow>}
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
