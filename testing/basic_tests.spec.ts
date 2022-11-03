@@ -191,7 +191,7 @@ test('renders the shortcut page', async () => {
   ]);
   await window.waitForSelector('h1')
   const text = await page.$eval('h1', (el) => el.textContent)
-  expect(text).toBe('File Upload')
+  expect(text).toBe('Shortcuts')
   page = window.page()
 })
 

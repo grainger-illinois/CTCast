@@ -7,10 +7,10 @@ import { Help as HelpIcon } from '@mui/icons-material'
 
 import ZoomPage from './zoom/zoom.js'
 import LinkEncoder from './LinkEncoder.js';
-import Shortcuts from './Shortcuts';
+import Shortcuts from './Shortcuts.js';
 import Help from "./Help.js";
 
-import Home from './home'
+import Home from './Home.js'
 import './Options.css'
 import {
   HashRouter as Router,

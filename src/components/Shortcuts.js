@@ -43,7 +43,7 @@ function Shortcuts() {
 	useEffect(() => {
 		const mapJSON = window.localStorage.getItem("map");
 		console.log(mapJSON);
-		if (mapJSON !== 'undefined') {
+		if (mapJSON) {
 			const localStorageMap = new Map(Object.entries(JSON.parse(mapJSON)));
 			setMap(localStorageMap);
 			// console.log(map);
@@ -113,7 +113,7 @@ function Shortcuts() {
 
 	const ListMap = () => 
 		<Box sx={{flexGrow: '1', marginRight:'20px', height:'auto'}}>
-				<h2>Shortcuts</h2>
+				<h1>Shortcuts</h1>
 				<List>
 					{Array.from(map, (entry) => {
 						if (entry[0] != 'docx' && entry[0] != 'pptx' && entry[0] != 'pdf') {
