@@ -1,36 +1,36 @@
 var net = require('net');
 var host = '127.0.0.1';
 var servers = [];
-var ports = [10001,10002];
+const compareMode = process.argv[2] == "-c";
+const ports = compareMode ? [10001, 10002, 10003] : [10001, 10002];
 
 // connect to both ports for testing.
 
 var linesFromBothConnection = new Map();
-linesFromBothConnection.set(10001, []);
-linesFromBothConnection.set(10002, []);
+ports.forEach((port) => linesFromBothConnection.set(port, []));
 
-// this.rollupcode0 = Buffer.from("1427142D1470", "hex");
-// this.rollupcode1 = Buffer.from("1427142D1350", "hex");
-// this.rollupcode2 = Buffer.from("142D1370", "hex");
-// this.rollupcode3 = Buffer.from("142D1450", "hex");
-// this.rollupcode4 = Buffer.from("142D1470", "hex");
-// this.bypass = Buffer.from("01300D01300D", "hex");
-// this.resetcode = Buffer.from("0F0F", "hex");
+this.rollupcode0 = Buffer.from("1427142D1470", "hex");
+this.rollupcode1 = Buffer.from("1427142D1350", "hex");
+this.rollupcode2 = Buffer.from("142D1370", "hex");
+this.rollupcode3 = Buffer.from("142D1450", "hex");
+this.rollupcode4 = Buffer.from("142D1470", "hex");
+this.bypass = Buffer.from("01300D01300D", "hex");
+this.resetcode = Buffer.from("0F0F", "hex");
 
 
 const compare = () => {
     console.log("\nComparing input from two ports...")
-    const input1 = linesFromBothConnection.get(10001), input2 = linesFromBothConnection.get(10002);
+    const input1 = linesFromBothConnection.get(10003), input2 = linesFromBothConnection.get(10002);
 
     if (input1.length != input2.length) {
         console.log("Inputs from the two ports differ in length.");
     } else {
         let counter = 0;
-        linesFromBothConnection.get(10001).forEach((line, i) => {
-            if (i > 0 && line != input2[i]) {
+        input1.forEach((line, i) => {
+            if (line != input2[i]) {
                 console.log("Inputs differ at line", i);
-                console.log("Input from port 10001:", line);
-                console.log("Input from port 10002:", input2[i]);
+                console.log("Input from port 10002:", JSON.stringify(input2[i]));
+                console.log("Input from port 10003:", JSON.stringify(line));
                 counter++;
             }
         });
@@ -54,18 +54,16 @@ ports.forEach(function (port) {
             // If both ports receive input, for this fake server, we want to compare them
             // This compares the first input sent from each port.
 
-            if (data[0] != 1) {
-                linesFromBothConnection.get(port).push(data.toString());
-            }
-
-
+            linesFromBothConnection.get(port).push(data.toString());
 
             // Compare the two recorded inputs and reset the recording variables.
 
-            compare();
+            if (compareMode) {
+                compare();
 
-            console.log("Exact input:");
-            console.log(linesFromBothConnection);
+                console.log("Exact input:");
+                console.log(linesFromBothConnection);
+            }
 
 
         });
@@ -85,4 +83,3 @@ ports.forEach(function (port) {
     servers.push(s);
 });
 
-// while(1) {}

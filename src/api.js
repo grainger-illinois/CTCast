@@ -150,7 +150,7 @@ export class LinkEncoderAPI {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async sendMessage(caption, host, port) {
+    async connectAndDisconnect(host, port) {
         if (host == "") {
             host = this.csEncoder;
         }
@@ -172,6 +172,32 @@ export class LinkEncoderAPI {
         // reconnecting trigger. Not sure if this works as expected when disconnected
         if (this.socket == null || this.socket.readyState == 'closed') {
             console.log('Attempting connection');
+            await this.connecttoserver(port, host);
+            console.log('Connected to ' + host + ':' + port);
+        }
+        else {
+            this.socket.destroy();
+            this.newswire = null;
+            this.fieldinsertmode = null;
+            console.log('Disconnected from ' + host + ':' + port);
+        }
+
+        return 200;
+    }
+
+    async sendMessage(caption, host, port) {
+        if (this.socket == null || this.socket.readyState == 'closed') {
+            console.log('Reconnecting');
+            if (port == 10001) {
+                this.fieldinsertmode = Buffer.from("01330D01330D", "hex");
+                this.newswire = Buffer.from("014E36014E36", "hex");
+            } else if (port == 10002) {
+                this.fieldinsertmode = Buffer.from("01340D01340D", "hex");
+                this.newswire = Buffer.from("015046015046", "hex");
+            } else {
+                console.error("Invalid port given, Should only be 10001 or 10002");
+                return 400;
+            }
             await this.connecttoserver(port, host);
             console.log('Connected to ' + host + ':' + port);
         }
@@ -220,7 +246,10 @@ export class LinkEncoderAPI {
                     break;
                 }
             }
+
         }
+        await this.sleep(10);
+        this.socket.write(this.bypass, this.encoding)
 
         this.last_message = caption;
         return 200;
