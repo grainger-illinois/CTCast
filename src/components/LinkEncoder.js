@@ -120,9 +120,13 @@ const LinkEncoder = () => {
                 interval = setInterval(async () => {
                     var today = new Date();
                     var hours = today.getHours();
+                    var minutes = today.getMinutes();
+                    var seconds = today.getSeconds();
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    seconds = seconds < 10 ? '0' + seconds : seconds;
                     var ampm = hours >= 12 ? 'PM' : 'AM';
                     hours = hours % 12;
-                    var time = hours + ":" + today.getMinutes() + ":" + today.getSeconds() + ' ' + ampm;
+                    var time = hours + ":" + minutes + ":" + seconds + ' ' + ampm;
                     await window.linkEncoderAPI.sendToLinkEncoder(time);    
                 }, 5000);
                 
