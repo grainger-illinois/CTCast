@@ -183,13 +183,24 @@ export class LinkEncoderAPI {
         return 200;
     }
 
-    async sendMessage(caption) {
+    async sendMessage(caption, host, port) {
         if (this.socket == null || this.socket.readyState == 'closed') {
-            console.log('Connect to an IP address first');
-            this.last_message = 'Connect to an IP address first';
-            return 400;
+            console.log('Reconnecting');
+            if (port == 10001) {
+                this.fieldinsertmode = Buffer.from("01330D01330D", "hex");
+                this.newswire = Buffer.from("014E36014E36", "hex");
+            } else if (port == 10002) {
+                this.fieldinsertmode = Buffer.from("01340D01340D", "hex");
+                this.newswire = Buffer.from("015046015046", "hex");
+            } else {
+                console.error("Invalid port given, Should only be 10001 or 10002");
+                this.last_message = 'Connect to an IP address first';
+                return 400;
+            }
+            await this.connecttoserver(port, host);
+            console.log('Connected to ' + host + ':' + port);            
         }
-        
+
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {
             for (const invalid_char of this.character_diff_list) {
