@@ -129,7 +129,6 @@ test('renders the home page', async () => {
 
 test('renders the zoom page', async () => {
   page = await electronApp.firstWindow()
-  console.log(page.title())
   const [window] = await Promise.all([
     page.waitForEvent('framenavigated'),
     page.locator('a:has-text("Zoom")').click()
