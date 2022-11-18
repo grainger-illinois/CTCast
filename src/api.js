@@ -240,7 +240,7 @@ export class LinkEncoderAPI {
                 else { // send the word(s)
                     //sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
                     let newswire_word = word + "\r";
-                    await this.sleep(10);
+                    await this.sleep(600);
                     this.socket.write(newswire_word, this.encoding);
 
                     break;
@@ -248,7 +248,7 @@ export class LinkEncoderAPI {
             }
 
         }
-        await this.sleep(10);
+        await this.sleep(1000);
         this.socket.write(this.bypass, this.encoding)
 
         this.last_message = caption;
