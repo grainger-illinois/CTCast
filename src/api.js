@@ -185,6 +185,15 @@ export class LinkEncoderAPI {
         return 200;
     }
 
+    async checkConnection() {
+        if (this.socket == null || this.socket.readyState == 'closed'){
+            return 400;
+        }
+        else {
+            return 200;
+        }
+    }
+
     async sendMessage(caption, host, port) {
         if (this.socket == null || this.socket.readyState == 'closed') {
             console.log('Reconnecting');

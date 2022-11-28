@@ -100,18 +100,18 @@ const LinkEncoder = () => {
     const [selected, setSelected] = useState("success");
     const [checked, setIsChecked] = useState(false);
 
+
     const connectAndDisconnect = async () => {
-        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port)
-        .then(() => {
-            if (buttonText == 'Connect'){
-                setButtonText('Disconnect');
-                setSelected("error");
-            }
-            else {
-                setButtonText('Connect');
-                setSelected("success");
-            }  
-        });
+        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
+        const retCode = await window.linkEncoderAPI.checkLinkEncoder();
+        if (retCode == 200) {
+            setButtonText('Disconnect');
+            setSelected("error");
+        }
+        else {
+            setButtonText('Connect');
+            setSelected("success");
+        }
     };
 
     const pinging = async () => {
@@ -142,7 +142,6 @@ const LinkEncoder = () => {
     }   
 
     const classes = useStyles();
-
 
     return (
         <div style={{ margin: "20px", marginTop: "30px" }} className="position-sticky">
@@ -202,10 +201,6 @@ const LinkEncoder = () => {
                 </Stack>
 
             </form>
-            <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={connectAndDisconnect}>
-                
-            </form>
-
 
 
             <div>
