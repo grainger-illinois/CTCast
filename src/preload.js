@@ -22,7 +22,11 @@ contextBridge.exposeInMainWorld('zoomAPI', {
 contextBridge.exposeInMainWorld('shortcutMap', {
     sendShortcut: (shortcut) => ipcRenderer.invoke('upload-map', shortcut),
     getShortcutMap: () => ipcRenderer.invoke('get-shortcut-map'),
-    clearShortcuts: () => ipcRenderer.send('clear-shortcuts')
+    clearShortcuts: () => ipcRenderer.invoke('clear-shortcuts')
+})
+
+contextBridge.exposeInMainWorld('fileExtractionAPI', {
+    processFile: (ext, arrayBuffer) => ipcRenderer.invoke('process-file', ext, arrayBuffer)
 })
 
 
