@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('loggerAPI', {
 contextBridge.exposeInMainWorld('linkEncoderAPI', {
     connectionLinkEncoder: (host, port) => ipcRenderer.invoke('connection-le', host, port),
     sendToLinkEncoder: (caption, host, port) => ipcRenderer.invoke('linkencoder', caption, host, port),
+    checkLinkEncoder: () => ipcRenderer.invoke('check-le'),
     clearLinkEncoder: () => ipcRenderer.send('clear-le'),
     getLastMessage: () => ipcRenderer.invoke('le-last-message')
 })
@@ -21,7 +22,11 @@ contextBridge.exposeInMainWorld('zoomAPI', {
 contextBridge.exposeInMainWorld('shortcutMap', {
     sendShortcut: (shortcut) => ipcRenderer.invoke('upload-map', shortcut),
     getShortcutMap: () => ipcRenderer.invoke('get-shortcut-map'),
-    clearShortcuts: () => ipcRenderer.send('clear-shortcuts')
+    clearShortcuts: () => ipcRenderer.invoke('clear-shortcuts')
+})
+
+contextBridge.exposeInMainWorld('fileExtractionAPI', {
+    processFile: (ext, arrayBuffer) => ipcRenderer.invoke('process-file', ext, arrayBuffer)
 })
 
 
