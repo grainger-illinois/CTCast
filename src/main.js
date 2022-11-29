@@ -27,6 +27,11 @@ async function linkEncoderConnectionHandler(linkencoder, host, port) {
   return res;
 }
 
+async function linkEncoderConnectionChecker(linkencoder) {
+  const res = await linkencoder.checkConnection();
+  return res;
+}
+
 async function linkEncoderHandler(linkencoder, caption, host, port) {
   var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
@@ -103,6 +108,10 @@ app.on('ready', () => {
 
   ipcMain.handle('connection-le', async (event, host, port) => {
     return await linkEncoderConnectionHandler(linkencoder, host, port);
+  });
+
+  ipcMain.handle('check-le', async (event) => {
+    return await linkEncoderConnectionChecker(linkencoder);
   });
   
   ipcMain.handle('linkencoder', async (event, caption, host, port) => {
