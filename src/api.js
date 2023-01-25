@@ -183,6 +183,8 @@ export class LinkEncoderAPI {
         }
         else {
             this.socket.destroy();
+            this.newswire = null;
+            this.fieldinsertmode = null;
             console.log('Disconnected from ' + host + ':' + port);
         }
 
