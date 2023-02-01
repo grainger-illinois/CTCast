@@ -25,8 +25,8 @@ const Options = () => {
 
   return (
     <Router>
-      <Box sx={{ flexGrow: 1 }} width="100%" className='center-align'>
-        <AppBar position="static" className='center-align'>
+      <Box sx={{ flexGrow: 1 }} width="100" className='center-align'>
+        <AppBar className='center-align'>
           <Toolbar style={{ display: "flex", justifyContent: "start" }}>
             <Link to="/" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
               <Button color="inherit">Home</Button>

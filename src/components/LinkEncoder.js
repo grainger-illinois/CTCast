@@ -144,61 +144,89 @@ const LinkEncoder = () => {
     const classes = useStyles();
 
     return (
-        <div style={{ margin: "20px", marginTop: "30px" }} className="position-sticky">
-            <h1 style={{ textAlign: "left" }}>Link Encoder</h1>
+        <div style={{ marginTop: "100px" }} className="position-sticky">
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <TextField
-                    name="ip"
-                    variant="outlined"
-                    label="IP Address"
-                    fullWidth
-                    value={postData ? postData.ip : ''}
-                    onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
+                <div style={{width:"50%", flex:1}}>
+                    <TextField
+                        name="ip"
+                        variant="outlined"
+                        label="IP Address"
+                        fullWidth
+                        value={postData ? postData.ip : ''}
+                        onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
-                />
-                <TextField
-                    name="port"
-                    variant="outlined"
-                    label="Port"
-                    fullWidth
-                    align="left"
-                    value={postData ? postData.port : ''}
-                    onChange={(e) => setPostData({ ...postData, port: e.target.value })}
-                />
-                <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                    <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
-                        {buttonText}
-                    </Button>
+                    />
+                    <TextField
+                        name="port"
+                        variant="outlined"
+                        label="Port"
+                        fullWidth
+                        align="left"
+                        value={postData ? postData.port : ''}
+                        onChange={(e) => setPostData({ ...postData, port: e.target.value })}
+                    />
+                    <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
+                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
+                            {buttonText}
+                        </Button>
 
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
-                    </FormGroup>
-                </Stack>
-                <TextField
-                    name="caption"
-                    variant="outlined"
-                    label="Message"
-                    fullWidth
-                    value={postData ? postData.caption : ''}
-                    onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
-                />
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
+                        </FormGroup>
+                    </Stack>
 
-                <Stack direction="row" spacing={2} sx={{ m: 2 }}>
-                    <Button color="primary" variant="outlined" id="zoompost" type="submit">
-                        Submit
-                    </Button>
+                </div>
 
-                    <Button color="error" variant="outlined" onClick={clear}>
-                        Clear
-                    </Button>
+                <div style={{width:"50%", flex:1}}>
 
-                    <Button color="success" variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
-                        Download
-                    </Button>
+                    <TextField
+                        name="caption"
+                        variant="outlined"
+                        label="Message"
+                        fullWidth
+                        value={postData ? postData.caption : ''}
+                        onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
+                    />
 
-                    
+                    <Stack direction="row" spacing={2} sx={{ m: 2 }}>
+                        <Button color="primary" variant="outlined" id="zoompost" type="submit">
+                            Submit
+                        </Button>
 
-                </Stack>
+                        <Button color="error" variant="outlined" onClick={clear}>
+                            Clear
+                        </Button>
+
+                        <Button color="success" variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
+                            Download
+                        </Button>
+
+                    </Stack>
+
+                    <TableContainer sx={{ maxHeight: 200 }}>
+                        <Table stickyHeader size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>
+                                    <TableCell align="justify" sx={{ width: "20%" }}><AccessTime fontSize="small"></AccessTime></TableCell>
+                                    <TableCell align="justify" sx={{ width: "70%" }}><Message fontSize="small"></Message></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {postDataArr ? postDataArr.map((row, index) => (
+                                    <TableRow
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
+                                    >
+                                        <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count + 1}</TableCell>
+                                        <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
+                                        <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
+                                    </TableRow>
+                                )): <TableRow></TableRow>}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
 
             </form>
 
@@ -210,29 +238,7 @@ const LinkEncoder = () => {
 
             <br></br>
 
-            <TableContainer sx={{ maxHeight: 200 }}>
-                <Table stickyHeader size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>
-                            <TableCell align="justify" sx={{ width: "20%" }}><AccessTime fontSize="small"></AccessTime></TableCell>
-                            <TableCell align="justify" sx={{ width: "70%" }}><Message fontSize="small"></Message></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
-                            >
-                                <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count + 1}</TableCell>
-                                <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
-                                <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
-                            </TableRow>
-                        )): <TableRow></TableRow>}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+
         </div>
 
     );
