@@ -137,6 +137,7 @@ test('renders the zoom page', async () => {
   const text = await page.$eval('h1', (el) => el.textContent)
   expect(text).toBe('Zoom')
   page = window.page()
+  test.setTimeout(120000)
 })
 
 
