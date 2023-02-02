@@ -25,22 +25,21 @@ const Options = () => {
 
   return (
     <Router>
-      <Box sx={{ flexGrow: 1 }} width="100" className='center-align'>
         <AppBar className='center-align'>
-          <Toolbar style={{ display: "flex", justifyContent: "start" }}>
-            <Link to="/" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
-              <Button color="inherit">Home</Button>
+          <Toolbar >
+            <Link to="/"style={{ color: '#FFF', textDecoration: 'none', textAlign: "left", flexGrow:"1"}}>
+              <Button color="inherit" style={{textTransform:"none", fontSize:"20px"}}>CTCast</Button>
             </Link>
-            <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
+            <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit">Zoom</Button>
             </Link>
-            <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
+            <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit">Link Encoder</Button>
             </Link>
             <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit">Shortcuts</Button>
             </Link>
-            <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "1"}}>
+            <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "12"}}>
             </Box>
             <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit"><HelpIcon/></Button>
@@ -58,7 +57,6 @@ const Options = () => {
           <Route exact path='/help' element={< Help />}></Route>
         </Routes>
 
-      </Box>
     </Router>
   );
 

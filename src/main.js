@@ -1,6 +1,7 @@
 /* eslint no-unused-vars: 0 */
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, session } = require('electron');
 const path = require('path');
+
 const commandReplacer = require('./components/commandReplacer');
 
 const { LoggerWriter, ZoomAPI, LinkEncoderAPI, ShortcutMap } = require('./api');
@@ -10,6 +11,14 @@ var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
 var zoom = new ZoomAPI();
 var shortcutMap = new ShortcutMap();
+
+const reactDevToolsPath = (
+  'C:\\Users\\boyouh2\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi\\4.27.1_0'
+)
+
+app.whenReady().then(async () => {
+  await session.defaultSession.loadExtension(reactDevToolsPath)
+})
 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

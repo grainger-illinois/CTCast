@@ -17,6 +17,8 @@ import Checkbox from '@mui/material/Checkbox';
 import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
 import FormGroup from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { RadioGroup, Radio, Box } from '@mui/material';
+import { Drawer, FormControl, FormLabel } from '@material-ui/core';
 
 
 
@@ -35,6 +37,7 @@ const LinkEncoder = () => {
     const [postData, setPostData] = useState({
         ip: '', port: '', caption: '', count: 0
     });
+
 
     function createLogTableItem(
         time,
@@ -143,30 +146,39 @@ const LinkEncoder = () => {
 
     const classes = useStyles();
 
+    
+
     return (
-        <div style={{ marginTop: "100px" }} className="position-sticky">
+        <div style={{ marginLeft:"0", marginTop: "30px", display:"flex" }} className="position-sticky">
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <div style={{width:"50%", flex:1}}>
+                <Box sx={{width:"200px", marginRight:"10px", padding:"20px",  height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
+                    <Box sx={{marginBottom:"20px"}}>Network</Box>
                     <TextField
                         name="ip"
+                        size='small'
                         variant="outlined"
                         label="IP Address"
-                        fullWidth
                         value={postData ? postData.ip : ''}
                         onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
+                    />
+                    
+                    <FormLabel sx={{padding:"10px"}}>Port</FormLabel>
+                    <Box textAlign='center'>
+                        <FormControl>
 
-                    />
-                    <TextField
-                        name="port"
-                        variant="outlined"
-                        label="Port"
-                        fullWidth
-                        align="left"
-                        value={postData ? postData.port : ''}
-                        onChange={(e) => setPostData({ ...postData, port: e.target.value })}
-                    />
+                            <RadioGroup 
+                                value={postData ? postData.port : ''}
+                                row
+                                onChange={(e) => setPostData({ ...postData, port: e.target.value })}
+                                >
+                                    <FormControlLabel value="10001" control={<Radio />} label="10001" />
+                                    <FormControlLabel value="10002" control={<Radio />} label="10002" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Box>
+
                     <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
+                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%", borderRadius:"16px"}}>
                             {buttonText}
                         </Button>
 
@@ -175,9 +187,10 @@ const LinkEncoder = () => {
                         </FormGroup>
                     </Stack>
 
-                </div>
+                </Box>
 
-                <div style={{width:"50%", flex:1}}>
+
+                <Box sx={{padding:"20px"}} >
 
                     <TextField
                         name="caption"
@@ -226,7 +239,7 @@ const LinkEncoder = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </div>
+                </Box>
 
             </form>
 

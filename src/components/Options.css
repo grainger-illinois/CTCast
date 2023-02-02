@@ -6,6 +6,21 @@
     vertical-align: middle;
 }
 
+Link {
+    color: '#F00';
+    text-decoration: 'none' !important;
+    text-align: "center" ;
+    flex-grow:"1";
+}
+
+
+.html, body {
+    position: absolute; 
+    left:0;
+    padding-left:0;
+}
+
+
 .link{
     color: 'rgba(255,255,255, 255)'
 }
