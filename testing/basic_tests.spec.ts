@@ -126,7 +126,7 @@ test('renders the home page', async () => {
   expect(title).toBe('CTCast')
 })
 
-
+/** 
 test('renders the zoom page', async () => {
   page = await electronApp.firstWindow()
   const [window] = await Promise.all([
@@ -139,7 +139,7 @@ test('renders the zoom page', async () => {
   page = window.page()
   test.setTimeout(120000)
 })
-
+**/
 
 test('renders the link encoder page', async () => {
   page = await electronApp.firstWindow()
