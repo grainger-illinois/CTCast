@@ -39,17 +39,15 @@ const Form = () => {
     });
 
     //Log object
-    const [postDataArr, setPostDataArr] = useState([]);
-
-    //Updates the objects from locally saved objects
-    useEffect(() => {
-        const data = window.localStorage.getItem('Zoom_captioning');
+    const [postDataArr, setPostDataArr] = useState( () => {
+        //Updates the objects from locally saved objects
+        //const data = window.localStorage.getItem('Zoom_captioning');
         const data_log = window.localStorage.getItem('logging_data');
-        const data_prased = JSON.parse(data)
+        //const data_prased = JSON.parse(data)
         const data_log_parsed = JSON.parse(data_log);
-        setPostData(data_prased || "");
-        setPostDataArr(data_log_parsed || "");
-    }, [])
+        //setPostData(data_prased || "");
+        return data_log_parsed || [];
+    });
 
     //locally saves objects upon changes to postData and postDataArr
     useEffect(() => {

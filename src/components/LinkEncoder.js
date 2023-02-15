@@ -44,20 +44,18 @@ const LinkEncoder = () => {
         return { time, count, caption};
     }
 
-    const [postDataArr, setPostDataArr] = useState([]);
-
-    useEffect(() => {
-        const data = window.localStorage.getItem('linken_captioning');
-        const data_log = window.localStorage.getItem('logging_data');
-        const data_prased= JSON.parse(data);
+    const [postDataArr, setPostDataArr] = useState( () => {
+        //const data = window.localStorage.getItem('linken_captioning');
+        const data_log = localStorage.getItem('logging_data');
+        //const data_prased= JSON.parse(data);
         const data_log_parsed = JSON.parse(data_log);
-        setPostData(data_prased || "");
-        setPostDataArr(data_log_parsed || "");
-    }, [])
+        //setPostData(data_prased || "");
+        return data_log_parsed || [];
+    });
 
     useEffect(() => {
-        window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
-        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
+        localStorage.setItem('linken_captioning', JSON.stringify(postData))
+        localStorage.setItem('logging_data', JSON.stringify(postDataArr))
     }, [postData, postDataArr])
 
     const downloadTxtFile = () => {
