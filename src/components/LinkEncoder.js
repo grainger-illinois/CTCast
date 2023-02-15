@@ -44,18 +44,18 @@ const LinkEncoder = () => {
         return { time, count, caption};
     }
 
-    const [postDataArr, setPostDataArr] = useState([]);
+    const [postDataArr, setPostDataArr] = useState( () => {
+        //const data = window.localStorage.getItem('linken_captioning');
+        const data_log = localStorage.getItem('logging_data');
+        //const data_prased= JSON.parse(data);
+        const data_log_parsed = JSON.parse(data_log);
+        //setPostData(data_prased || "");
+        return data_log_parsed || [];
+    });
 
     useEffect(() => {
-        const data = window.localStorage.getItem('linken_captioning');
-        const data_log = window.localStorage.getItem('logging_data');
-        setPostData(JSON.parse(data));
-        setPostDataArr(JSON.parse(data_log));
-    }, [])
-
-    useEffect(() => {
-        window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
-        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
+        localStorage.setItem('linken_captioning', JSON.stringify(postData))
+        localStorage.setItem('logging_data', JSON.stringify(postDataArr))
     }, [postData, postDataArr])
 
     const downloadTxtFile = () => {
@@ -74,23 +74,19 @@ const LinkEncoder = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        postData.count += 1;
 
         await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
-
+        //Could be useful to display errors about conntion failures from this
         var message = await window.linkEncoderAPI.getLastMessage();
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
-        postData.count += 1;
         setPostData({ ...postData, caption: '' });
-        if (!postDataArr) {
-            setPostDataArr([]);
-        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
-
     }
 
     const clear = () => {
-        setPostData({ ip: '', port: '', caption: '', count: 0 });
+        setPostData({ ip: '', port: '', caption: '', count: -1 });
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
         window.linkEncoderAPI.clearLinkEncoder();
@@ -152,7 +148,7 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="IP Address"
                     fullWidth
-                    value={postData ? postData.ip : ''}
+                    value={postData.ip}
                     onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
                 />
@@ -162,7 +158,7 @@ const LinkEncoder = () => {
                     label="Port"
                     fullWidth
                     align="left"
-                    value={postData ? postData.port : ''}
+                    value={postData.port}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
                 <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
@@ -220,7 +216,7 @@ const LinkEncoder = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
+                        {postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -229,7 +225,7 @@ const LinkEncoder = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
                             </TableRow>
-                        )): <TableRow></TableRow>}
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>

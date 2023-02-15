@@ -211,12 +211,13 @@ export class LinkEncoderAPI {
                 this.newswire = Buffer.from("015046015046", "hex");
             } else {
                 console.error("Invalid port given, Should only be 10001 or 10002");
+                this.last_message = 'Connect to an IP address first';
                 return 400;
             }
             await this.connecttoserver(port, host);
-            console.log('Connected to ' + host + ':' + port);
+            console.log('Connected to ' + host + ':' + port);            
         }
-        
+
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {
             for (const invalid_char of this.character_diff_list) {
@@ -232,6 +233,7 @@ export class LinkEncoderAPI {
         
         if (list_of_words.length == 0) {
             console.log('Caption was empty!');
+            this.last_message = 'Caption was empty!';
             return 200;
         }
 
