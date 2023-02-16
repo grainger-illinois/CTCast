@@ -19,6 +19,8 @@ import FormGroup from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { RadioGroup, Radio, Box } from '@mui/material';
 import { Drawer, FormControl, FormLabel } from '@material-ui/core';
+import styles from './LinkEncoder.css'
+import SplitButton from './SplitButton.jsx';
 
 
 
@@ -149,9 +151,9 @@ const LinkEncoder = () => {
     
 
     return (
-        <div style={{ marginLeft:"0", marginTop: "30px", display:"flex" }} className="position-sticky">
+        <Stack direction="row" sx={{ marginLeft:"0", marginTop: "30px", width:"100vw"}} className="position-sticky">
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <Box sx={{width:"200px", marginRight:"10px", padding:"20px",  height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
+                <Box sx={{width:"200px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
                     <Box sx={{marginBottom:"20px"}}>Network</Box>
                     <TextField
                         name="ip"
@@ -178,7 +180,7 @@ const LinkEncoder = () => {
                     </Box>
 
                     <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%", borderRadius:"16px"}}>
+                        <Button color={selected} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
                             {buttonText}
                         </Button>
 
@@ -190,23 +192,25 @@ const LinkEncoder = () => {
                 </Box>
 
 
-                <Box sx={{padding:"20px"}} >
+                <Box sx={{padding:"20px", height:"100vh"}} >
 
                     <TextField
                         name="caption"
                         variant="outlined"
                         label="Message"
-                        fullWidth
                         value={postData ? postData.caption : ''}
                         onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
                     />
 
-                    <Stack direction="row" spacing={2} sx={{ m: 2 }}>
-                        <Button color="primary" variant="outlined" id="zoompost" type="submit">
+                    <Stack direction="row" spacing={2} sx={{ m: 2, flexWrap:"wrap"}}>
+                        <Button color="primary" variant="outlined" className={`${classes.roundButton}`} id="zoompost" type="submit">
                             Submit
                         </Button>
+                        <SplitButton className={`${classes.roundButton}`} type="submit">
 
-                        <Button color="error" variant="outlined" onClick={clear}>
+                        </SplitButton>
+
+                        <Button color="error" variant="outlined" className={`${classes.roundButton}`} onClick={clear}>
                             Clear
                         </Button>
 
@@ -252,7 +256,7 @@ const LinkEncoder = () => {
             <br></br>
 
 
-        </div>
+        </Stack>
 
     );
 }

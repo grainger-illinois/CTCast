@@ -20,4 +20,7 @@ export default makeStyles((theme) => ({
   buttonSubmit: {
     marginBottom: 10,
   },
+  roundButton: {
+    borderRadius: "16px"
+  },
 }));
