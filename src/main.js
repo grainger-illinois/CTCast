@@ -1,5 +1,5 @@
 /* eslint no-unused-vars: 0 */
-const { app, BrowserWindow, ipcMain, dialog} = require('electron');
+const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
 
@@ -174,14 +174,5 @@ app.on('activate', () => {
   }
 });
 
-process.on("uncaughtException", (err) => {
-  const messageBoxOptions = {
-       type: "error",
-       title: "Error in Main process",
-       message: "Connecting to a closed server or server unexpectedly shut down. Connect to a different server or wait for the server to reboot and press the disconnect button."
-   };
-   dialog.showMessageBoxSync(messageBoxOptions);
-   
-});
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

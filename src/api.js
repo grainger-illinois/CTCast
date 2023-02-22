@@ -127,10 +127,15 @@ export class LinkEncoderAPI {
     }
 
     async connecttoserver(port, host) {
-        return new Promise(resolve => {
+        new Promise(resolve => {
             this.socket = net.createConnection(port, host, () => {
                 console.log('Connecting to ' + host + ':' + port);
-                resolve();
+                resolve(this.socket);
+                console.log('Connected to ' + host + ':' + port);
+            });
+            this.socket.on('error', () => {
+                this.socket = null;
+                console.log('Error: Trying to connect to a closed server or server unexpectedly shut down');
             });
         });
     }
@@ -179,11 +184,12 @@ export class LinkEncoderAPI {
         if (this.socket == null || this.socket.readyState == 'closed') {
             console.log('Attempting connection');
             await this.connecttoserver(port, host);
-            console.log('Connected to ' + host + ':' + port);
+            
+            //console.log('Connected to ' + host + ':' + port);
         }
         else {
             this.socket.destroy();
-            this.newswire = null;
+            //this.newswire = null;
             this.fieldinsertmode = null;
             console.log('Disconnected from ' + host + ':' + port);
         }
@@ -192,7 +198,10 @@ export class LinkEncoderAPI {
     }
 
     async checkConnection() {
-        if (this.socket == null || this.socket.readyState == 'closed'){
+        if (this.socket == null){
+            return 300;
+        }
+        else if (this.socket.destroyed) {
             return 400;
         }
         else {

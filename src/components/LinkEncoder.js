@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 //import Button from 'react-bootstrap/Button'
 //import Badge from 'react-bootstrap/Badge'
 // import { useNavigate } from "react-router-dom";
+import {View, Text} from 'react'
 import useStyles from './zoom/styles'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -53,6 +54,7 @@ const LinkEncoder = () => {
         return data_log_parsed || [];
     });
 
+
     useEffect(() => {
         localStorage.setItem('linken_captioning', JSON.stringify(postData))
         localStorage.setItem('logging_data', JSON.stringify(postDataArr))
@@ -95,20 +97,31 @@ const LinkEncoder = () => {
     const [buttonText, setButtonText] = useState('Connect');
     const [selected, setSelected] = useState("success");
     const [checked, setIsChecked] = useState(false);
+    const [errorMessage, setShowMessage] = useState(false);
+    const [errorMessageColor, setColor] = useState('white');
 
 
     const connectAndDisconnect = async () => {
         await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
         const retCode = await window.linkEncoderAPI.checkLinkEncoder();
         if (retCode == 200) {
+            setColor('white');
             setButtonText('Disconnect');
             setSelected("error");
         }
-        else {
+        else if (retCode == 300) {
+            setColor('red');
             setButtonText('Connect');
             setSelected("success");
         }
+        else {
+            setColor('white');
+            setButtonText('Connect');
+            setSelected("success");
+        }
+
     };
+
 
     const pinging = async () => {
         return new Promise(resolve => {
@@ -152,6 +165,7 @@ const LinkEncoder = () => {
                     onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
                 />
+                
                 <TextField
                     name="port"
                     variant="outlined"
@@ -161,15 +175,19 @@ const LinkEncoder = () => {
                     value={postData.port}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
-                <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                    <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
-                        {buttonText}
-                    </Button>
-
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
-                    </FormGroup>
+                <Stack direction="column" spacing={-0.5}>
+                    <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
+                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
+                            {buttonText}
+                        </Button>
+                        
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
+                        </FormGroup>
+                    </Stack>
+                <p style={{ color: errorMessageColor}}>Could not establish connection</p>
                 </Stack>
+
                 <TextField
                     name="caption"
                     variant="outlined"
