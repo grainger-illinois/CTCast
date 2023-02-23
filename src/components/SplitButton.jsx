@@ -8,10 +8,11 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import PropTypes from 'prop-types';
 
-const options = ['Create a merge commit', 'Squash and merge', 'Rebase and merge'];
+const options = ['Send All', 'Send Current Line', 'Send Highlighted'];
 
-export default function SplitButton() {
+export default function SplitButton(props) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -40,7 +41,7 @@ export default function SplitButton() {
   return (
     <React.Fragment>
       <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-        <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+        <Button onClick={handleClick} type="submit">{options[selectedIndex]}</Button>
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -48,7 +49,6 @@ export default function SplitButton() {
           aria-label="select merge strategy"
           aria-haspopup="menu"
           onClick={handleToggle}
-          type="submit"
         >
           <ArrowDropDownIcon />
         </Button>
@@ -77,7 +77,6 @@ export default function SplitButton() {
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
-                      disabled={index === 2}
                       selected={index === selectedIndex}
                       onClick={(event) => handleMenuItemClick(event, index)}
                     >

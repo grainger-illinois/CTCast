@@ -56,6 +56,7 @@ const LinkEncoder = () => {
         const data_log = window.localStorage.getItem('logging_data');
         setPostData(JSON.parse(data));
         setPostDataArr(JSON.parse(data_log));
+        document.body.style.position = "fixed";
     }, [])
 
     useEffect(() => {
@@ -151,8 +152,8 @@ const LinkEncoder = () => {
     
 
     return (
-        <Stack direction="row" sx={{ marginLeft:"0", marginTop: "30px", width:"100vw"}} className="position-sticky">
-            <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
+        <Stack direction="row" sx={{ marginLeft:"0", marginTop: "30px", width:"100vw",}} className="position-sticky">
+            <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`}  onSubmit={handleSubmit}>
                 <Box sx={{width:"200px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
                     <Box sx={{marginBottom:"20px"}}>Network</Box>
                     <TextField
@@ -187,8 +188,11 @@ const LinkEncoder = () => {
                         <FormGroup>
                             <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
                         </FormGroup>
+                        
                     </Stack>
-
+                    <Button color="success" variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
+                            Download
+                        </Button>
                 </Box>
 
 
@@ -203,25 +207,20 @@ const LinkEncoder = () => {
                     />
 
                     <Stack direction="row" spacing={2} sx={{ m: 2, flexWrap:"wrap"}}>
-                        <Button color="primary" variant="outlined" className={`${classes.roundButton}`} id="zoompost" type="submit">
-                            Submit
-                        </Button>
-                        <SplitButton className={`${classes.roundButton}`} type="submit">
 
+                        <SplitButton className={`${classes.roundButton}`} type="submit">
                         </SplitButton>
 
                         <Button color="error" variant="outlined" className={`${classes.roundButton}`} onClick={clear}>
                             Clear
                         </Button>
 
-                        <Button color="success" variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
-                            Download
-                        </Button>
+
 
                     </Stack>
 
                     <TableContainer sx={{ maxHeight: 200 }}>
-                        <Table stickyHeader size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
+                        <Table size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>

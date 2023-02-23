@@ -49,7 +49,7 @@ const Options = () => {
         </AppBar>
 
 
-        <Routes>
+        <Routes style={{overflow: "hidden"}}>
           <Route exact path='/' element={< Home />}></Route>
           <Route exact path='/zoom' element={< ZoomPage />}></Route>
           <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
