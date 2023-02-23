@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 //import Button from 'react-bootstrap/Button'
 //import Badge from 'react-bootstrap/Badge'
 // import { useNavigate } from "react-router-dom";
-import {View, Text} from 'react'
 import useStyles from './zoom/styles'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
