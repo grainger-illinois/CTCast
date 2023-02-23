@@ -96,7 +96,6 @@ const LinkEncoder = () => {
     const [buttonText, setButtonText] = useState('Connect');
     const [selected, setSelected] = useState("success");
     const [checked, setIsChecked] = useState(false);
-    const [errorMessage, setShowMessage] = useState(false);
     const [errorMessageColor, setColor] = useState('white');
 
 
