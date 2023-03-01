@@ -40,8 +40,8 @@ export default function SplitButton(props) {
 
   return (
     <React.Fragment>
-      <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-        <Button onClick={handleClick} type="submit">{options[selectedIndex]}</Button>
+      <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" >
+        <Button onClick={handleClick} type="submit" style={{ background: '#13294B' }}>{options[selectedIndex]}</Button>
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -49,8 +49,9 @@ export default function SplitButton(props) {
           aria-label="select merge strategy"
           aria-haspopup="menu"
           onClick={handleToggle}
+          style={{ background: '#13294B' }}
         >
-          <ArrowDropDownIcon />
+          <ArrowDropDownIcon style={{ background: '#13294B' }} />
         </Button>
       </ButtonGroup>
       <Popper

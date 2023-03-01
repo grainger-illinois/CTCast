@@ -25,7 +25,7 @@ const Options = () => {
 
   return (
     <Router>
-        <AppBar className='center-align'>
+        <AppBar className='center-align' style={{ background: '#13294B' }}>
           <Toolbar >
             <Link to="/"style={{ color: '#FFF', textDecoration: 'none', textAlign: "left", flexGrow:"1"}}>
               <Button color="inherit" style={{textTransform:"none", fontSize:"20px"}}>CTCast</Button>

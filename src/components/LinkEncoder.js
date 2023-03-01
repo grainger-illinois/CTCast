@@ -181,7 +181,7 @@ const LinkEncoder = () => {
                     </Box>
 
                     <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                        <Button color={selected} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
+                        <Button style={{ background: '#13294B' }} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
                             {buttonText}
                         </Button>
 
@@ -190,14 +190,14 @@ const LinkEncoder = () => {
                         </FormGroup>
                         
                     </Stack>
-                    <Button color="success" variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
+                    <Button style={{color: "#13294B"}} variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
                             Download
                         </Button>
                 </Box>
 
 
-                <stack direction="column" alignItems="strech" >
-
+                <Stack direction="column" alignItems="strech" sx={{width:"1000"}} >
+                    <Box  sx={{width:"1000"}}>
                     <TextField multiline fullWidth
                         sx = {{width: 'auto', display: 'flex'}}
                         name="caption"
@@ -212,7 +212,7 @@ const LinkEncoder = () => {
                         <SplitButton className={`${classes.roundButton}`} type="submit">
                         </SplitButton>
 
-                        <Button color="error" variant="outlined" className={`${classes.roundButton}`} onClick={clear}>
+                        <Button style={{ background: '#DDDEDE' }} variant="outlined" className={`${classes.roundButton}`} onClick={clear}>
                             Clear
                         </Button>
 
@@ -243,7 +243,8 @@ const LinkEncoder = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </stack>
+                    </Box>
+                </Stack>
 
             </form>
 
