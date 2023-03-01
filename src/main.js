@@ -1,5 +1,5 @@
 /* eslint no-unused-vars: 0 */
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
 
