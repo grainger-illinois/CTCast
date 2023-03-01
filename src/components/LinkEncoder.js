@@ -152,7 +152,7 @@ const LinkEncoder = () => {
     
 
     return (
-        <Stack direction="row" sx={{ marginLeft:"0", marginTop: "30px", width:"100vw",}} className="position-sticky">
+        <Stack direction="row" alignItems='stretch'  sx={{ marginLeft:"0", marginTop: "30px", width:"800vw"}} className="position-sticky">
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`}  onSubmit={handleSubmit}>
                 <Box sx={{width:"200px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
                     <Box sx={{marginBottom:"20px"}}>Network</Box>
@@ -196,9 +196,10 @@ const LinkEncoder = () => {
                 </Box>
 
 
-                <Box sx={{padding:"20px", height:"100vh"}} >
+                <stack direction="column" alignItems="strech" >
 
-                    <TextField
+                    <TextField multiline fullWidth
+                        sx = {{width: 'auto', display: 'flex'}}
                         name="caption"
                         variant="outlined"
                         label="Message"
@@ -206,7 +207,7 @@ const LinkEncoder = () => {
                         onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
                     />
 
-                    <Stack direction="row" spacing={2} sx={{ m: 2, flexWrap:"wrap"}}>
+                    <Stack direction="row" spacing={2} sx={{ m: 2, width: 'auto', flexWrap:"wrap"}}>
 
                         <SplitButton className={`${classes.roundButton}`} type="submit">
                         </SplitButton>
@@ -219,8 +220,8 @@ const LinkEncoder = () => {
 
                     </Stack>
 
-                    <TableContainer sx={{ maxHeight: 200 }}>
-                        <Table size="small" aria-label="a dense table" sx={{ minWidth: 300 }}>
+                    <TableContainer sx={{width: 'auto', display: 'flex'}}>
+                        <Table size="small" aria-label="a dense table" sx={{ minWidth: 300}}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>
@@ -242,7 +243,7 @@ const LinkEncoder = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </Box>
+                </stack>
 
             </form>
 
