@@ -25,7 +25,7 @@ const Options = () => {
 
   return (
     <Router>
-        <AppBar className='center-align' style={{ background: '#13294B' }}>
+        <AppBar className='center-align' style={{ background: '#13294B', width:'100vw'}} position="relative">
           <Toolbar >
             <Link to="/"style={{ color: '#FFF', textDecoration: 'none', textAlign: "left", flexGrow:"1"}}>
               <Button color="inherit" style={{textTransform:"none", fontSize:"20px"}}>CTCast</Button>
@@ -49,14 +49,13 @@ const Options = () => {
         </AppBar>
 
 
-        <Routes style={{overflow: "hidden"}}>
+        <Routes>
           <Route exact path='/' element={< Home />}></Route>
           <Route exact path='/zoom' element={< ZoomPage />}></Route>
           <Route exact path='/linkencoder' element={< LinkEncoder />}></Route>
           <Route exact path='/uploadfiles' element={< Shortcuts />}></Route>
           <Route exact path='/help' element={< Help />}></Route>
         </Routes>
-
     </Router>
   );
 
