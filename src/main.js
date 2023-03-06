@@ -90,6 +90,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       enableRemoteModule: true
     },
+    icon: path.join(__dirname, 'icons/ctcast_icon_512x512.png'),
   });
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY); // eslint-disable-line
