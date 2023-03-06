@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## 0.1.3 - 2023-03-06
+### Added
+- New UI feedback for LinkEncoder connection exceptions
+- Additional work on LinkEncoder Newswire mode
+- Zoom reconnection support; send new captions when reconnecting to an existing Zoom call that had prior captions
+- New Application icon
+
+### Fixed
+- Fixed UI bugs (including initial blank screen for Zoom and LinkEncoder pages)
+
 ## 0.1.3-pre3 - 2022-10-28
 
 ### Added
