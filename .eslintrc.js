@@ -11,6 +11,9 @@ module.exports = {
     ],
     "overrides": [
     ],
+    "ignorePatterns": [
+        "testing/"
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"

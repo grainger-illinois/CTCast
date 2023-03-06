@@ -44,15 +44,21 @@ export class LoggerWriter {
 export class ShortcutMap {
     constructor() {
         this.shortcuts = new Map();
+        this.shortcuts.set('pptx', 1);
+        this.shortcuts.set('docx', 1);
+        this.shortcuts.set('pdf', 1);
+    }
+    
+    get(key) {
+        return this.shortcuts.get(key);
     }
 
-    async updateShortcutMap(shortcut) {
-        
+    async appendToExistingShortcutMap(shortcut) {
         this.shortcuts = new Map([...this.shortcuts, ...shortcut]);
         return this.shortcuts;
     }
 
-    async getShortcutMap(){
+    getShortcutMap(){
         return this.shortcuts;
     }
 }
@@ -121,10 +127,15 @@ export class LinkEncoderAPI {
     }
 
     async connecttoserver(port, host) {
-        return new Promise(resolve => {
+        new Promise(resolve => {
             this.socket = net.createConnection(port, host, () => {
                 console.log('Connecting to ' + host + ':' + port);
-                resolve();
+                resolve(this.socket);
+                console.log('Connected to ' + host + ':' + port);
+            });
+            this.socket.on('error', () => {
+                this.socket = null;
+                console.log('Error: Trying to connect to a closed server or server unexpectedly shut down');
             });
         });
     }
@@ -173,7 +184,8 @@ export class LinkEncoderAPI {
         if (this.socket == null || this.socket.readyState == 'closed') {
             console.log('Attempting connection');
             await this.connecttoserver(port, host);
-            console.log('Connected to ' + host + ':' + port);
+            
+            //console.log('Connected to ' + host + ':' + port);
         }
         else {
             this.socket.destroy();
@@ -183,6 +195,18 @@ export class LinkEncoderAPI {
         }
 
         return 200;
+    }
+
+    async checkConnection() {
+        if (this.socket == null){
+            return 300;
+        }
+        else if (this.socket.destroyed) {
+            return 400;
+        }
+        else {
+            return 200;
+        }
     }
 
     async sendMessage(caption, host, port) {
@@ -196,12 +220,13 @@ export class LinkEncoderAPI {
                 this.newswire = Buffer.from("015046015046", "hex");
             } else {
                 console.error("Invalid port given, Should only be 10001 or 10002");
+                this.last_message = 'Connect to an IP address first';
                 return 400;
             }
             await this.connecttoserver(port, host);
-            console.log('Connected to ' + host + ':' + port);
+            console.log('Connected to ' + host + ':' + port);            
         }
-        
+
         this.socket.write(this.newswire, this.encoding);
         if (this.omit) {
             for (const invalid_char of this.character_diff_list) {
@@ -217,6 +242,7 @@ export class LinkEncoderAPI {
         
         if (list_of_words.length == 0) {
             console.log('Caption was empty!');
+            this.last_message = 'Caption was empty!';
             return 200;
         }
 
@@ -240,7 +266,7 @@ export class LinkEncoderAPI {
                 else { // send the word(s)
                     //sendControlCodes(s, row_number_dict[row_number], fieldinsertmode)
                     let newswire_word = word + "\r";
-                    await this.sleep(10);
+                    await this.sleep(600);
                     this.socket.write(newswire_word, this.encoding);
 
                     break;
@@ -248,7 +274,7 @@ export class LinkEncoderAPI {
             }
 
         }
-        await this.sleep(10);
+        await this.sleep(1000);
         this.socket.write(this.bypass, this.encoding)
 
         this.last_message = caption;

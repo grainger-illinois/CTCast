@@ -1,9 +1,10 @@
 /* eslint no-unused-vars: 0 */
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const commandReplacer = require('./components/commandReplacer');
 
 const { LoggerWriter, ZoomAPI, LinkEncoderAPI, ShortcutMap } = require('./api');
+const { extractDocxImageAltText, extractPptxImageAltText } = require('./util/extractAltTextHelpers');
 
 var logger = new LoggerWriter();
 var linkencoder = new LinkEncoderAPI();
@@ -26,9 +27,19 @@ async function linkEncoderConnectionHandler(linkencoder, host, port) {
   return res;
 }
 
+async function linkEncoderConnectionChecker(linkencoder) {
+  const res = await linkencoder.checkConnection();
+  return res;
+}
+
 async function linkEncoderHandler(linkencoder, caption, host, port) {
   var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
   const res = await linkencoder.sendMessage(message, host, port);
+  return res;
+}
+
+async function shortcutHandler(shortcut) {
+  const res = await shortcutMap.appendToExistingShortcutMap(shortcut);
   return res;
 }
 
@@ -39,9 +50,33 @@ async function zoomAPIHandler(zoom, caption, meetingLink) {
   return res;
 }
 
-async function shortcutHandler(shortcut) {
-  const res = await shortcutMap.updateShortcutMap(shortcut);
-  return res;
+async function fileProcessHandler(ext, arrayBuffer) {
+  var altTextResult;
+  var mapForThisFile = new Map();
+  switch(ext) {
+  case 'docx':
+    altTextResult = await extractDocxImageAltText(arrayBuffer);
+    for (const [i, slide] of altTextResult.entries()) {
+      for (const [j, picture] of slide.entries()) {
+        mapForThisFile.set('docx' + shortcutMap.get('docx') + 'p' + j, picture);
+        mapForThisFile.set('docx', shortcutMap.get('docx') + 1);
+
+      }
+    }
+    break;
+  case 'pptx':
+    altTextResult = await extractPptxImageAltText(arrayBuffer);
+    for (const [i, slide] of altTextResult.entries()) {
+      for (const [j, picture] of slide.entries()) {
+        mapForThisFile.set('pptx' + shortcutMap.get('pptx')  + 's' + i + 'p' + j, picture);
+        mapForThisFile.set('pptx', shortcutMap.get('pptx') + 1);
+      }
+    }
+    break;
+  }
+  
+  shortcutMap.appendToExistingShortcutMap(mapForThisFile);
+  
 }
 
 
@@ -53,15 +88,15 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
       enableRemoteModule: true
     },
+    icon: path.join(__dirname, 'icons/ctcast_icon_512x512.png'),
   });
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY); // eslint-disable-line
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -74,6 +109,10 @@ app.on('ready', () => {
 
   ipcMain.handle('connection-le', async (event, host, port) => {
     return await linkEncoderConnectionHandler(linkencoder, host, port);
+  });
+
+  ipcMain.handle('check-le', async (event) => {
+    return await linkEncoderConnectionChecker(linkencoder);
   });
   
   ipcMain.handle('linkencoder', async (event, caption, host, port) => {
@@ -109,8 +148,12 @@ app.on('ready', () => {
   });
 
   ipcMain.handle('clear-shortcuts', async (event) => {
-    shortcutMap.shortcuts = new Map();
+    shortcutMap = new ShortcutMap();
   });
+
+  ipcMain.handle('process-file', async (event, ext, buffer) => {
+    return await fileProcessHandler(ext, buffer);
+  })
 
   createWindow();
 });

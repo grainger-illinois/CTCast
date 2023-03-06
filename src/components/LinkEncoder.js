@@ -44,18 +44,19 @@ const LinkEncoder = () => {
         return { time, count, caption};
     }
 
-    const [postDataArr, setPostDataArr] = useState([]);
+    const [postDataArr, setPostDataArr] = useState( () => {
+        //const data = window.localStorage.getItem('linken_captioning');
+        const data_log = localStorage.getItem('logging_data');
+        //const data_prased= JSON.parse(data);
+        const data_log_parsed = JSON.parse(data_log);
+        //setPostData(data_prased || "");
+        return data_log_parsed || [];
+    });
+
 
     useEffect(() => {
-        const data = window.localStorage.getItem('linken_captioning');
-        const data_log = window.localStorage.getItem('logging_data');
-        setPostData(JSON.parse(data));
-        setPostDataArr(JSON.parse(data_log));
-    }, [])
-
-    useEffect(() => {
-        window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
-        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
+        localStorage.setItem('linken_captioning', JSON.stringify(postData))
+        localStorage.setItem('logging_data', JSON.stringify(postDataArr))
     }, [postData, postDataArr])
 
     const downloadTxtFile = () => {
@@ -74,23 +75,19 @@ const LinkEncoder = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        postData.count += 1;
 
         await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
-
+        //Could be useful to display errors about conntion failures from this
         var message = await window.linkEncoderAPI.getLastMessage();
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
-        postData.count += 1;
         setPostData({ ...postData, caption: '' });
-        if (!postDataArr) {
-            setPostDataArr([]);
-        }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
-
     }
 
     const clear = () => {
-        setPostData({ ip: '', port: '', caption: '', count: 0 });
+        setPostData({ ip: '', port: '', caption: '', count: -1 });
         setPostDataArr([]);
         document.getElementById('locallog').textContent = "";
         window.linkEncoderAPI.clearLinkEncoder();
@@ -99,20 +96,30 @@ const LinkEncoder = () => {
     const [buttonText, setButtonText] = useState('Connect');
     const [selected, setSelected] = useState("success");
     const [checked, setIsChecked] = useState(false);
+    const [errorMessageColor, setColor] = useState('white');
+
 
     const connectAndDisconnect = async () => {
-        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port)
-        .then(() => {
-            if (buttonText == 'Connect'){
-                setButtonText('Disconnect');
-                setSelected("error");
-            }
-            else {
-                setButtonText('Connect');
-                setSelected("success");
-            }  
-        });
+        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
+        const retCode = await window.linkEncoderAPI.checkLinkEncoder();
+        if (retCode == 200) {
+            setColor('white');
+            setButtonText('Disconnect');
+            setSelected("error");
+        }
+        else if (retCode == 300) {
+            setColor('red');
+            setButtonText('Connect');
+            setSelected("success");
+        }
+        else {
+            setColor('white');
+            setButtonText('Connect');
+            setSelected("success");
+        }
+
     };
+
 
     const pinging = async () => {
         return new Promise(resolve => {
@@ -120,9 +127,13 @@ const LinkEncoder = () => {
                 interval = setInterval(async () => {
                     var today = new Date();
                     var hours = today.getHours();
+                    var minutes = today.getMinutes();
+                    var seconds = today.getSeconds();
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    seconds = seconds < 10 ? '0' + seconds : seconds;
                     var ampm = hours >= 12 ? 'PM' : 'AM';
                     hours = hours % 12;
-                    var time = hours + ":" + today.getMinutes() + ":" + today.getSeconds() + ' ' + ampm;
+                    var time = hours + ":" + minutes + ":" + seconds + ' ' + ampm;
                     await window.linkEncoderAPI.sendToLinkEncoder(time);    
                 }, 5000);
                 
@@ -139,7 +150,6 @@ const LinkEncoder = () => {
 
     const classes = useStyles();
 
-
     return (
         <div style={{ margin: "20px", marginTop: "30px" }} className="position-sticky">
             <h1 style={{ textAlign: "left" }}>Link Encoder</h1>
@@ -149,28 +159,33 @@ const LinkEncoder = () => {
                     variant="outlined"
                     label="IP Address"
                     fullWidth
-                    value={postData ? postData.ip : ''}
+                    value={postData.ip}
                     onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
 
                 />
+                
                 <TextField
                     name="port"
                     variant="outlined"
                     label="Port"
                     fullWidth
                     align="left"
-                    value={postData ? postData.port : ''}
+                    value={postData.port}
                     onChange={(e) => setPostData({ ...postData, port: e.target.value })}
                 />
-                <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
-                    <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
-                        {buttonText}
-                    </Button>
-
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
-                    </FormGroup>
+                <Stack direction="column" spacing={-0.5}>
+                    <Stack direction="row" spacing={2} sx={{ m: 1 }} alignItems="center" justifyContent="center">
+                        <Button color={selected} variant="contained" onClick={connectAndDisconnect} sx={{height:"80%", width:"50%"}}>
+                            {buttonText}
+                        </Button>
+                        
+                        <FormGroup>
+                            <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
+                        </FormGroup>
+                    </Stack>
+                <p style={{ color: errorMessageColor}}>Could not establish connection</p>
                 </Stack>
+
                 <TextField
                     name="caption"
                     variant="outlined"
@@ -198,10 +213,6 @@ const LinkEncoder = () => {
                 </Stack>
 
             </form>
-            <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={connectAndDisconnect}>
-                
-            </form>
-
 
 
             <div>
@@ -221,7 +232,7 @@ const LinkEncoder = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
+                        {postDataArr.map((row, index) => (
                             <TableRow
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -230,7 +241,7 @@ const LinkEncoder = () => {
                                 <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
                                 <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
                             </TableRow>
-                        )): <TableRow></TableRow>}
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
