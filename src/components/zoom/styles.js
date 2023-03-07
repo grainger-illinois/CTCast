@@ -21,6 +21,6 @@ export default makeStyles((theme) => ({
     marginBottom: 10,
   },
   roundButton: {
-    borderRadius: "16px"
+    borderRadius: "16px",
   },
 }));

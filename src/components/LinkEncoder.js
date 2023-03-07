@@ -74,7 +74,7 @@ const LinkEncoder = () => {
     }
 
     const writeLog = (result) => {
-        var localLog = document.getElementById('locallog');
+        let localLog = document.getElementById('locallog');
         localLog.textContent += `${result}\n`;
     }
 
@@ -151,7 +151,7 @@ const LinkEncoder = () => {
 
 
     const Network = 
-        <Box sx={{width:"200px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
+        <Box sx={{minWidth:"220px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
             <Box sx={{marginBottom:"20px"}}>Network</Box>
             <TextField
                 name="ip"
@@ -178,7 +178,7 @@ const LinkEncoder = () => {
             </Box>
 
             <Stack direction="row" spacing={2} sx={{ m: 1 }} wrap="nowrap" alignItems="center" justifyContent="center">
-                <Button style={{ background: '#13294B' }} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
+                <Button sx={{ background: '#13294B' }} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
                     {buttonText}
                 </Button>
 
@@ -189,7 +189,7 @@ const LinkEncoder = () => {
             </Stack>
             <Button style={{color: "#13294B"}} variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
                     Download
-                </Button>
+            </Button>
         </Box>
 
     const MessageEncoder = 

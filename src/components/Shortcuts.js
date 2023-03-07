@@ -30,7 +30,6 @@ function Shortcuts() {
 	
 	const didMountRef = useRef(false);
 
-
 	useEffect(() => {
 		const mapJSON = JSON.stringify(Object.fromEntries(map));
 		if (didMountRef.current) {
@@ -42,11 +41,10 @@ function Shortcuts() {
 
 	useEffect(() => {
 		const mapJSON = window.localStorage.getItem("map");
-		console.log(mapJSON);
-		if (mapJSON) {
+		if (mapJSON && mapJSON != 'undefined') {
+			console.log("mapJson", mapJSON, Boolean(mapJSON));
 			const localStorageMap = new Map(Object.entries(JSON.parse(mapJSON)));
 			setMap(localStorageMap);
-			// console.log(map);
 			window.shortcutMap.sendShortcut(localStorageMap).then(refreshRemoteMap());
 		}
 	}, []);
@@ -111,7 +109,7 @@ function Shortcuts() {
 		} else alert("Please choose a file!");
 	};
 
-	const ListMap = () => 
+	const ListMap = 
 		<Box sx={{flexGrow: '1', marginRight:'20px', height:'auto'}}>
 				<h1>Shortcuts</h1>
 				<List>
@@ -130,7 +128,7 @@ function Shortcuts() {
 
 	return <div style={{ margin: "20px", marginTop: "30px", display:"flex" }} >
 			
-			<ListMap/>
+			{ListMap}
 
 			<Stack
 				sx={{flexGrow: '1'}}
