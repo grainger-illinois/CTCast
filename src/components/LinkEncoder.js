@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 //import { Form, Row, Col } from 'react-bootstrap'
 //import Button from 'react-bootstrap/Button'
 //import Badge from 'react-bootstrap/Badge'
@@ -35,7 +35,6 @@ let interval; //for 5s ping
 
 const LinkEncoder = () => {
     //const [captionList, setCaptionList] = useState([]);
-    //const [localLog, setLocalLog] = useState("");
     const [postData, setPostData] = useState({
         ip: '', port: '', caption: '', count: 0
     });
@@ -56,7 +55,6 @@ const LinkEncoder = () => {
         const data_log = window.localStorage.getItem('logging_data');
         setPostData(JSON.parse(data));
         setPostDataArr(JSON.parse(data_log));
-        document.body.style.position = "fixed";
     }, [])
 
     useEffect(() => {
@@ -64,18 +62,32 @@ const LinkEncoder = () => {
         window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
     }, [postData, postDataArr])
 
-    const downloadTxtFile = () => {
-        const element = document.createElement("a");
-        const file = new Blob([document.getElementById('locallog').outerHTML], { type: 'text/plain' });
-        element.href = URL.createObjectURL(file);
-        element.download = "linkEncoderLog.txt";
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
+
+    const downloadTxtRef = useRef(null);
+    const [downloadLogUrl, setDownloadLogUrl] = useState(undefined);
+    const downloadTxtFile = (e) => {
+        e.preventDefault();
+        console.log(localLog);
+        const file = new Blob([localLog], { type: 'text/plain' });
+        setDownloadLogUrl(window.URL.createObjectURL(file));
+        console.log("log1", downloadTxtRef.current.attributes.href);    
     }
 
+    useEffect(() => {
+        console.log("log2", downloadTxtRef.current.attributes.href);    
+    
+        if (downloadTxtRef != null) {
+            downloadTxtRef.current.click();
+        }
+    }, [downloadLogUrl]);
+
+    const [localLog, setLocalLog] = useState("");
     const writeLog = (result) => {
-        let localLog = document.getElementById('locallog');
-        localLog.textContent += `${result}\n`;
+        console.log("locallog", localLog);
+        const a = localLog + `${result}\n`;
+        console.log("writelog", a);
+        setLocalLog(a);
+        console.log("locallog", localLog);
     }
 
     const handleSubmit = async (e) => {
@@ -83,7 +95,7 @@ const LinkEncoder = () => {
 
         await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
 
-        var message = await window.linkEncoderAPI.getLastMessage();
+        let message = await window.linkEncoderAPI.getLastMessage();
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
@@ -98,7 +110,7 @@ const LinkEncoder = () => {
     const clear = () => {
         setPostData({ ip: '', port: '', caption: '', count: 0 });
         setPostDataArr([]);
-        document.getElementById('locallog').textContent = "";
+        setLocalLog("");
         window.linkEncoderAPI.clearLinkEncoder();
     };
 
@@ -190,6 +202,7 @@ const LinkEncoder = () => {
             <Button style={{color: "#13294B"}} variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
                     Download
             </Button>
+            <Box sx={{width:"100px", height:"100px", background:"white"}}>{"locallog\n" + localLog}</Box>
         </Box>
 
     const MessageEncoder = 
@@ -244,9 +257,6 @@ const LinkEncoder = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-
-
-
     </Box>
 
 
@@ -256,6 +266,7 @@ const LinkEncoder = () => {
         <Box component={'form'} sx={{display:'flex', width:'100vw'}} onSubmit={handleSubmit}>
             {Network}
             {MessageEncoder}
+            <a style={{display:'none'}} ref={downloadTxtRef} href={downloadLogUrl} download={'linkEncoder.log'}></a>
         </Box>
 
     );

@@ -42,10 +42,7 @@ import Options from "./components/Options.js"
 
 function render() {
     ReactDOM.render(
-        <div>
-            <Options window = {window}/>
-            
-        </div>, 
+        <Options window = {window}/>, 
     document.body);
 }
 
