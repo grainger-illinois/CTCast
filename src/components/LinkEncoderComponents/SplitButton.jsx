@@ -8,11 +8,10 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
-import PropTypes from 'prop-types';
 
 const options = ['Send All', 'Send Current Line', 'Send Highlighted'];
 
-export default function SplitButton(props) {
+export default function SplitButton() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);

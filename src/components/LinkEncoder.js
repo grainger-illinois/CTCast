@@ -1,8 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-//import { Form, Row, Col } from 'react-bootstrap'
-//import Button from 'react-bootstrap/Button'
-//import Badge from 'react-bootstrap/Badge'
-// import { useNavigate } from "react-router-dom";
 import useStyles from './zoom/styles'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -20,21 +16,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { RadioGroup, Radio, Box } from '@mui/material';
 import { Drawer, FormControl, FormLabel } from '@material-ui/core';
 import styles from './LinkEncoder.css'
-import SplitButton from './SplitButton.jsx';
-
-
-
-/**
- * 2022/04/27:
- *   Implemented basic version of sending captions
- *   Need further testing to confirm the message is sent as expected
- *   Need to change to a better alignment
- */
-
-let interval; //for 5s ping
+import Network from './LinkEncoderComponents/Network.jsx';
+import MessageEncoder from './LinkEncoderComponents/MessageEncoder.jsx';
 
 const LinkEncoder = () => {
-    //const [captionList, setCaptionList] = useState([]);
     const [postData, setPostData] = useState({
         ip: '', port: '', caption: '', count: 0
     });
@@ -61,25 +46,6 @@ const LinkEncoder = () => {
         window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
         window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
     }, [postData, postDataArr])
-
-
-    const downloadTxtRef = useRef(null);
-    const [downloadLogUrl, setDownloadLogUrl] = useState(undefined);
-    const downloadTxtFile = (e) => {
-        e.preventDefault();
-        console.log(localLog);
-        const file = new Blob([localLog], { type: 'text/plain' });
-        setDownloadLogUrl(window.URL.createObjectURL(file));
-        console.log("log1", downloadTxtRef.current.attributes.href);    
-    }
-
-    useEffect(() => {
-        console.log("log2", downloadTxtRef.current.attributes.href);    
-    
-        if (downloadTxtRef != null) {
-            downloadTxtRef.current.click();
-        }
-    }, [downloadLogUrl]);
 
     const [localLog, setLocalLog] = useState("");
     const writeLog = (result) => {
@@ -114,159 +80,23 @@ const LinkEncoder = () => {
         window.linkEncoderAPI.clearLinkEncoder();
     };
 
-    const [buttonText, setButtonText] = useState('Connect');
-    const [selected, setSelected] = useState("success");
-    const [checked, setIsChecked] = useState(false);
-
-
-    const connectAndDisconnect = async () => {
-        await window.linkEncoderAPI.connectionLinkEncoder(postData.ip, postData.port);
-        const retCode = await window.linkEncoderAPI.checkLinkEncoder();
-        if (retCode == 200) {
-            setButtonText('Disconnect');
-            setSelected("error");
-        }
-        else {
-            setButtonText('Connect');
-            setSelected("success");
-        }
-    };
-
-    const pinging = async () => {
-        return new Promise(resolve => {
-            if (checked == false) {
-                interval = setInterval(async () => {
-                    var today = new Date();
-                    var hours = today.getHours();
-                    var minutes = today.getMinutes();
-                    var seconds = today.getSeconds();
-                    minutes = minutes < 10 ? '0' + minutes : minutes;
-                    seconds = seconds < 10 ? '0' + seconds : seconds;
-                    var ampm = hours >= 12 ? 'PM' : 'AM';
-                    hours = hours % 12;
-                    var time = hours + ":" + minutes + ":" + seconds + ' ' + ampm;
-                    await window.linkEncoderAPI.sendToLinkEncoder(time);    
-                }, 5000);
-                
-            }
-            resolve();
-        })
-    };
-
-    const stopPinging = async () => {
-        setIsChecked(!checked);
-        clearInterval(interval);
-        await pinging();
-    }   
-
     const classes = useStyles();
-
-
-    const Network = 
-        <Box sx={{minWidth:"220px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
-            <Box sx={{marginBottom:"20px"}}>Network</Box>
-            <TextField
-                name="ip"
-                size='small'
-                variant="outlined"
-                label="IP Address"
-                value={postData ? postData.ip : ''}
-                onChange={(e) => setPostData({ ...postData, ip: e.target.value })}
-            />
-            
-            <FormLabel sx={{padding:"10px"}}>Port</FormLabel>
-            <Box textAlign='center'>
-                <FormControl>
-
-                    <RadioGroup 
-                        value={postData ? postData.port : ''}
-                        row
-                        onChange={(e) => setPostData({ ...postData, port: e.target.value })}
-                        >
-                            <FormControlLabel value="10001" control={<Radio />} label="10001" />
-                            <FormControlLabel value="10002" control={<Radio />} label="10002" />
-                    </RadioGroup>
-                </FormControl>
-            </Box>
-
-            <Stack direction="row" spacing={2} sx={{ m: 1 }} wrap="nowrap" alignItems="center" justifyContent="center">
-                <Button sx={{ background: '#13294B' }} variant="contained" className={`${classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
-                    {buttonText}
-                </Button>
-
-                <FormGroup>
-                    <FormControlLabel control={<Checkbox onChange={stopPinging} value={checked}/>} label="Ping"/>
-                </FormGroup>
-                
-            </Stack>
-            <Button style={{color: "#13294B"}} variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
-                    Download
-            </Button>
-            <Box sx={{width:"100px", height:"100px", background:"white"}}>{"locallog\n" + localLog}</Box>
-        </Box>
-
-    const MessageEncoder = 
-    <Box sx={{paddingTop:'20px', paddingRight:'20px', width:'100vw'}}>
-        <TextField multiline fullWidth
-        name="caption"
-        variant="outlined"
-        label="Message"
-        value={postData ? postData.caption : ''}
-        onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
-        maxRows={8}
-        inputProps={{
-            className:'messageInput',
-            style: {
-              minHeight: "100px",
-              maxHeight: "200px",
-              overflow:'scroll'
-            },
-          }}
-        />
-
-        <Stack direction="row" spacing={2} sx={{ m: 2, width: '100%', overflow:'hidden'}}>
-
-            <SplitButton className={`${classes.roundButton}`} type="submit">
-            </SplitButton>
-
-            <Button style={{ background: '#DDDEDE' }} variant="outlined" className={`${classes.roundButton}`} onClick={clear}>
-                Clear
-            </Button> 
-        </Stack>
-
-        <TableContainer sx={{width: 'auto', display: 'flex'}}>
-                <Table size="small" aria-label="a dense table" sx={{ minWidth: 300}}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>
-                            <TableCell align="justify" sx={{ width: "20%" }}><AccessTime fontSize="small"></AccessTime></TableCell>
-                            <TableCell align="justify" sx={{ width: "70%" }}><Message fontSize="small"></Message></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {postDataArr ? postDataArr.map((row, index) => (
-                            <TableRow
-                                key={index}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
-                            >
-                                <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count + 1}</TableCell>
-                                <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
-                                <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
-                            </TableRow>
-                        )): <TableRow></TableRow>}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-    </Box>
-
-
-
 
     return (
         <Box component={'form'} sx={{display:'flex', width:'100vw'}} onSubmit={handleSubmit}>
-            {Network}
-            {MessageEncoder}
-            <a style={{display:'none'}} ref={downloadTxtRef} href={downloadLogUrl} download={'linkEncoder.log'}></a>
+            <Network
+            postData={postData}
+            setPostData={setPostData}
+            localLog={localLog}
+            classes={classes}
+            />
+            <MessageEncoder
+            classes={classes}
+            setPostData={setPostData}
+            postData={postData}
+            clear={clear}
+            postDataHistory={postDataArr}
+            />
         </Box>
 
     );
@@ -274,11 +104,3 @@ const LinkEncoder = () => {
 
 export default LinkEncoder;
 
-/*
-Old format for reference:
-<Form><Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-    <Col>
-        <Form.Control type="text" placeholder="IP Address" onChange={e => setPostData({ ...postData, ip: e.target.value })} />
-    </Col>
-</Form.Group></Form>
-*/
