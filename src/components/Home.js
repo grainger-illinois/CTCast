@@ -104,7 +104,6 @@ function home() {
         <Card variant="outlined">{upload_card}</Card>
       </Box>
 
-
     </div>
   )
 }

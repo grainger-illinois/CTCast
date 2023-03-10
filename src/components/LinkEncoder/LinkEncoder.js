@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
-import useStyles from './zoom/styles'
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Checkbox from '@mui/material/Checkbox';
-import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
-import FormGroup from '@mui/material/FormLabel';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { RadioGroup, Radio, Box } from '@mui/material';
-import { Drawer, FormControl, FormLabel } from '@material-ui/core';
-import styles from './LinkEncoder.css'
-import Network from './LinkEncoderComponents/Network.jsx';
-import MessageEncoder from './LinkEncoderComponents/MessageEncoder.jsx';
+import React, { useState, useEffect } from 'react'
+import useStyles from './styles'
+import { Box } from '@mui/material';
+import Network from './Network.jsx';
+import MessageEncoder from './MessageEncoder.jsx';
+import { useTheme } from "@mui/material";
 
 const LinkEncoder = () => {
     const [postData, setPostData] = useState({
         ip: '', port: '', caption: '', count: 0
     });
-
 
     function createLogTableItem(
         time,
@@ -82,14 +67,19 @@ const LinkEncoder = () => {
 
     const classes = useStyles();
 
+    const {
+        mixins: { toolbar },
+    } = useTheme();
+
     return (
-        <Box component={'form'} sx={{display:'flex', width:'100vw'}} onSubmit={handleSubmit}>
+        <Box component={'form'} sx={{display:'flex', width:'100vw', height:`calc(100vh - (${toolbar?.minHeight}px + ${8}px))`, overflow:'hidden'}} onSubmit={handleSubmit}>
             <Network
             postData={postData}
             setPostData={setPostData}
             localLog={localLog}
             classes={classes}
             />
+
             <MessageEncoder
             classes={classes}
             setPostData={setPostData}

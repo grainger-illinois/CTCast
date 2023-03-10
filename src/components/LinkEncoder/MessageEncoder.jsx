@@ -2,7 +2,7 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { RadioGroup, Radio, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import SplitButton from './SplitButton.jsx';
 import History from './History.jsx';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 function MessageEncoder(props) {
   return (
-  <Box sx={{paddingTop:'20px', paddingRight:'20px', width:'100vw'}}>
+  <Box sx={{paddingTop:'20px', paddingRight:'20px', width:'calc(100% - 300px)'}}>
     <TextField multiline fullWidth
     name="caption"
     variant="outlined"
@@ -34,7 +34,7 @@ function MessageEncoder(props) {
         </SplitButton>
 
         <Button style={{ background: '#DDDEDE' }} variant="outlined" className={`${props.classes.roundButton}`} onClick={props.clear}>
-            Clear
+          Clear
         </Button> 
     </Stack>
 

@@ -1,4 +1,4 @@
-import React, { useState, } from 'react';
+import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,24 +11,24 @@ import PropTypes from 'prop-types';
 
 function History (props) {
   return (
-    <TableContainer sx={{width: 'auto', display: 'flex'}}>
-    <Table size="small" aria-label="a dense table" sx={{ minWidth: 300}}>
+    <TableContainer sx={{width: '100%', display: 'flex', overflow:'auto'}}>
+    <Table size="small" aria-label="a dense table" sx={{ width: '100%'}}>
         <TableHead>
             <TableRow>
                 <TableCell align="justify" sx={{ width: "10%" }}><Numbers fontSize="small"></Numbers></TableCell>
                 <TableCell align="justify" sx={{ width: "20%" }}><AccessTime fontSize="small"></AccessTime></TableCell>
                 <TableCell align="justify" sx={{ width: "70%" }}><Message fontSize="small"></Message></TableCell>
             </TableRow>
-        </TableHead>
+        </TableHead> 
         <TableBody>
             {props.postDataHistory ? props.postDataHistory.map((row, index) => (
                 <TableRow
                     key={index}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
                 >
-                    <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count + 1}</TableCell>
+                    <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count}</TableCell>
                     <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
-                    <TableCell align="justify" sx={{ wordWrap: "break-word", width: "70%" }}>{row.caption}</TableCell>
+                    <TableCell align="justify" sx={{ wordBreak: "break-word", width: "70%" }}>{row.caption}</TableCell>
                 </TableRow>
             )): <TableRow></TableRow>}
         </TableBody>
@@ -38,7 +38,7 @@ function History (props) {
 }
 
 History.propTypes = {
-  postDataHistory:PropTypes.arrayOf(PropTypes.object)
+  postDataHistory:PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default History;
