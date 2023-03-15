@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 function History (props) {
   return (
-    <TableContainer sx={{width: '100%', display: 'flex', overflow:'auto'}}>
+    <TableContainer sx={{width: '100%', display: 'flex', height:'400px', overflowY:'scroll'}}>
     <Table size="small" aria-label="a dense table" sx={{ width: '100%'}}>
         <TableHead>
             <TableRow>
@@ -21,7 +21,7 @@ function History (props) {
             </TableRow>
         </TableHead> 
         <TableBody>
-            {props.postDataHistory ? props.postDataHistory.map((row, index) => (
+            {props.children ? props.children.map((row, index) => (
                 <TableRow
                     key={index}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
@@ -38,7 +38,7 @@ function History (props) {
 }
 
 History.propTypes = {
-  postDataHistory:PropTypes.arrayOf(PropTypes.object).isRequired,
+  children:PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default History;

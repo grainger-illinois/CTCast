@@ -18,7 +18,7 @@ const LinkEncoder = () => {
         return { time, count, caption};
     }
 
-    const [postDataArr, setPostDataArr] = useState([]);
+    const [postDataHistory, setPostDataArr] = useState([]);
 
     useEffect(() => {
         const data = window.localStorage.getItem('linken_captioning');
@@ -29,8 +29,8 @@ const LinkEncoder = () => {
 
     useEffect(() => {
         window.localStorage.setItem('linken_captioning', JSON.stringify(postData))
-        window.localStorage.setItem('logging_data', JSON.stringify(postDataArr))
-    }, [postData, postDataArr])
+        window.localStorage.setItem('logging_data', JSON.stringify(postDataHistory))
+    }, [postData, postDataHistory])
 
     const [localLog, setLocalLog] = useState("");
     const writeLog = (result) => {
@@ -41,21 +41,25 @@ const LinkEncoder = () => {
         console.log("locallog", localLog);
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
 
-        await window.linkEncoderAPI.sendToLinkEncoder(postData.caption, postData.ip, postData.port);
+    const sendToLinkEncoderAndLog = async (caption) => {
+        await window.linkEncoderAPI.sendToLinkEncoder(caption, postData.ip, postData.port);
 
         let message = await window.linkEncoderAPI.getLastMessage();
 
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
         postData.count += 1;
         setPostData({ ...postData, caption: '' });
-        if (!postDataArr) {
+        if (!postDataHistory) {
             setPostDataArr([]);
         }
         setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
 
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        sendToLinkEncoderAndLog(postData.caption);
     }
 
     const clear = () => {
@@ -85,8 +89,9 @@ const LinkEncoder = () => {
             setPostData={setPostData}
             postData={postData}
             clear={clear}
-            postDataHistory={postDataArr}
-            />
+            >
+                {postDataHistory}
+            </MessageEncoder>
         </Box>
 
     );
