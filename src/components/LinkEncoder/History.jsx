@@ -24,7 +24,7 @@ function History (props) {
             {props.children ? props.children.map((row, index) => (
                 <TableRow
                     key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, wordWrap: "break-word" }}
+                    sx={{ wordWrap: "break-word" }}
                 >
                     <TableCell component="th" scope="row" align="justify" sx={{ width: "10%" }}>{row.count}</TableCell>
                     <TableCell align="justify" sx={{ width: "20%" }}>{row.time}</TableCell>
