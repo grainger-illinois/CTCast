@@ -25,10 +25,11 @@ const Options = () => {
 
   return (
     <Router>
-        <AppBar className='center-align' style={{ background: '#13294B', width:'100vw', overflow:'hidden'}} position="relative">
-          <Toolbar >
-            <Link to="/"style={{ color: '#FFF', textDecoration: 'none', textAlign: "left", flexGrow:"1"}}>
-              <Button color="inherit" style={{textTransform:"none", fontSize:"20px"}}>CTCast</Button>
+      <Box sx={{ flexGrow: 1 }} width="100" className='center-align'>
+        <AppBar className='center-align'>
+          <Toolbar style={{ display: "flex", justifyContent: "start" }}>
+            <Link to="/" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center" }}>
+              <Button color="inherit">Home</Button>
             </Link>
             <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
               <Button color="inherit">Zoom</Button>
@@ -56,6 +57,8 @@ const Options = () => {
           <Route exact path='/uploadfiles' element={< Shortcuts />}></Route>
           <Route exact path='/help' element={< Help />}></Route>
         </Routes>
+
+      </Box>
     </Router>
   );
 
