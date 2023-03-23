@@ -14,7 +14,7 @@ import React from 'react'
 import { EventEmitter } from 'node:events'
 import { BrowserContext, ElectronApplication, Page, _electron as electron } from 'playwright'
 import { BrowserNotSupported, MessageSharp } from '@mui/icons-material'
-import LinkEncoder from '../src/components/LinkEncoder'
+import LinkEncoder from '../src/components/LinkEncoder/LinkEncoder.js'
 import { LinkEncoderAPI } from '../src/api'
 
 let electronApp: ElectronApplication
