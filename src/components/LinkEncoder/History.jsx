@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 
 function History (props) {
   return (
-    <TableContainer sx={{width: '100%', display: 'flex', height:'400px', overflowY:'scroll'}}>
+    <TableContainer sx={{width: '100%', height:'400px', overflowY:'scroll'}}>
     <Table size="small" aria-label="a dense table" sx={{ width: '100%'}}>
         <TableHead>
             <TableRow>
