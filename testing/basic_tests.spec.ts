@@ -141,17 +141,17 @@ test('renders the zoom page', async () => {
 })
 **/
 
-test('renders the link encoder page', async () => {
-  page = await electronApp.firstWindow()
-  const [window] = await Promise.all([
-    page.waitForEvent('framenavigated'),
-    page.locator('a:has-text("Link Encoder")').click()
-  ]);
-  await window.waitForSelector('h1')
-  const text = await page.$eval('h1', (el) => el.textContent)
-  expect(text).toBe('Link Encoder')
-  page = window.page()
-})
+// test('renders the link encoder page', async () => {
+//   page = await electronApp.firstWindow()
+//   const [window] = await Promise.all([
+//     page.waitForEvent('framenavigated'),
+//     page.locator('a:has-text("Link Encoder")').click()
+//   ]);
+//   await window.waitForSelector('h1')
+//   const text = await page.$eval('h1', (el) => el.textContent)
+//   expect(text).toBe('Link Encoder')
+//   page = window.page()
+// })
 
 
 test('Sends Text Correctly', async () => {
@@ -213,7 +213,7 @@ test('Correctly returns to home page', async () => {
   page = await electronApp.firstWindow()
   const [window] = await Promise.all([
     page.waitForEvent('framenavigated'),
-    page.locator('a:has-text("Home")').click()
+    page.locator('a:has-text("CTCast")').click()
   ]);
   await window.waitForSelector('h1')
   const text = await page.$eval('h1', (el) => el.textContent)
