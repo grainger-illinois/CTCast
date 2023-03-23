@@ -1,5 +1,5 @@
 /* eslint no-unused-vars: 0 */
-const { app, BrowserWindow, ipcMain, session } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 const commandReplacer = require('./components/commandReplacer');
@@ -88,6 +88,7 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       enableRemoteModule: true
     },
+    icon: path.join(__dirname, 'icons/ctcast_icon_512x512.png'),
   });
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY); // eslint-disable-line
