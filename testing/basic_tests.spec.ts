@@ -175,7 +175,7 @@ test('Sends Text Correctly', async () => {
   await messageBox.type("hello")
   const s2 = await messageBox.inputValue()
   expect(s2).toBe("hello")
-  const r = window.locator('button:has-text("Submit")')
+  const r = window.locator('button:has-text("Send")')
   await r.click()
   //await (window.waitForTimeout(2000))
   //console.log('done')

@@ -23,15 +23,23 @@ const Network = (props) => {
   const [connectButtonText, setConnectButtonText] = useState('Connect');
   const [selected, setSelected] = useState("success");
   const [checked, setIsChecked] = useState(false);
+  const [errorMessageDisplay, setDisplay] = useState(false);
 
   const connectAndDisconnect = async () => {
     await window.linkEncoderAPI.connectionLinkEncoder(props.postData.ip, props.postData.port);
     const retCode = await window.linkEncoderAPI.checkLinkEncoder();
     if (retCode == 200) {
+        setDisplay(false);
         setConnectButtonText('Disconnect');
         setSelected("error");
     }
+    else if (retCode == 300) {
+        setDisplay(true);
+        setConnectButtonText('Connect');
+        setSelected("success");
+    }
     else {
+        setDisplay(false);
         setConnectButtonText('Connect');
         setSelected("success");
     }
@@ -112,7 +120,7 @@ const Network = (props) => {
     </Box>
 
     <Stack direction="row" spacing={2} sx={{ m: 1 }} wrap="nowrap" alignItems="center" justifyContent="center">
-        <Button sx={{ background: '#13294B' }} variant="contained" className={`${props.classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
+        <Button sx={{ background: '#13294B'}} variant="contained" className={`${props.classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
             {connectButtonText}
         </Button>
 
@@ -121,6 +129,7 @@ const Network = (props) => {
         </FormGroup>
         
     </Stack>
+    <p style={{ color: 'red'}}>{errorMessageDisplay ? "Could not establish connection" : null}</p>
     <Button style={{color: "#13294B"}} variant="outlined" endIcon={<Download />} onClick={downloadTxtFile}>
         Download
     </Button>
