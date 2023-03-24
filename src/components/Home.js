@@ -90,7 +90,7 @@ const upload_card = (
 
 function home() {
   return (
-    <div style={{ margin: "20px", marginTop: "30px" }}>
+    <div style={{ margin: "20px", marginTop: "30px", }}>
       <h1 style={{ textAlign: "left" }}>Welcome to CTCast</h1>
       <Box sx={{ minWidth: 275 }} style={{ marginBottom: '1rem' }}>
         <Card variant="outlined">{zoom_card}</Card>
@@ -103,7 +103,6 @@ function home() {
       <Box sx={{ minWidth: 275 }} style={{ marginBottom: '1rem' }}>
         <Card variant="outlined">{upload_card}</Card>
       </Box>
-
 
     </div>
   )
