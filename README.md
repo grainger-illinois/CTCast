@@ -2,9 +2,13 @@
 
 A tool to broadcast captions and text descriptions.
 
+# Build Status
+
+[![Release](https://github.com/grainger-illinois/CTCast/actions/workflows/release.yml/badge.svg)](https://github.com/grainger-illinois/CTCast/actions/workflows/release.yml)
+
 # License
 
-Source code and is available under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt), copyright (C) Board of Trustees, University of Illinois 2021-2022.
+Source code and is available under the Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt), copyright (C) Board of Trustees, University of Illinois 2021-2023.
 
 # Installation
 We currently target Node 16 (check the latest build actions). Node Verson Manager (nvm) is useful to select a particular version of Node.

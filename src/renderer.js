@@ -28,25 +28,12 @@
 
 
 import './index.css';
-import './app.jsx'
 import * as ReactDOM from 'react-dom';
 import React from 'react'
 import Options from "./components/Options.js"
 
-/*
-  2022/04/28: It seems that when the import bug is fixed in this file, 
-  the renderer in app.jsx is no longer called.
-  Consider removing afterwards.
-*/
+const container = document.getElementById('root');
 
+ReactDOM.render(<Options window = {window}/>, container);
 
-function render() {
-    ReactDOM.render(
-        <div>
-            <Options window = {window}/>
-            
-        </div>, 
-    document.body);
-}
-
-render()
+        
