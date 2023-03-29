@@ -8,20 +8,17 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import PropTypes from 'prop-types';
 
-const options = ['Send All', 'Send Current Line', 'Send Highlighted'];
+export const options = ['Send All', 'Send Highlighted'];
 
-export default function SplitButton() {
+export default function SplitButton(props) {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
-  const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
-  };
 
   const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
+    props.setSelectedIndex(index);
     setOpen(false);
   };
 
@@ -37,10 +34,18 @@ export default function SplitButton() {
     setOpen(false);
   };
 
+  const handleClick = () => {
+    console.info(`You clicked ${options[props.selectedIndex]}`);
+  };
+
   return (
     <React.Fragment>
       <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" >
-        <Button onClick={handleClick} type="submit" style={{ background: '#13294B', whiteSpace: 'nowrap' }}>{options[selectedIndex]}</Button>
+        <Button onClick={handleClick}
+          type='submit'
+          style={{ background: '#13294B', whiteSpace: 'nowrap' }}>
+          {options[props.selectedIndex]}
+        </Button>
         <Button
           size="small"
           aria-controls={open ? 'split-button-menu' : undefined}
@@ -77,7 +82,7 @@ export default function SplitButton() {
                   {options.map((option, index) => (
                     <MenuItem
                       key={option}
-                      selected={index === selectedIndex}
+                      selected={index === props.selectedIndex}
                       onClick={(event) => handleMenuItemClick(event, index)}
                     >
                       {option}
@@ -91,4 +96,9 @@ export default function SplitButton() {
       </Popper>
     </React.Fragment>
   );
+}
+
+SplitButton.propTypes = {
+  selectedIndex: PropTypes.number.isRequired,
+  setSelectedIndex: PropTypes.func.isRequired,
 }
