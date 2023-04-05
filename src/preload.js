@@ -10,7 +10,8 @@ contextBridge.exposeInMainWorld('linkEncoderAPI', {
     sendToLinkEncoder: (caption, host, port) => ipcRenderer.invoke('linkencoder', caption, host, port),
     checkLinkEncoder: () => ipcRenderer.invoke('check-le'),
     clearLinkEncoder: () => ipcRenderer.send('clear-le'),
-    getLastMessage: () => ipcRenderer.invoke('le-last-message')
+    preview: (rawText) => ipcRenderer.invoke('preview', rawText),
+    getLastMessage: () => ipcRenderer.invoke('le-last-message'),
 })
 
 contextBridge.exposeInMainWorld('zoomAPI', {

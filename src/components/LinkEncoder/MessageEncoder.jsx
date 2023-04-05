@@ -8,11 +8,13 @@ import History from './History.jsx';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
+import PreviewDialog from './Preview.jsx';
 
 
 
 function MessageEncoder(props) {
   const [isTextBoxFocused, setTextBoxFocused] = useState(false);
+
   const hotkeyHandler = (e) => {
     if (isTextBoxFocused && e.ctrlKey && e.key == 'f') {
       // TODO: Pop up textfieldfinder and find
@@ -27,9 +29,13 @@ function MessageEncoder(props) {
     if (e.altKey && e.key == 's') {
       props.clear();
     }
-
   };
 
+  /* Selected Send Mode (Send All/Highlighted) */
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+
+  /* Send caption handlers */
   const sendToLinkEncoderAndLog = async (caption, option) => {
     await window.linkEncoderAPI.sendToLinkEncoder(caption, props.postData.ip, props.postData.port);
     let message = await window.linkEncoderAPI.getLastMessage();
@@ -47,20 +53,36 @@ function MessageEncoder(props) {
     selection.deleteFromDocument();
   }
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  /* Preview popup callbacks */
+  const [previewOpen, setPreviewOpen] = React.useState(false);
+  const [previewContents, setPreviewContents] = React.useState('');
 
+  async function getPreviewContents() {
+    let selectedOption = options[selectedIndex];
+    let rawText = '';
+
+    if (selectedOption == 'Send All') {
+      rawText = props.postData.caption;
+    }
+    if (selectedOption == 'Send Highlighted') {
+      rawText = window.getSelection().toString();
+    }
+    return await window.linkEncoderAPI.preview(rawText);
+  }
+
+  /* Styled Text */
   const GreyTextBoldTypography = withStyles({
     root: {
-      color: "#121255",
+      color: "#070707",
       fontWeight: "bold",
     }
   })(Typography);
+
   const GreyTextTypography = withStyles({
     root: {
-      color: "#121255",
+      color: "#070707",
     }
   })(Typography);
-
 
   return (
     <Box component='form' onSubmit={(e) => {
@@ -103,6 +125,8 @@ function MessageEncoder(props) {
         </Box>
       </Box>
 
+      <PreviewDialog contents={previewContents} open={previewOpen} onClose={() => { setPreviewOpen(false); }} />
+
       <Stack direction="row" spacing={2} sx={{ m: 2, width: '100%', overflow: 'hidden' }}>
 
         <SplitButton className={`${props.classes.roundButton}`}
@@ -112,11 +136,21 @@ function MessageEncoder(props) {
         </SplitButton>
 
         <Button
-          style={{ background: '#DDDEDE' }}
+          sx={{ background: '#DDDEDE' }}
           variant="outlined"
           className={`${props.classes.roundButton}`}
           onClick={props.clear}>
           Clear
+        </Button>
+        <Button
+          sx={{ background: '#DDDEDE' }}
+          variant="outlined"
+          className={`${props.classes.roundButton}`}
+          onClick={async () => {
+            setPreviewContents(await getPreviewContents());
+            setPreviewOpen(true);
+          }}>
+          Preview
         </Button>
       </Stack>
 
