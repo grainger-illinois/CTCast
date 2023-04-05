@@ -94,12 +94,12 @@ function MessageEncoder(props) {
           }}
         />
         <Box sx={{ marginLeft: '10px', marginTop: '10px', flexDirection: 'column' }} color='black' display='flex' width='auto'>
-          <GreyTextTypography>send all</GreyTextTypography>
-          <GreyTextBoldTypography>alt + X</GreyTextBoldTypography>
-          <GreyTextTypography>send highlighted </GreyTextTypography>
-          <GreyTextBoldTypography>alt + M</GreyTextBoldTypography>
+          <GreyTextTypography>Send all</GreyTextTypography>
+          <GreyTextBoldTypography>Alt + X</GreyTextBoldTypography>
+          <GreyTextTypography>Send highlighted </GreyTextTypography>
+          <GreyTextBoldTypography>Alt + M</GreyTextBoldTypography>
           <GreyTextTypography>Clear</GreyTextTypography>
-          <GreyTextBoldTypography>alt + S</GreyTextBoldTypography>
+          <GreyTextBoldTypography>Alt + S</GreyTextBoldTypography>
         </Box>
       </Box>
 
