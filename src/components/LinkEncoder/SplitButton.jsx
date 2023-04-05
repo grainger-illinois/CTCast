@@ -34,7 +34,7 @@ export default function SplitButton(props) {
     setOpen(false);
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     console.info(`You clicked ${options[props.selectedIndex]}`);
   };
 

@@ -38,9 +38,14 @@ const LinkEncoder = () => {
         setLocalLog(a);
     }
 
-    const writeLogAndSetHistory = (message) => {
+    const writeLogAndSetHistory = (message, option = 'sendAll') => {
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
-        setPostData({ ...postData, count: postData.count + 1, caption: '' });
+        if (option === 'sendAll') {
+            setPostData({ ...postData, count: postData.count + 1, caption: '' });
+        } else {
+            setPostData({ ...postData, count: postData.count + 1});
+        }
+
         if (!postDataHistory) {
             setPostDataArr([]);
         }
