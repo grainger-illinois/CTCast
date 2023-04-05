@@ -136,15 +136,8 @@ function MessageEncoder(props) {
         </SplitButton>
 
         <Button
-          sx={{ background: '#DDDEDE' }}
-          variant="outlined"
-          className={`${props.classes.roundButton}`}
-          onClick={props.clear}>
-          Clear
-        </Button>
-        <Button
-          sx={{ background: '#DDDEDE' }}
-          variant="outlined"
+          sx={{ background: '#13294B' }}
+          variant="contained"
           className={`${props.classes.roundButton}`}
           onClick={async () => {
             setPreviewContents(await getPreviewContents());
@@ -152,6 +145,15 @@ function MessageEncoder(props) {
           }}>
           Preview
         </Button>
+
+        <Button
+          sx={{ background: '#DDDEDE' }}
+          variant="outlined"
+          className={`${props.classes.roundButton}`}
+          onClick={props.clear}>
+          Clear
+        </Button>
+
       </Stack>
 
       <History>{props.children}</History>
