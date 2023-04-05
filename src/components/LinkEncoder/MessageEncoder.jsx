@@ -3,9 +3,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import { Box } from '@mui/material';
-import SplitButton from './SplitButton.jsx';
+import SplitButton, { options } from './SplitButton.jsx';
 import History from './History.jsx';
 import PropTypes from 'prop-types';
+import { Typography } from '@material-ui/core';
+import { withStyles } from "@material-ui/core/styles";
+
 
 
 function MessageEncoder(props) {
@@ -16,58 +19,119 @@ function MessageEncoder(props) {
       console.log('find');
     }
     if (e.altKey && e.key == 'x') {
-      console.log('alt x');
+      sendAll();
     }
     if (e.altKey && e.key == 'm') {
-      console.log('alt m');
+      sendSelected();
     }
     if (e.altKey && e.key == 's') {
-      console.log('alt s');
+      props.clear();
     }
-    
+
   };
 
+  const sendToLinkEncoderAndLog = async (caption, option) => {
+    await window.linkEncoderAPI.sendToLinkEncoder(caption, props.postData.ip, props.postData.port);
+    let message = await window.linkEncoderAPI.getLastMessage();
+    props.writeLogAndSetHistory(message, option);
+
+  }
+
+  const sendAll = () => {
+    sendToLinkEncoderAndLog(props.postData.caption, 'sendAll');
+  }
+
+  const sendSelected = () => {
+    let selection = window.getSelection();
+    sendToLinkEncoderAndLog(selection.toString(), 'sendSelected');
+    selection.deleteFromDocument();
+  }
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const GreyTextBoldTypography = withStyles({
+    root: {
+      color: "#121255",
+      fontWeight: "bold",
+    }
+  })(Typography);
+  const GreyTextTypography = withStyles({
+    root: {
+      color: "#121255",
+    }
+  })(Typography);
+
+
   return (
-  <Box sx={{paddingTop:'20px', paddingRight:'20px', width:'calc(100% - 300px)'}}>
-    <TextField multiline fullWidth
-    name="caption"
-    variant="outlined"
-    label="Message"
-    value={props.postData ? props.postData.caption : ''}
-    onChange={(e) => props.setPostData({ ...props.postData, caption: e.target.value })}
-    onFocus={() => setTextBoxFocused(true)}
-    onBlur={() => setTextBoxFocused(false)}
-    onKeyDown={hotkeyHandler}
-    inputProps={{
-        style: {
-          minHeight: "100px",
-          maxHeight: "200px",
-          overflow:'scroll',
-        },
-      }}
-    />
+    <Box component='form' onSubmit={(e) => {
+      e.preventDefault();
+      let selectedOption = options[selectedIndex];
+      if (selectedOption == 'Send All') {
+        sendAll();
+      }
+      if (selectedOption == 'Send Highlighted') {
+        sendSelected();
+      }
+    }} sx={{ paddingTop: '20px', paddingRight: '20px', width: 'calc(100% - 300px)' }}>
+      <Box sx={{ display: 'flex' }}>
+        <TextField multiline
+          sx={{ flexGrow: '1' }}
+          display='flex'
+          name="caption"
+          variant="outlined"
+          label="Message"
+          value={props.postData ? props.postData.caption : ''}
+          onChange={(e) => props.setPostData({ ...props.postData, caption: e.target.value })}
+          onFocus={() => setTextBoxFocused(true)}
+          onBlur={() => setTextBoxFocused(false)}
+          onKeyDown={hotkeyHandler}
+          inputProps={{
+            style: {
+              minHeight: "100px",
+              maxHeight: "200px",
+              overflow: 'scroll',
+            },
+          }}
+        />
+        <Box sx={{ marginLeft: '10px', marginTop: '10px', flexDirection: 'column' }} color='black' display='flex' width='auto'>
+          <GreyTextTypography>Send all</GreyTextTypography>
+          <GreyTextBoldTypography>Alt + X</GreyTextBoldTypography>
+          <GreyTextTypography>Send highlighted </GreyTextTypography>
+          <GreyTextBoldTypography>Alt + M</GreyTextBoldTypography>
+          <GreyTextTypography>Clear</GreyTextTypography>
+          <GreyTextBoldTypography>Alt + S</GreyTextBoldTypography>
+        </Box>
+      </Box>
 
-    <Stack direction="row" spacing={2} sx={{ m: 2, width: '100%', overflow:'hidden'}}>
+      <Stack direction="row" spacing={2} sx={{ m: 2, width: '100%', overflow: 'hidden' }}>
 
-        <SplitButton className={`${props.classes.roundButton}`} type="submit">
+        <SplitButton className={`${props.classes.roundButton}`}
+          selectedIndex={selectedIndex}
+          setSelectedIndex={setSelectedIndex}
+        >
         </SplitButton>
 
-        <Button style={{ background: '#DDDEDE' }} variant="outlined" className={`${props.classes.roundButton}`} onClick={props.clear}>
+        <Button
+          style={{ background: '#DDDEDE' }}
+          variant="outlined"
+          className={`${props.classes.roundButton}`}
+          onClick={props.clear}>
           Clear
-        </Button> 
-    </Stack>
+        </Button>
+      </Stack>
 
-    <History>{props.children}</History>
+      <History>{props.children}</History>
 
-  </Box>);
+    </Box>);
 }
 
 MessageEncoder.propTypes = {
-  postData:PropTypes.object.isRequired,
-  children:PropTypes.arrayOf(PropTypes.object).isRequired,
-  setPostData:PropTypes.func.isRequired,
-  classes:PropTypes.object.isRequired,
-  clear:PropTypes.func.isRequired,
+  postData: PropTypes.object.isRequired,
+  children: PropTypes.arrayOf(PropTypes.object).isRequired,
+  setPostData: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  clear: PropTypes.func.isRequired,
+  writeLogAndSetHistory: PropTypes.func.isRequired,
 };
 
 export default MessageEncoder;

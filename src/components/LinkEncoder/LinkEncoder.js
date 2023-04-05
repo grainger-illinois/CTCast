@@ -15,7 +15,7 @@ const LinkEncoder = () => {
         count,
         caption
     ) {
-        return { time, count, caption};
+        return { time, count, caption };
     }
 
     const [postDataHistory, setPostDataArr] = useState([]);
@@ -34,33 +34,28 @@ const LinkEncoder = () => {
 
     const [localLog, setLocalLog] = useState("");
     const writeLog = (result) => {
-        console.log("locallog", localLog);
         const a = localLog + `${result}\n`;
-        console.log("writelog", a);
         setLocalLog(a);
-        console.log("locallog", localLog);
     }
 
-
-    const sendToLinkEncoderAndLog = async (caption) => {
-        await window.linkEncoderAPI.sendToLinkEncoder(caption, postData.ip, postData.port);
-
-        let message = await window.linkEncoderAPI.getLastMessage();
-
+    const writeLogAndSetHistory = (message, option = 'sendAll') => {
         writeLog(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}, ${postData.count}:${message}`);
-        postData.count += 1;
-        setPostData({ ...postData, caption: '' });
+        if (option === 'sendAll') {
+            setPostData({ ...postData, count: postData.count + 1, caption: '' });
+        } else {
+            setPostData({ ...postData, count: postData.count + 1});
+        }
+
         if (!postDataHistory) {
             setPostDataArr([]);
         }
-        setPostDataArr(arr => [createLogTableItem(`${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`, postData.count, message), ...arr]);
-
+        setPostDataArr(arr => [createLogTableItem(
+            `${new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(Date.now())}`,
+            postData.count,
+            message), ...arr]
+        );
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        sendToLinkEncoderAndLog(postData.caption);
-    }
 
     const clear = () => {
         setPostData({ ip: '', port: '', caption: '', count: 0 });
@@ -76,19 +71,26 @@ const LinkEncoder = () => {
     } = useTheme();
 
     return (
-        <Box component={'form'} sx={{display:'flex', width:'100vw', height:`calc(100vh - (${toolbar?.minHeight}px + ${8}px))`, overflow:'hidden'}} onSubmit={handleSubmit}>
+        <Box
+            sx={{
+                display: 'flex',
+                width: '100vw',
+                height: `calc(100vh - (${toolbar?.minHeight}px + ${8}px))`,
+                overflow: 'hidden'
+            }}
+        >
             <Network
-            postData={postData}
-            setPostData={setPostData}
-            localLog={localLog}
-            classes={classes}
+                postData={postData}
+                setPostData={setPostData}
+                localLog={localLog}
+                classes={classes}
             />
-
             <MessageEncoder
-            classes={classes}
-            setPostData={setPostData}
-            postData={postData}
-            clear={clear}
+                classes={classes}
+                setPostData={setPostData}
+                postData={postData}
+                clear={clear}
+                writeLogAndSetHistory={writeLogAndSetHistory}
             >
                 {postDataHistory}
             </MessageEncoder>
