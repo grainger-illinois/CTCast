@@ -6,6 +6,8 @@ import { Box } from '@mui/material';
 import SplitButton, { options } from './SplitButton.jsx';
 import History from './History.jsx';
 import PropTypes from 'prop-types';
+import { Typography } from '@material-ui/core';
+import { withStyles } from "@material-ui/core/styles";
 
 
 
@@ -17,56 +19,96 @@ function MessageEncoder(props) {
       console.log('find');
     }
     if (e.altKey && e.key == 'x') {
-      console.log('alt x');
+      sendAll();
     }
     if (e.altKey && e.key == 'm') {
-      console.log('alt m');
+      sendSelected();
     }
     if (e.altKey && e.key == 's') {
-      console.log('alt s');
+      props.clear();
     }
 
   };
 
-  const sendToLinkEncoderAndLog = async (caption) => {
+  const sendToLinkEncoderAndLog = async (caption, option) => {
     await window.linkEncoderAPI.sendToLinkEncoder(caption, props.postData.ip, props.postData.port);
     let message = await window.linkEncoderAPI.getLastMessage();
-    props.writeLogAndSetHistory(message);
+    props.writeLogAndSetHistory(message, option);
+
+  }
+
+  const sendAll = () => {
+    sendToLinkEncoderAndLog(props.postData.caption, 'sendAll');
+  }
+
+  const sendSelected = () => {
+    let selection = window.getSelection();
+    sendToLinkEncoderAndLog(selection.toString(), 'sendSelected');
+    selection.deleteFromDocument();
   }
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
+  const GreyTextBoldTypography = withStyles({
+    root: {
+      color: "#121255",
+      fontWeight: "bold",
+    }
+  })(Typography);
+  const GreyTextTypography = withStyles({
+    root: {
+      color: "#121255",
+    }
+  })(Typography);
 
 
   return (
-    <Box component='form' onSubmit={() => {
+    <Box component='form' onSubmit={(e) => {
+      e.preventDefault();
       let selectedOption = options[selectedIndex];
-      
+      if (selectedOption == 'Send All') {
+        sendAll();
+      }
+      if (selectedOption == 'Send Highlighted') {
+        sendSelected();
+      }
     }} sx={{ paddingTop: '20px', paddingRight: '20px', width: 'calc(100% - 300px)' }}>
-      <TextField multiline fullWidth
-        name="caption"
-        variant="outlined"
-        label="Message"
-        value={props.postData ? props.postData.caption : ''}
-        onChange={(e) => props.setPostData({ ...props.postData, caption: e.target.value })}
-        onFocus={() => setTextBoxFocused(true)}
-        onBlur={() => setTextBoxFocused(false)}
-        onKeyDown={hotkeyHandler}
-        inputProps={{
-          style: {
-            minHeight: "100px",
-            maxHeight: "200px",
-            overflow: 'scroll',
-          },
-        }}
-      />
+      <Box sx={{ display: 'flex' }}>
+        <TextField multiline
+          sx={{ flexGrow: '1' }}
+          display='flex'
+          name="caption"
+          variant="outlined"
+          label="Message"
+          value={props.postData ? props.postData.caption : ''}
+          onChange={(e) => props.setPostData({ ...props.postData, caption: e.target.value })}
+          onFocus={() => setTextBoxFocused(true)}
+          onBlur={() => setTextBoxFocused(false)}
+          onKeyDown={hotkeyHandler}
+          inputProps={{
+            style: {
+              minHeight: "100px",
+              maxHeight: "200px",
+              overflow: 'scroll',
+            },
+          }}
+        />
+        <Box sx={{ marginLeft: '10px', marginTop: '10px', flexDirection: 'column' }} color='black' display='flex' width='auto'>
+          <GreyTextTypography>send all</GreyTextTypography>
+          <GreyTextBoldTypography>alt + X</GreyTextBoldTypography>
+          <GreyTextTypography>send highlighted </GreyTextTypography>
+          <GreyTextBoldTypography>alt + M</GreyTextBoldTypography>
+          <GreyTextTypography>Clear</GreyTextTypography>
+          <GreyTextBoldTypography>alt + S</GreyTextBoldTypography>
+        </Box>
+      </Box>
 
       <Stack direction="row" spacing={2} sx={{ m: 2, width: '100%', overflow: 'hidden' }}>
 
         <SplitButton className={`${props.classes.roundButton}`}
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
-          type='submit'>
+        >
         </SplitButton>
 
         <Button
