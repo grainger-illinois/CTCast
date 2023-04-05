@@ -29,6 +29,15 @@ function MessageEncoder(props) {
     if (e.altKey && e.key == 's') {
       props.clear();
     }
+    if (e.altKey && e.key == 'z') {
+      setSelectedIndex(0);
+      preview();
+    }
+    if (e.altKey && e.key == 'c') {
+      setSelectedIndex(1);
+      preview();
+    }
+    
   };
 
   /* Selected Send Mode (Send All/Highlighted) */
@@ -68,6 +77,11 @@ function MessageEncoder(props) {
       rawText = window.getSelection().toString();
     }
     return await window.linkEncoderAPI.preview(rawText);
+  }
+
+  async function preview() {
+    setPreviewContents(await getPreviewContents());
+    setPreviewOpen(true);
   }
 
   /* Styled Text */
@@ -122,6 +136,8 @@ function MessageEncoder(props) {
           <GreyTextBoldTypography>Alt + M</GreyTextBoldTypography>
           <GreyTextTypography>Clear</GreyTextTypography>
           <GreyTextBoldTypography>Alt + S</GreyTextBoldTypography>
+          <GreyTextTypography>Preview All/Highlighted</GreyTextTypography>
+          <GreyTextBoldTypography>Alt + Z/C</GreyTextBoldTypography>
         </Box>
       </Box>
 
@@ -139,10 +155,7 @@ function MessageEncoder(props) {
           sx={{ background: '#13294B' }}
           variant="contained"
           className={`${props.classes.roundButton}`}
-          onClick={async () => {
-            setPreviewContents(await getPreviewContents());
-            setPreviewOpen(true);
-          }}>
+          onClick={preview}>
           Preview
         </Button>
 
