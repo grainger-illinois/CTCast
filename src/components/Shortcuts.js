@@ -10,6 +10,14 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import Collapse from "@mui/material/Collapse";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Typography from '@mui/material/Typography';
 
 
 
@@ -119,8 +127,47 @@ function Shortcuts() {
 				</List>
 			</Box>
 	
+	const [open, setOpen] = useState(false);
 
-	return <div style={{ margin: "20px", marginTop: "30px", display:"flex" }} >
+	return (
+		<div>
+        <Card sx={{ minWidth: 300, width: '99vw'}}>
+            <CardHeader
+            title="Shortcuts"
+            action={
+                <IconButton
+                    onClick={() => setOpen(!open)}
+                    aria-label="expand"
+                    size="small"
+                    >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            }
+            >
+            </CardHeader>
+            <div style={{ backgroundColor: '#e8e9eb', display: 'flex'}}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <CardContent>
+					<Typography variant="body2">
+						<div>
+							<ul>
+									<li>To upload shortcuts, either upload a text file or add them manually</li>
+									<li>When using file upload, have the text first then shortcut (e.g. ClassTranscribe:CT)</li>
+									<li>When using manual shortcut input, add full text and shortcut to designated textboxes</li>
+									<li>
+									You can manually input shortcuts after file has been uploaded
+									</li>
+									<li>
+									You can reset the shortcuts by pressing clear button.
+									</li>
+							</ul>
+						</div>
+					</Typography>
+                </CardContent>
+            </Collapse>
+            </div>
+        </Card>
+	<div style={{ margin: "20px", marginTop: "30px", display:"flex" }} >
 			
 			{ListMap}
 
@@ -172,7 +219,7 @@ function Shortcuts() {
 
 
 	</div>
-
-}
+	</div>
+)}
 
 export default Shortcuts;
