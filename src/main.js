@@ -73,6 +73,12 @@ async function fileProcessHandler(ext, arrayBuffer) {
       }
     }
     break;
+  case 'ctcast':
+    const serializedMap = new TextDecoder().decode(arrayBuffer).split(/^(\n)*(#)+(\n)*$/).filter(i => i);
+    serializedMap.map((entry) => {
+      const splitEntry = entry.split(/:(.*)/s);
+      mapForThisFile.set(splitEntry[0], splitEntry[1]);
+    })
   }
   
   shortcutMap.appendToExistingShortcutMap(mapForThisFile);

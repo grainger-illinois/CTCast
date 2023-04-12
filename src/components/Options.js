@@ -7,7 +7,7 @@ import { Help as HelpIcon } from '@mui/icons-material'
 
 import ZoomPage from './zoom/zoom.js'
 import LinkEncoder from './LinkEncoder/LinkEncoder.js';
-import Shortcuts from './Shortcuts.js';
+import Shortcuts from './Shortcuts/Shortcuts.js';
 import Help from "./Help.js";
 
 import Home from './Home.js'
