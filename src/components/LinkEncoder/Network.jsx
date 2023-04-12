@@ -9,6 +9,7 @@ import FormGroup from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { FormControl, FormLabel } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import LensIcon from '@mui/icons-material/Lens';
 
 /**
  * 2022/04/27:
@@ -21,27 +22,35 @@ let interval; //for 5s ping
 const Network = (props) => {
   
   const [connectButtonText, setConnectButtonText] = useState('Connect');
-  const [selected, setSelected] = useState("success");
+  const [indicatorColor, setIndicatorColor] = useState("success");
   const [checked, setIsChecked] = useState(false);
   const [errorMessageDisplay, setDisplay] = useState(false);
-
+  const [indicatorTextColor, setIndicatorTextColor] = useState("red");
+  const [indicatorText, setIndicatorText] = useState('Connected');
   const connectAndDisconnect = async () => {
     await window.linkEncoderAPI.connectionLinkEncoder(props.postData.ip, props.postData.port);
     const retCode = await window.linkEncoderAPI.checkLinkEncoder();
     if (retCode == 200) {
         setDisplay(false);
         setConnectButtonText('Disconnect');
-        setSelected("error");
+        setIndicatorColor("success");
+        setIndicatorTextColor("green");
+        setIndicatorText('Connected');
     }
     else if (retCode == 300) {
         setDisplay(true);
         setConnectButtonText('Connect');
-        setSelected("success");
+        setIndicatorColor("error");
+        setIndicatorTextColor("red");
+        setIndicatorText('Disconnected');
     }
     else {
         setDisplay(false);
         setConnectButtonText('Connect');
-        setSelected("success");
+        setIndicatorColor("error");
+        setIndicatorTextColor("red");
+        setIndicatorText('Disconnected');
+
     }
   };
 
@@ -94,7 +103,15 @@ const Network = (props) => {
   }, [downloadLogUrl]);
 
   return <Box sx={{width:"220px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
-    <Box sx={{marginBottom:"20px"}}>Network</Box>
+    <Stack direction="row" spacing={6} sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
+        <Box>Network </Box>
+        <Stack direction="row" spacing={0.5} sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
+            <Box sx={{marginRight:"20px", width:"90%"}}fontSize={12} color={indicatorTextColor} > {indicatorText} </Box>
+            <LensIcon color={indicatorColor}></LensIcon>
+        </Stack>
+    </Stack>
+
+    
     <TextField
         name="ip"
         size='small'
