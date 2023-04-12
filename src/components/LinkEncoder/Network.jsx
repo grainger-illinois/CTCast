@@ -18,7 +18,7 @@ import LensIcon from '@mui/icons-material/Lens';
  *   Need to change to a better alignment
  */
 
-let interval; //for 5s ping
+let interval, errorInterval; //for 5s ping
 const Network = (props) => {
   
   const [connectButtonText, setConnectButtonText] = useState('Connect');
@@ -28,7 +28,26 @@ const Network = (props) => {
   const [indicatorTextColor, setIndicatorTextColor] = useState("red");
   const [indicatorText, setIndicatorText] = useState('Disconnected');
   
+
+  const checkingConnection = async () => {
+    return new Promise(resolve => {
+        errorInterval = setInterval(async () => {
+            const retCode = await window.linkEncoderAPI.checkLinkEncoder();
+            if (retCode == 300) {
+                setDisplay(true);
+                setConnectButtonText('Connect');
+                setIndicatorColor("error");
+                setIndicatorTextColor("red");
+                setIndicatorText('Disconnected');
+            }    
+        }, 500);
+            
+        resolve();
+    })
+  };
+
   const connectAndDisconnect = async () => {
+    clearInterval(errorInterval);
     await window.linkEncoderAPI.connectionLinkEncoder(props.postData.ip, props.postData.port);
     const retCode = await window.linkEncoderAPI.checkLinkEncoder();
     if (retCode == 200) {
@@ -51,8 +70,8 @@ const Network = (props) => {
         setIndicatorColor("error");
         setIndicatorTextColor("red");
         setIndicatorText('Disconnected');
-
     }
+    await checkingConnection();
   };
 
   const pinging = async () => {
@@ -138,7 +157,11 @@ const Network = (props) => {
     </Box>
 
     <Stack direction="row" spacing={2} sx={{ m: 1 }} wrap="nowrap" alignItems="center" justifyContent="center">
-        <Button sx={{ background: '#13294B'}} variant="contained" className={`${props.classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
+        <Button sx={{ background: '#13294B'}} variant="contained" className={`${props.classes.roundButton}`} 
+        onClick={() => {
+            connectAndDisconnect();
+            
+        }} id="rb">
             {connectButtonText}
         </Button>
 

@@ -134,6 +134,9 @@ export class LinkEncoderAPI {
                 console.log('Connected to ' + host + ':' + port);
             });
             this.socket.on('error', () => {
+                //this.socket.destroy();
+                this.newswire = null;
+                this.fieldinsertmode = null;
                 this.socket = null;
             });
         });
