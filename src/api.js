@@ -133,7 +133,7 @@ export class LinkEncoderAPI {
                 resolve(this.socket);
                 console.log('Connected to ' + host + ':' + port);
             });
-            this.socket.on('error', (error) => {
+            this.socket.on('error', () => {
                 this.socket = null;
             });
         });
