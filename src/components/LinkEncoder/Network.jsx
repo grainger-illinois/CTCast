@@ -22,11 +22,12 @@ let interval; //for 5s ping
 const Network = (props) => {
   
   const [connectButtonText, setConnectButtonText] = useState('Connect');
-  const [indicatorColor, setIndicatorColor] = useState("success");
+  const [indicatorColor, setIndicatorColor] = useState("error");
   const [checked, setIsChecked] = useState(false);
   const [errorMessageDisplay, setDisplay] = useState(false);
   const [indicatorTextColor, setIndicatorTextColor] = useState("red");
-  const [indicatorText, setIndicatorText] = useState('Connected');
+  const [indicatorText, setIndicatorText] = useState('Disconnected');
+  
   const connectAndDisconnect = async () => {
     await window.linkEncoderAPI.connectionLinkEncoder(props.postData.ip, props.postData.port);
     const retCode = await window.linkEncoderAPI.checkLinkEncoder();
@@ -103,11 +104,11 @@ const Network = (props) => {
   }, [downloadLogUrl]);
 
   return <Box sx={{width:"220px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
-    <Stack direction="row" spacing={6} sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
+    <Stack direction="row" spacing={6} sx={{ m: 1, marginBottom: "20px"}} wrap="nowrap" alignItems="center" justifyContent="right">
         <Box>Network </Box>
-        <Stack direction="row" spacing={0.5} sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
-            <Box sx={{marginRight:"20px", width:"90%"}}fontSize={12} color={indicatorTextColor} > {indicatorText} </Box>
-            <LensIcon color={indicatorColor}></LensIcon>
+        <Stack direction="row" sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
+            <Box sx={{pr:"20px", maxWidth:"60%"}}fontSize={12} color={indicatorTextColor}> {indicatorText} </Box>
+            <LensIcon sx={{maxHeight:"18%", maxWidth:"18%", width:"18%", height:"18%"}} color={indicatorColor}></LensIcon>
         </Stack>
     </Stack>
 

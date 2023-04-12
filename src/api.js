@@ -133,9 +133,8 @@ export class LinkEncoderAPI {
                 resolve(this.socket);
                 console.log('Connected to ' + host + ':' + port);
             });
-            this.socket.on('error', () => {
+            this.socket.on('error', (error) => {
                 this.socket = null;
-                console.log('Error: Trying to connect to a closed server or server unexpectedly shut down');
             });
         });
     }
@@ -185,7 +184,6 @@ export class LinkEncoderAPI {
             console.log('Attempting connection');
             await this.connecttoserver(port, host);
             
-            //console.log('Connected to ' + host + ':' + port);
         }
         else {
             this.socket.destroy();
