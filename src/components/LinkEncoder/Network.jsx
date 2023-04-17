@@ -127,7 +127,7 @@ const Network = (props) => {
         <Box>Network </Box>
         <Stack direction="row" sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
             <Box sx={{pr:"20px", maxWidth:"60%"}}fontSize={12} color={indicatorTextColor}> {indicatorText} </Box>
-            <LensIcon sx={{maxHeight:"18%", maxWidth:"18%", width:"18%", height:"18%"}} color={indicatorColor}></LensIcon>
+            <LensIcon sx={{maxHeight:"15%", maxWidth:"15%", width:"12%", height:"12%", marginTop:"3px"}} color={indicatorColor}></LensIcon>
         </Stack>
     </Stack>
 
