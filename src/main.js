@@ -33,7 +33,7 @@ async function linkEncoderConnectionChecker(linkencoder) {
 }
 
 async function linkEncoderHandler(linkencoder, caption, host, port) {
-  var message = commandReplacer(caption, shortcutMap.shortcuts, '@')
+  var message = commandReplacer(caption, shortcutMap.shortcuts, '@');
   const res = await linkencoder.sendMessage(message, host, port);
   return res;
 }
@@ -53,30 +53,30 @@ async function zoomAPIHandler(zoom, caption, meetingLink) {
 async function fileProcessHandler(ext, arrayBuffer) {
   var altTextResult;
   var mapForThisFile = new Map();
-  switch(ext) {
-  case 'docx':
-    altTextResult = await extractDocxImageAltText(arrayBuffer);
-    for (const [i, slide] of altTextResult.entries()) {
-      for (const [j, picture] of slide.entries()) {
-        mapForThisFile.set('docx' + shortcutMap.get('docx') + 'p' + j, picture);
-        mapForThisFile.set('docx', shortcutMap.get('docx') + 1);
+  switch (ext) {
+    case 'docx':
+      altTextResult = await extractDocxImageAltText(arrayBuffer);
+      for (const [i, slide] of altTextResult.entries()) {
+        for (const [j, picture] of slide.entries()) {
+          mapForThisFile.set('docx' + shortcutMap.get('docx') + 'p' + j, picture);
+          mapForThisFile.set('docx', shortcutMap.get('docx') + 1);
 
+        }
       }
-    }
-    break;
-  case 'pptx':
-    altTextResult = await extractPptxImageAltText(arrayBuffer);
-    for (const [i, slide] of altTextResult.entries()) {
-      for (const [j, picture] of slide.entries()) {
-        mapForThisFile.set('pptx' + shortcutMap.get('pptx')  + 's' + i + 'p' + j, picture);
-        mapForThisFile.set('pptx', shortcutMap.get('pptx') + 1);
+      break;
+    case 'pptx':
+      altTextResult = await extractPptxImageAltText(arrayBuffer);
+      for (const [i, slide] of altTextResult.entries()) {
+        for (const [j, picture] of slide.entries()) {
+          mapForThisFile.set('pptx' + shortcutMap.get('pptx') + 's' + i + 'p' + j, picture);
+          mapForThisFile.set('pptx', shortcutMap.get('pptx') + 1);
+        }
       }
-    }
-    break;
+      break;
   }
-  
+
   shortcutMap.appendToExistingShortcutMap(mapForThisFile);
-  
+
 }
 
 const createWindow = () => {
@@ -112,9 +112,13 @@ app.on('ready', () => {
   ipcMain.handle('check-le', async (event) => {
     return await linkEncoderConnectionChecker(linkencoder);
   });
-  
+
   ipcMain.handle('linkencoder', async (event, caption, host, port) => {
     return await linkEncoderHandler(linkencoder, caption, host, port);
+  });
+
+  ipcMain.handle('preview', async (event, rawText) => {
+    return commandReplacer(rawText, shortcutMap.shortcuts, '@');
   });
 
   ipcMain.handle('clear-le', async (event) => {
