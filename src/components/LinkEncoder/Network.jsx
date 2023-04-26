@@ -9,6 +9,7 @@ import FormGroup from '@mui/material/FormLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { FormControl, FormLabel } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import LensIcon from '@mui/icons-material/Lens';
 
 /**
  * 2022/04/27:
@@ -17,32 +18,60 @@ import PropTypes from 'prop-types';
  *   Need to change to a better alignment
  */
 
-let interval; //for 5s ping
+let interval, errorInterval; //for 5s ping
 const Network = (props) => {
   
   const [connectButtonText, setConnectButtonText] = useState('Connect');
-  const [selected, setSelected] = useState("success");
+  const [indicatorColor, setIndicatorColor] = useState("error");
   const [checked, setIsChecked] = useState(false);
   const [errorMessageDisplay, setDisplay] = useState(false);
+  const [indicatorTextColor, setIndicatorTextColor] = useState("red");
+  const [indicatorText, setIndicatorText] = useState('Disconnected');
+  
+
+  const checkingConnection = async () => {
+    return new Promise(resolve => {
+        errorInterval = setInterval(async () => {
+            const retCode = await window.linkEncoderAPI.checkLinkEncoder();
+            if (retCode == 300) {
+                setDisplay(true);
+                setConnectButtonText('Connect');
+                setIndicatorColor("error");
+                setIndicatorTextColor("red");
+                setIndicatorText('Disconnected');
+            }    
+        }, 500);
+            
+        resolve();
+    })
+  };
 
   const connectAndDisconnect = async () => {
+    clearInterval(errorInterval);
     await window.linkEncoderAPI.connectionLinkEncoder(props.postData.ip, props.postData.port);
     const retCode = await window.linkEncoderAPI.checkLinkEncoder();
     if (retCode == 200) {
         setDisplay(false);
         setConnectButtonText('Disconnect');
-        setSelected("error");
+        setIndicatorColor("success");
+        setIndicatorTextColor("green");
+        setIndicatorText('Connected');
     }
     else if (retCode == 300) {
         setDisplay(true);
         setConnectButtonText('Connect');
-        setSelected("success");
+        setIndicatorColor("error");
+        setIndicatorTextColor("red");
+        setIndicatorText('Disconnected');
     }
     else {
         setDisplay(false);
         setConnectButtonText('Connect');
-        setSelected("success");
+        setIndicatorColor("error");
+        setIndicatorTextColor("red");
+        setIndicatorText('Disconnected');
     }
+    await checkingConnection();
   };
 
   const pinging = async () => {
@@ -94,7 +123,15 @@ const Network = (props) => {
   }, [downloadLogUrl]);
 
   return <Box sx={{width:"220px", marginRight:"10px", padding:"20px", height:"100vh", backgroundClip:"border-box", backgroundColor:"#e8e9eb"}} >
-    <Box sx={{marginBottom:"20px"}}>Network</Box>
+    <Stack direction="row" spacing={6} sx={{ m: 1, marginBottom: "20px"}} wrap="nowrap" alignItems="center" justifyContent="right">
+        <Box>Network </Box>
+        <Stack direction="row" sx={{ m: 1, marginBottom: "20px" }} wrap="nowrap" alignItems="center">
+            <Box sx={{pr:"20px", maxWidth:"60%"}}fontSize={12} color={indicatorTextColor}> {indicatorText} </Box>
+            <LensIcon sx={{maxHeight:"15%", maxWidth:"15%", width:"12%", height:"12%", marginTop:"3px"}} color={indicatorColor}></LensIcon>
+        </Stack>
+    </Stack>
+
+    
     <TextField
         name="ip"
         size='small'
@@ -120,7 +157,11 @@ const Network = (props) => {
     </Box>
 
     <Stack direction="row" spacing={2} sx={{ m: 1 }} wrap="nowrap" alignItems="center" justifyContent="center">
-        <Button sx={{ background: '#13294B'}} variant="contained" className={`${props.classes.roundButton}`} onClick={connectAndDisconnect} id="rb">
+        <Button sx={{ background: '#13294B'}} variant="contained" className={`${props.classes.roundButton}`} 
+        onClick={() => {
+            connectAndDisconnect();
+            
+        }} id="rb">
             {connectButtonText}
         </Button>
 
