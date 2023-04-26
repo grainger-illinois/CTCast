@@ -16,7 +16,7 @@ import {
   HashRouter as Router,
   Routes,
   Route,
-  Link
+  NavLink
 } from 'react-router-dom';
 
 
@@ -27,23 +27,26 @@ const Options = () => {
     <Router>
         <AppBar className='center-align' style={{ background: '#13294B', width:'100vw', overflow:'hidden'}} position="relative">
           <Toolbar >
-            <Link to="/"style={{ color: '#FFF', textDecoration: 'none', textAlign: "left", flexGrow:"1"}}>
+            <NavLink to="/" className="link" style={{ color: '#FFF'}}>
               <Button color="inherit" style={{textTransform:"none", fontSize:"20px"}}>CTCast</Button>
-            </Link>
-            <Link to="/zoom" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
+            </NavLink>
+            <NavLink to="/zoom" className="link" style={({ isActive }) => ({ 
+                            color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.6)' })}>
               <Button color="inherit">Zoom</Button>
-            </Link>
-            <Link to="/linkencoder" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
+            </NavLink>
+            <NavLink to="/linkencoder" className="link" style={({ isActive }) => ({ 
+                            color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.6)' })}>
               <Button color="inherit">Link Encoder</Button>
-            </Link>
-            <Link to="/uploadfiles" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
+            </NavLink>
+            <NavLink to="/uploadfiles" className="link" style={({ isActive }) => ({ 
+                            color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.6)' })}>
               <Button color="inherit">Shortcuts</Button>
-            </Link>
+            </NavLink>
             <Box style={{ color: '#FFF', textDecoration: 'none', textAlign: "left" , flexGrow: "12"}}>
             </Box>
-            <Link to="/help" style={{ color: '#FFF', textDecoration: 'none', textAlign: "center"}}>
+            <NavLink to="/help" className="link" style={{ color: '#FFF'}}>
               <Button color="inherit"><HelpIcon/></Button>
-            </Link>
+            </NavLink>
           </Toolbar>
 
         </AppBar>

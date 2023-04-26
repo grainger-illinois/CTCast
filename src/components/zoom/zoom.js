@@ -10,7 +10,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Message, AccessTime, Numbers, Download } from '@mui/icons-material';
-
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import Collapse from "@mui/material/Collapse";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Typography from '@mui/material/Typography';
 
 
 const Form = () => {
@@ -90,10 +97,47 @@ const Form = () => {
         window.zoomAPI.clearZoom();
     };
 
+    const [open, setOpen] = useState(false);
 
     return (
+        <div>
+        <Card sx={{ minWidth: 300, width: '99vw'}}>
+            <CardHeader
+            title="Zoom"
+            action={
+                <IconButton
+                    onClick={() => setOpen(!open)}
+                    aria-label="expand"
+                    size="small"
+                    >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                </IconButton>
+            }
+            >
+            </CardHeader>
+            <div style={{ backgroundColor: '#e8e9eb', display: 'flex'}}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <CardContent>
+                <Typography variant="body1">
+                    <div>
+                    <ul>
+                            <li>To connect to Zoom meeting, enter valid Zoom API key from Zoom meeting</li>
+                            <li>To send captions, add desired captions to the captions textbox and press send button or press enter key</li>
+                            <li>To connect to new meeting or to disconnect, press clear button</li>
+                            <li>
+                            To download the caption log, press download button
+                            </li>
+                            <li>
+                            Caution!: if you clear out during zoom call, you need to start the Zoom meeting again in order for captioning to work properly
+                            </li>
+                    </ul>
+                    </div>
+                </Typography>
+                </CardContent>
+            </Collapse>
+            </div>
+        </Card>
         <div style={{ margin: "20px", marginTop: "30px" }}>
-            <h1 style={{ textAlign: "left" }}>Zoom</h1>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <TextField
                     name="zoomAPI"
@@ -162,6 +206,7 @@ const Form = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+        </div>
         </div>
     )
 }
